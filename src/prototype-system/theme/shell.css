@@ -1,0 +1,39 @@
+/* Temporary prototype-shell styling. These are not ZoBlocks brand tokens. */
+:root {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #26313d;
+  background: #f6f7f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.prototype-shell { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
+.shell-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 0; border-bottom: 1px solid #dce1e7; }
+.wordmark { font-size: 19px; font-weight: 700; letter-spacing: -0.5px; }
+.shell-label { color: #586576; font-size: 13px; }
+main { padding: 64px 0 80px; }
+.introduction { max-width: 690px; margin-bottom: 48px; }
+.eyebrow { color: #586576; font-size: 12px; font-weight: 650; letter-spacing: 1.3px; text-transform: uppercase; margin: 0 0 16px; }
+h1 { font-size: clamp(32px, 5vw, 46px); line-height: 1.15; letter-spacing: -1.5px; margin: 0 0 20px; }
+.description { color: #586576; font-size: 18px; line-height: 1.7; margin: 0; }
+h2 { font-size: 15px; margin: 0 0 18px; font-weight: 650; }
+.prototype-card { max-width: 540px; padding: 28px; background: #fff; border: 1px solid #dce1e7; border-radius: 12px; box-shadow: 0 3px 12px rgb(38 49 61 / 3%); }
+.card-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+h3 { font-size: 22px; margin: 0; letter-spacing: -0.4px; }
+.status { background: #eef1f5; color: #4f5d6d; border-radius: 20px; padding: 6px 10px; font-size: 12px; }
+.card-description { color: #586576; margin: 12px 0 28px; line-height: 1.5; }
+.prototype-details { border-top: 1px solid #e7ebef; margin: 0; padding-top: 20px; display: grid; gap: 12px; font-size: 14px; }
+.prototype-details div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; }
+dt { color: #586576; }
+dd { margin: 0; font-weight: 550; }
+footer { border-top: 1px solid #dce1e7; padding: 24px 0; font-size: 12px; color: #586576; line-height: 1.6; }
+@media (max-width: 600px) {
+  .prototype-shell { padding: 0 20px; }
+  .shell-header { padding: 22px 0; }
+  .shell-label { max-width: 100px; text-align: right; }
+  main { padding: 40px 0 56px; }
+  .prototype-card { padding: 22px; }
+}
