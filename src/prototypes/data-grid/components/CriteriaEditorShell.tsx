@@ -55,7 +55,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, onCancel, onApplyA
       <div className="dg-condition-stack">
       {draft.rows.map((row, index) => mode === 'simple' ? <div key={row.id} className="dg-simple-rule">{controls(row, index)}</div> : <div className="dg-rule-row" key={row.id}>
         {draft.rows.length > 1 && <div className="dg-relationship">{index === 1 ? <PrototypeSelect compact label="Condition relationship" value={draft.relationship} options={['And', 'Or']} onChange={relationship => setDraft(current => ({ ...current, relationship: relationship as 'And' | 'Or' }))} /> : index === 0 ? 'Where' : draft.relationship.toLowerCase()}</div>}
-        <div className="dg-rule-surface">{controls(row, index)}<PrototypeButton variant="text" className="dg-nested-filter" disabled={incomplete} aria-disabled={!incomplete || undefined}><Plus size={14} aria-hidden="true" />Add Nested Filter</PrototypeButton></div>
+        <div className="dg-rule-surface">{controls(row, index)}<PrototypeButton variant="text" className="dg-nested-filter" disabled={incomplete}><Plus size={14} aria-hidden="true" />Add Nested Filter</PrototypeButton></div>
       </div>)}
       {mode === 'advanced' && <PrototypeButton variant="text" className="dg-editor-add" disabled={incomplete} onClick={() => {
         const id = nextId.current++
