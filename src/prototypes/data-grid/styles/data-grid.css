@@ -282,3 +282,15 @@
 .dg-page .dg-snackbar .dg-button:not(:disabled):focus-visible { color: #FFFFFF; background: rgb(255 255 255 / 10%); }
 .dg-page .dg-snackbar .dg-button:not(:disabled):active { color: #FFFFFF; background: rgb(255 255 255 / 18%); }
 .dg-page .dg-snackbar .dg-button:disabled { color: var(--dg-disabled); background: transparent; }
+
+/* The guard is a layout layer of the editor body, never an anchored picker. */
+.dg-editor-workspace { display: grid; }
+.dg-editor-workspace > .dg-conditions, .dg-guard-overlay { grid-area: 1 / 1; min-width: 0; }
+.dg-editor-workspace.dg-editor-guarded { min-height: 190px; }
+.dg-guard-overlay { display: grid; place-items: center; padding: 24px; background: rgb(16 24 40 / 16%); z-index: 3; }
+.dg-guard-dialog { width: min(360px, 100%); padding: 20px; border: 1px solid var(--dg-border); border-radius: 8px; background: var(--dg-white); box-shadow: 0 4px 16px rgb(16 24 40 / 16%); }
+.dg-guard-dialog > p { margin: 0 0 16px; font-size: 14px; line-height: 20px; font-weight: 600; }
+.dg-guard-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.dg-conditions-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-shrink: 0; }
+.dg-conditions-heading p { margin: 0; color: var(--dg-tertiary); line-height: 16px; }
+.dg-conditions-heading > .dg-button { flex-shrink: 0; }

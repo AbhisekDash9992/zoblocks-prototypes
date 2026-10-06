@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import { createPortal } from 'react-dom'
-import { claimOverlay, releaseOverlay } from './overlayState'
+import { canClaimOverlay, claimOverlay, releaseOverlay } from './overlayState'
 
 // Event-driven visibility: click/leave/blur dismiss even when focus remains.
 export function PrototypeTooltip({ content, children }: { content: string; children: ReactElement }) {
@@ -12,7 +12,7 @@ export function PrototypeTooltip({ content, children }: { content: string; child
   const [position, setPosition] = useState({ left: 0, top: 0 })
   const close = () => { setOpen(false); releaseOverlay(id) }
   const show = () => {
-    if (suppressed.current) return
+    if (suppressed.current || !canClaimOverlay(id)) return
     const rect = anchor.current?.getBoundingClientRect()
     if (!rect) return
     claimOverlay(id)

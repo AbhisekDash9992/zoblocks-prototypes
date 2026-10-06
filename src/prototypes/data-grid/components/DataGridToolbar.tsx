@@ -18,7 +18,7 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onToggleCrit
     </div>
     <div className="dg-toolbar-right">
       <span className="dg-collapse-affordance"><PrototypeIconButton icon={expanded ? ChevronsRight : ChevronsLeft} label={expanded ? 'Collapse controls' : 'Expand controls'} onClick={onToggleToolbar} /></span>
-      <PrototypeTooltip content={state.viewModified ? 'Save View · Modified' : 'Save View'}><PrototypeButton className={`dg-save${state.viewModified ? ' dg-modified' : ''}`}>Save View<ChevronDown size={14} aria-hidden="true" /></PrototypeButton></PrototypeTooltip>
+      <PrototypeButton className={`dg-save${state.viewModified ? ' dg-modified' : ''}`}>Save View<ChevronDown size={14} aria-hidden="true" /></PrototypeButton>
       <span className="dg-toolbar-divider" aria-hidden="true" />
       {expanded && <><PrototypeIconButton icon={Filter} label="Filter" applied={filterApplied} onClick={event => onFilter(event.currentTarget)} /><PrototypeIconButton icon={ArrowUpDown} label="Sort" applied={sortApplied} /></>}
       <PrototypeIconButton icon={Search} label="Search" />

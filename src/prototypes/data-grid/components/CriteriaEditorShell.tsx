@@ -1,5 +1,6 @@
+import { DirtyNavigationGuard } from './DirtyNavigationGuard'
 import { useEffect, useRef, useState } from 'react'
-import { CalendarRange, Plus, Trash2 } from 'lucide-react'
+import { CalendarRange, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { filterFields as fields, filterOperators as operators, filterValues as values, completeRule as complete, starterRule } from '../model/filterFields'
 import type { AdvancedSnapshot, DraftRule } from '../model/dataGridPrototypeState'
 import { PrototypeSelect } from '../ui/PrototypeSelect'
@@ -9,18 +10,22 @@ import { PrototypeInput } from '../ui/PrototypeInput'
 
 type Props = {
   mode: 'advanced' | 'simple'; advanced: AdvancedSnapshot; simple: DraftRule | null
+  guardOpen: boolean; onKeep: () => void; onDiscard: () => void; onAdvanceSimple: (row: DraftRule) => void
+  hasAdvanced: boolean; forceDirty?: boolean
   simpleFilters: DraftRule[]; isNew?: boolean; onDirty: (dirty: boolean) => void
   onCancel: () => void; onApplyAdvanced: (snapshot: AdvancedSnapshot) => void
   onApplySimple: (snapshot: DraftRule) => void; onDeleteSimple: () => void
 }
-export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, isNew = false, onDirty, onCancel, onApplyAdvanced, onApplySimple, onDeleteSimple }: Props) {
+export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, guardOpen, onKeep, onDiscard, onAdvanceSimple, hasAdvanced, forceDirty = false, isNew = false, onDirty, onCancel, onApplyAdvanced, onApplySimple, onDeleteSimple }: Props) {
   const [initial] = useState<AdvancedSnapshot>(() => mode === 'advanced' ? structuredClone(advanced) : { relationship: 'And', rows: [{ ...(simple ?? starterRule(1)) }] })
   const [draft, setDraft] = useState<AdvancedSnapshot>(initial)
-  const [autoOpenId, setAutoOpenId] = useState<number | null>(isNew && mode === 'advanced' ? initial.rows[0]?.id ?? null : null)
+  const [autoOpenId, setAutoOpenId] = useState<number | null>(isNew && mode === 'advanced' && !initial.rows[0]?.field ? initial.rows[0]?.id ?? null : null)
   const [valueOpenId, setValueOpenId] = useState<number | null>(isNew && mode === 'simple' ? initial.rows[0].id : null)
+  const [aiNotice, setAiNotice] = useState(false)
+  const sourceFocus = useRef<HTMLElement | null>(null)
   const numericInput = useRef<HTMLInputElement>(null)
   const nextId = useRef(Math.max(0, ...draft.rows.map(row => row.id)) + 1)
-  const dirty = JSON.stringify(draft) !== JSON.stringify(initial)
+  const dirty = forceDirty || JSON.stringify(draft) !== JSON.stringify(initial)
   useEffect(() => { onDirty(dirty) }, [dirty, onDirty])
   useEffect(() => { if (valueOpenId !== null) numericInput.current?.focus({ preventScroll: true }) }, [valueOpenId])
   const incomplete = draft.rows.some(row => !complete(row))
@@ -37,12 +42,15 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, isN
     </>}
     <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label="Remove condition" onClick={() => { setAutoOpenId(null); setValueOpenId(null); setDraft(current => ({ ...current, rows: mode === 'simple' ? [starterRule(row.id)] : current.rows.filter(item => item.id !== row.id) })) }} />
   </div>
-  return <section className={`dg-editor dg-editor-${mode}`} aria-labelledby="dg-editor-title">
-    <header className="dg-editor-header"><h2 id="dg-editor-title">Filter</h2><div>
+  return <section className={`dg-editor dg-editor-${mode}`} aria-labelledby="dg-editor-title" onFocusCapture={event => { if (event.target instanceof HTMLElement && event.currentTarget.contains(event.target) && !event.target.closest('.dg-guard-dialog')) sourceFocus.current = event.target }}>
+    <header className="dg-editor-header"><div className="dg-editor-title-group"><h2 id="dg-editor-title">Filter</h2><PrototypeIconButton icon={Sparkles} label="AI Filter" onClick={() => setAiNotice(true)} /></div><div>
       <PrototypeButton variant="text" onClick={onCancel}>Cancel</PrototypeButton>
       <PrototypeButton className={`dg-apply${clearing ? ' dg-destructive' : ''}`} variant="primary" size={32} disabled={!clearing && ((!dirty && !isNew) || !valid)} onClick={() => clearing ? onDeleteSimple() : mode === 'advanced' ? onApplyAdvanced(structuredClone(draft)) : onApplySimple({ ...draft.rows[0] })}>{clearing ? 'Clear filter' : 'Apply'}</PrototypeButton>
     </div></header>
+    <div className={`dg-editor-workspace${guardOpen ? ' dg-editor-guarded' : ''}`}>
     <div className={`dg-conditions${mode === 'simple' ? ' dg-simple-conditions' : ''}`} role="region" aria-label={mode === 'advanced' ? 'Representative conditions' : 'Simple filter rule'} tabIndex={0}>
+      {aiNotice && <p className="dg-ai-notice" role="status">AI Filter is deferred in this prototype batch.</p>}
+      {mode === 'simple' && <div className="dg-conditions-heading"><div><h3>Conditions</h3><p>One condition.</p></div><PrototypeButton variant="text" textTone="primary" disabled={!valid} onClick={() => onAdvanceSimple({ ...draft.rows[0] })}>{hasAdvanced ? 'Add to Advanced Filter' : 'Convert to Advanced Filter'}</PrototypeButton></div>}
       {mode === 'advanced' && <><h3>Conditions</h3>{draft.rows.length > 0 && <p>{draft.relationship === 'And' ? 'All' : 'Any'} conditions below must match.</p>}</>}
       {fieldConflict && <p role="status">This field already has a Simple filter. Choose another field.</p>}
       <div className="dg-condition-stack">
@@ -56,6 +64,8 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, isN
         setAutoOpenId(id)
       }}><Plus size={14} aria-hidden="true" />Add Filter</PrototypeButton>}
       </div>
+    </div>
+    {guardOpen && <DirtyNavigationGuard sourceFocus={sourceFocus} onKeep={onKeep} onDiscard={onDiscard} />}
     </div>
   </section>
 }

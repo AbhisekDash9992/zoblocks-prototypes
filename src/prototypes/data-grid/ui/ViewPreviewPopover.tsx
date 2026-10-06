@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import { createPortal } from 'react-dom'
-import { claimOverlay, releaseOverlay } from './overlayState'
+import { canClaimOverlay, claimOverlay, releaseOverlay } from './overlayState'
 
 const configurations = [
   { group: 'Status', sort: ['Priority ↓', 'Next Contact ↑'], filters: ['Advanced filter · 3 rules', 'Status: Active'] },
@@ -16,6 +16,7 @@ export function ViewPreviewPopover({ index, children }: { index: number; childre
   const [position, setPosition] = useState({ left: 0, top: 0 })
   const close = () => { clearTimeout(timer.current); setOpen(false); releaseOverlay(id) }
   const show = () => {
+    if (!canClaimOverlay(id)) return
     clearTimeout(timer.current)
     const rect = anchor.current?.getBoundingClientRect()
     if (!rect) return
@@ -28,6 +29,7 @@ export function ViewPreviewPopover({ index, children }: { index: number; childre
   }, [id])
   const config = configurations[index]
   return <span ref={anchor} className="dg-tooltip-anchor" onMouseEnter={() => {
+    if (!canClaimOverlay(id)) return
     clearTimeout(timer.current)
     // Reserve ownership before waiting: the previous chip cannot cancel this timer.
     const previousOwner = claimOverlay(id)

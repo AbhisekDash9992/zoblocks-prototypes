@@ -12,7 +12,9 @@ export function PrototypeMenu({ id, label, trigger, position, onClose, children,
     const menu = popup.current
     if (!menu) return
     const height = menu.getBoundingClientRect().height
-    menu.style.top = Math.max(8, Math.min(position.top, window.innerHeight - height - 8)) + 'px'
+    const anchor = trigger.current?.getBoundingClientRect()
+    const top = position.top + height <= window.innerHeight - 8 ? position.top : anchor ? anchor.top - height - 4 : position.top
+    menu.style.top = Math.max(8, Math.min(top, window.innerHeight - height - 8)) + 'px'
   })
   useEffect(() => {
     claimOverlay(id)
