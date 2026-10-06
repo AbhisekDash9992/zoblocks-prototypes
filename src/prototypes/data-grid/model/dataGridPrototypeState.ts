@@ -25,7 +25,8 @@ export type DataGridPrototypeState = {
   activeEditor: 'none' | 'advanced' | 'simple'
   activeCriterion: 'none' | 'advanced' | 'simple'
   advancedSnapshot: AdvancedSnapshot
-  simpleSnapshot: DraftRule | null
+  simpleFilters: DraftRule[]
+  activeSimpleId: number | null
   directSort: DirectSort
 }
 
@@ -44,20 +45,20 @@ export const defaultDataGridState: DataGridPrototypeState = {
   activeEditor: 'none',
   activeCriterion: 'none',
   advancedSnapshot: initialAdvancedSnapshot,
-  simpleSnapshot: { id: 1, field: 'Status', operator: 'is', value: 'Active' },
+  simpleFilters: [{ id: 1, field: 'Status', operator: 'is', value: 'Active' }],
+  activeSimpleId: null,
   directSort: null,
 }
 
 export function withCriteriaState(state: DataGridPrototypeState, criteriaState: CriteriaState): DataGridPrototypeState {
   return {
     ...state, criteriaState,
+    activeSimpleId: null,
     activeEditor: criteriaState === 'editor' ? 'advanced' : 'none',
     activeCriterion: criteriaState === 'editor' && state.criteriaPreset === 'sampleCommitted' ? 'advanced' : 'none',
   }
 }
 
-// TODO Batch 2: toolbar Filter and Summary Add Filter share a field/action picker.
-// Pass A only reveals Summary; it does not select a field or open an editor.
 export function revealFilterEntry(state: DataGridPrototypeState): DataGridPrototypeState {
   return withCriteriaState(state, 'summary')
 }

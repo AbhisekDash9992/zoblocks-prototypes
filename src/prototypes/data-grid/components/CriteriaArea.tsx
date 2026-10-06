@@ -1,14 +1,20 @@
-import type { DataGridPrototypeState } from '../model/dataGridPrototypeState'
+import type { AdvancedSnapshot, DataGridPrototypeState, DraftRule } from '../model/dataGridPrototypeState'
 import { CriteriaEditorShell } from './CriteriaEditorShell'
 import { CriteriaSummary } from './CriteriaSummary'
-import type { AdvancedSnapshot, DraftRule } from '../model/dataGridPrototypeState'
 
-export function CriteriaArea({ state, onOpenEditor, onAddFilter, onCancel, onClear, onApplyAdvanced, onApplySimple, onDeleteSimple }: { state: DataGridPrototypeState; onOpenEditor: (mode: 'advanced' | 'simple') => void; onAddFilter: () => void; onCancel: () => void; onClear: () => void; onApplyAdvanced: (snapshot: AdvancedSnapshot) => void; onApplySimple: (snapshot: DraftRule) => void; onDeleteSimple: () => void }) {
+export type FilterEditorSession = { key: number; isNew: boolean; advanced: AdvancedSnapshot; simple: DraftRule | null }
+export function CriteriaArea({ state, session, onOpenEditor, onAddFilter, onCancel, onClear, onDirty, onApplyAdvanced, onApplySimple, onDeleteSimple, onRemoveSimple }: {
+  state: DataGridPrototypeState; session: FilterEditorSession | null
+  onOpenEditor: (mode: 'advanced' | 'simple', trigger: HTMLButtonElement, id?: number) => void
+  onAddFilter: (trigger: HTMLButtonElement) => void; onCancel: () => void; onClear: () => void
+  onDirty: (dirty: boolean) => void; onApplyAdvanced: (snapshot: AdvancedSnapshot) => void
+  onApplySimple: (snapshot: DraftRule) => void; onDeleteSimple: () => void; onRemoveSimple: (id: number) => void
+}) {
   if (state.criteriaState === 'hidden') return null
   return <div id="dg-criteria-area" className="dg-criteria-area">
     <div className="dg-criteria-surface">
-      {state.criteriaState === 'editor' && state.activeEditor !== 'none' && <CriteriaEditorShell key={state.activeEditor} mode={state.activeEditor} advanced={state.advancedSnapshot} simple={state.simpleSnapshot} onCancel={onCancel} onApplyAdvanced={onApplyAdvanced} onApplySimple={onApplySimple} onDeleteSimple={onDeleteSimple} />}
-      <CriteriaSummary state={state} onOpenEditor={onOpenEditor} onAddFilter={onAddFilter} onClear={onClear} />
+      {state.criteriaState === 'editor' && state.activeEditor !== 'none' && <CriteriaEditorShell key={session?.key ?? state.activeEditor} mode={state.activeEditor} advanced={session?.advanced ?? state.advancedSnapshot} simple={session?.simple ?? state.simpleFilters[0] ?? null} isNew={session?.isNew} onDirty={onDirty} onCancel={onCancel} onApplyAdvanced={onApplyAdvanced} onApplySimple={onApplySimple} onDeleteSimple={onDeleteSimple} />}
+      <CriteriaSummary state={state} onOpenEditor={onOpenEditor} onAddFilter={onAddFilter} onClear={onClear} onRemoveSimple={onRemoveSimple} />
     </div>
   </div>
 }
