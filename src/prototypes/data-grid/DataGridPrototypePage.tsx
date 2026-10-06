@@ -11,20 +11,25 @@ import { PrototypeDataGrid } from './components/PrototypeDataGrid'
 import { PrototypeStateControls } from './components/PrototypeStateControls'
 import { defaultDataGridState, revealFilterEntry, withCriteriaState } from './model/dataGridPrototypeState'
 import './styles/data-grid.css'
+import { UndoSnackbar } from './components/UndoSnackbar'
 import { PrototypeButton } from './ui/PrototypeButton'
 
 export function DataGridPrototypePage() {
   const [state, setState] = useState({ ...defaultDataGridState })
   const [pickerAnchor, setPickerAnchor] = useState<HTMLButtonElement | null>(null)
+  const summaryAddFilterRef = useRef<HTMLButtonElement>(null)
+  const [pickerRequested, setPickerRequested] = useState(false)
+  const undoId = useRef(0)
   const [session, setSession] = useState<FilterEditorSession | null>(null)
   const [pending, setPending] = useState<{ action: () => void; anchor: HTMLElement } | null>(null)
-  const [undo, setUndo] = useState<{ message: string; restore: (current: DataGridPrototypeState) => DataGridPrototypeState } | null>(null)
+  const [undo, setUndo] = useState<{ id: number; message: string; restore: (current: DataGridPrototypeState) => DataGridPrototypeState } | null>(null)
   const dirty = useRef(false)
   const sessionKey = useRef(0)
   const nextSimpleId = useRef(2)
   const editorTrigger = useRef<HTMLButtonElement | null>(null)
   const reportDirty = useCallback((value: boolean) => { dirty.current = value }, [])
   const closePicker = useCallback(() => setPickerAnchor(null), [])
+  const dismissUndo = useCallback(() => setUndo(null), [])
   const keepEditing = useCallback(() => setPending(null), [])
   const fullScreenExitRef = useRef<HTMLButtonElement>(null)
   useEffect(() => {
@@ -38,6 +43,17 @@ export function DataGridPrototypePage() {
       if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus()
     }
   }, [state.fullScreen])
+  useEffect(() => {
+    if (!pickerRequested || state.criteriaState !== 'summary') return
+    const frame = requestAnimationFrame(() => {
+      const trigger = summaryAddFilterRef.current
+      if (!trigger) return
+      trigger.focus({ preventScroll: true })
+      setPickerAnchor(trigger)
+      setPickerRequested(false)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [pickerRequested, state.criteriaState])
   const navigate = (action: () => void, anchor: HTMLElement) => {
     if (state.criteriaState === 'editor' && dirty.current) setPending({ action, anchor })
     else action()
@@ -63,9 +79,17 @@ export function DataGridPrototypePage() {
     dirty.current = false
     setSession(null)
     setState(current => revealFilterEntry(current))
-    setPickerAnchor(trigger)
+    setPickerAnchor(null)
+    setPickerRequested(true)
   }, trigger)
   const selectField = (field: string) => {
+    const existing = state.simpleFilters.find(filter => filter.field === field)
+    if (existing && pickerAnchor) {
+      const trigger = pickerAnchor
+      setPickerAnchor(null)
+      openEditor('simple', trigger, existing.id)
+      return
+    }
     editorTrigger.current = pickerAnchor
     dirty.current = false
     setSession({ key: ++sessionKey.current, isNew: true, advanced: { relationship: 'And', rows: [starterRule(1)] }, simple: starterRule(nextSimpleId.current++, field) })
@@ -86,8 +110,8 @@ export function DataGridPrototypePage() {
     if (state.activeSimpleId === id) finishEditor()
     setState(current => ({ ...current, simpleFilters: current.simpleFilters.filter(row => row.id !== id), viewModified: true }))
     const index = state.simpleFilters.findIndex(row => row.id === id)
-    setUndo({ message: removed.field + ' filter removed.', restore: current => {
-      const rows = current.simpleFilters.filter(row => row.id !== id)
+    setUndo({ id: ++undoId.current, message: removed.field + ' filter removed.', restore: current => {
+      const rows = current.simpleFilters.filter(row => row.id !== id && row.field !== removed.field)
       rows.splice(Math.min(index, rows.length), 0, removed)
       return { ...current, simpleFilters: rows, viewModified: true }
     } })
@@ -96,7 +120,7 @@ export function DataGridPrototypePage() {
   const clearSummary = () => {
     const previous = structuredClone(state)
     setState(current => ({ ...withCriteriaState(current, 'summary'), criteriaPreset: 'empty', criteriaActive: false, advancedSnapshot: { relationship: 'And', rows: [] }, simpleFilters: [], directSort: null, viewModified: true }))
-    setUndo({ message: 'All criteria cleared.', restore: current => ({ ...current, criteriaPreset: previous.criteriaPreset, criteriaActive: previous.criteriaActive, advancedSnapshot: previous.advancedSnapshot, simpleFilters: previous.simpleFilters, directSort: previous.directSort, viewModified: true }) })
+    setUndo({ id: ++undoId.current, message: 'All criteria cleared.', restore: current => ({ ...current, criteriaPreset: previous.criteriaPreset, criteriaActive: previous.criteriaActive, advancedSnapshot: previous.advancedSnapshot, simpleFilters: previous.simpleFilters, directSort: previous.directSort, viewModified: true }) })
   }
 
   return <div className="dg-page">
@@ -106,8 +130,8 @@ export function DataGridPrototypePage() {
       {state.fullScreen && <div className="dg-full-screen-review"><span>Review only · Simulated full-screen candidate</span><PrototypeButton ref={fullScreenExitRef} onClick={() => setState(current => ({ ...current, fullScreen: false }))}>Exit full screen</PrototypeButton></div>}
       <div className="dg-scroll" role="region" aria-label="Data grid working surface, horizontally scrollable on narrow screens" tabIndex={0}>
         <div className="dg-surface">
-          <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
-          <CriteriaArea state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={finishEditor} onClear={clearSummary} onDirty={reportDirty}
+          <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
+          <CriteriaArea addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={finishEditor} onClear={clearSummary} onDirty={reportDirty}
             onApplyAdvanced={snapshot => { finishEditor(); setState(current => ({ ...current, advancedSnapshot: snapshot, viewModified: true, criteriaActive: true })) }}
             onApplySimple={snapshot => { finishEditor(); setState(current => ({ ...current, simpleFilters: current.simpleFilters.some(row => row.id === snapshot.id) ? current.simpleFilters.map(row => row.id === snapshot.id ? snapshot : row) : [...current.simpleFilters, snapshot], viewModified: true, criteriaActive: true })) }}
             onDeleteSimple={() => { const id = session?.simple?.id ?? state.activeSimpleId; if (id !== null && id !== undefined) removeSimple(id) }} onRemoveSimple={removeSimple} />
@@ -119,11 +143,11 @@ export function DataGridPrototypePage() {
     </div>
     {pickerAnchor && <AddFilterPopover anchor={pickerAnchor} onClose={closePicker} onField={selectField} onAdvanced={enterAdvanced} />}
     {pending && <DirtyNavigationPopover anchor={pending.anchor} onKeep={keepEditing} onDiscard={() => { dirty.current = false; setPending(null); pending.action() }} />}
-    {undo && <div className="dg-snackbar"><span role="status">{undo.message}</span><PrototypeButton variant="text" onClick={() => { setState(current => undo.restore(current)); setUndo(null); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.dg-add-filter, .dg-editor-header button')?.focus({ preventScroll: true })) }}>Undo</PrototypeButton><PrototypeButton variant="text" aria-label="Dismiss notification" onClick={() => setUndo(null)}>×</PrototypeButton></div>}
+    {undo && <UndoSnackbar key={undo.id} message={undo.message} onClose={dismissUndo} onUndo={() => { setState(current => undo.restore(current)); setUndo(null); requestAnimationFrame(() => (summaryAddFilterRef.current ?? document.querySelector<HTMLButtonElement>('.dg-editor-header button'))?.focus({ preventScroll: true })) }} />}
     <PrototypeStateControls state={state} onChange={(next, reset = false) => {
       const criteriaNavigation = reset || next.criteriaState !== state.criteriaState || next.criteriaPreset !== state.criteriaPreset
       if (!criteriaNavigation) { setState(next); return }
-      const change = () => { dirty.current = false; setSession(null); setPickerAnchor(null); setPending(null); setUndo(null); nextSimpleId.current = Math.max(nextSimpleId.current, ...next.simpleFilters.map(row => row.id + 1)); setState(next) }
+      const change = () => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setPending(null); setUndo(null); nextSimpleId.current = Math.max(nextSimpleId.current, ...next.simpleFilters.map(row => row.id + 1)); setState(next) }
       const trigger = document.activeElement
       if (trigger instanceof HTMLElement) navigate(change, trigger)
       else change()

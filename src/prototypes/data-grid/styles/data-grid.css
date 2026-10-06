@@ -166,10 +166,10 @@
 /* All local preview controls provide visual feedback; aria-disabled previews have no product action. */
 .dg-page button:not(:disabled):hover { background-color: var(--dg-level-one); }
 .dg-page button:not(:disabled):active { background-color: var(--dg-subtle); box-shadow: none; }
-.dg-page .dg-chip:hover { background: var(--dg-primary-light); }
+.dg-page .dg-chip:hover, .dg-page .dg-chip:focus-within { background: #E2EEFF; }
 .dg-page .dg-chip:active { background: var(--dg-subtle); box-shadow: none; }
-.dg-page .dg-chip-selected:hover, .dg-page .dg-chip-selected button:hover { background: #1039C4; }
-.dg-page .dg-chip-selected:active, .dg-page .dg-chip-selected button:active { background: #0D2E9E; }
+.dg-page .dg-chip-selected:hover, .dg-page .dg-chip-selected:focus-within { background: #1039C4; }
+.dg-page .dg-chip-selected:active { background: #0D2E9E; }
 .dg-page button:disabled { background: var(--dg-surface); color: var(--dg-disabled); cursor: not-allowed; }
 .dg-review-switch:hover .dg-switch-track { box-shadow: 0 0 0 3px var(--dg-subtle); }
 .dg-review-switch:active .dg-switch-track { box-shadow: 0 0 0 3px var(--dg-border); }
@@ -246,9 +246,9 @@
 .dg-page .dg-icon-action:disabled { background: transparent; color: var(--dg-disabled); }
 .dg-page .dg-date-range-control .dg-input { padding-left: 32px; }
 
-/* Text-only actions never acquire a surface in any interaction state. */
-.dg-page .dg-button-text, .dg-page .dg-button-text:not(:disabled):hover, .dg-page .dg-button-text:not(:disabled):active, .dg-page .dg-button-text:focus, .dg-page .dg-button-text:disabled,
-.dg-picker .dg-button-text, .dg-picker .dg-button-text:hover, .dg-picker .dg-button-text:active, .dg-picker .dg-button-text:focus, .dg-picker .dg-button-text:disabled { background: transparent; padding-inline: 0; box-shadow: none; }
+/* Enabled text actions may use their local interaction surface; disabled text stays surface-less. */
+.dg-page .dg-button-text, .dg-picker .dg-button-text { padding-inline: 0; box-shadow: none; }
+.dg-page .dg-button-text:disabled, .dg-picker .dg-button-text:disabled { background: transparent; }
 .dg-page .dg-text-secondary:not(:disabled):hover { color: var(--dg-text); }
 .dg-page .dg-text-secondary:not(:disabled):active { color: var(--dg-secondary); }
 .dg-page .dg-text-primary, .dg-picker .dg-text-primary { color: #1447F6; }
@@ -264,3 +264,21 @@
 .dg-snackbar { position: fixed; z-index: 110; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 8px; background: #101828; color: #FFFFFF; box-shadow: 0 4px 12px rgb(16 24 40 / 18%); font-size: 12px; }
 .dg-snackbar .dg-button-text { color: #FFFFFF; }
 .dg-summary { overflow-x: auto; }
+
+/* Applied toolbar icons use the primary ghost family, with a transparent resting surface. */
+.dg-page .dg-icon-action.dg-applied:not(:disabled):hover,
+.dg-page .dg-icon-action.dg-applied:not(:disabled):focus-visible { color: var(--dg-primary); background: #E2EEFF; }
+.dg-page .dg-icon-action.dg-applied:not(:disabled):active { color: var(--dg-primary); background: #D5E5FF; }
+/* Summary pills own the surface; their nested controls never paint rectangles. */
+.dg-page .dg-chip button, .dg-page .dg-chip button:hover,
+.dg-page .dg-chip button:active, .dg-page .dg-chip button:focus-visible { background: transparent; box-shadow: none; }
+.dg-page .dg-chip:focus-within { outline: 2px solid var(--dg-primary); outline-offset: 2px; }
+.dg-page .dg-chip button:focus-visible { outline: none; }
+.dg-page .dg-chip button:not(.dg-chip-open):hover svg,
+.dg-page .dg-chip button:not(.dg-chip-open):focus-visible svg { stroke-width: 3px; }
+/* Inverse controls on the dark snackbar retain their 24px targets. */
+.dg-page .dg-snackbar .dg-button-text, .dg-page .dg-snackbar .dg-icon-action { color: #FFFFFF; }
+.dg-page .dg-snackbar .dg-button:not(:disabled):hover,
+.dg-page .dg-snackbar .dg-button:not(:disabled):focus-visible { color: #FFFFFF; background: rgb(255 255 255 / 10%); }
+.dg-page .dg-snackbar .dg-button:not(:disabled):active { color: #FFFFFF; background: rgb(255 255 255 / 18%); }
+.dg-page .dg-snackbar .dg-button:disabled { color: var(--dg-disabled); background: transparent; }

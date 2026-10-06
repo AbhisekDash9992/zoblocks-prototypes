@@ -9,11 +9,11 @@ import { PrototypeInput } from '../ui/PrototypeInput'
 
 type Props = {
   mode: 'advanced' | 'simple'; advanced: AdvancedSnapshot; simple: DraftRule | null
-  isNew?: boolean; onDirty: (dirty: boolean) => void
+  simpleFilters: DraftRule[]; isNew?: boolean; onDirty: (dirty: boolean) => void
   onCancel: () => void; onApplyAdvanced: (snapshot: AdvancedSnapshot) => void
   onApplySimple: (snapshot: DraftRule) => void; onDeleteSimple: () => void
 }
-export function CriteriaEditorShell({ mode, advanced, simple, isNew = false, onDirty, onCancel, onApplyAdvanced, onApplySimple, onDeleteSimple }: Props) {
+export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, isNew = false, onDirty, onCancel, onApplyAdvanced, onApplySimple, onDeleteSimple }: Props) {
   const [initial] = useState<AdvancedSnapshot>(() => mode === 'advanced' ? structuredClone(advanced) : { relationship: 'And', rows: [{ ...(simple ?? starterRule(1)) }] })
   const [draft, setDraft] = useState<AdvancedSnapshot>(initial)
   const [autoOpenId, setAutoOpenId] = useState<number | null>(isNew && mode === 'advanced' ? initial.rows[0]?.id ?? null : null)
@@ -24,17 +24,18 @@ export function CriteriaEditorShell({ mode, advanced, simple, isNew = false, onD
   useEffect(() => { onDirty(dirty) }, [dirty, onDirty])
   useEffect(() => { if (valueOpenId !== null) numericInput.current?.focus({ preventScroll: true }) }, [valueOpenId])
   const incomplete = draft.rows.some(row => !complete(row))
-  const valid = draft.rows.length > 0 && !incomplete
+  const fieldConflict = mode === 'simple' && simpleFilters.some(filter => filter.field === draft.rows[0].field && filter.id !== draft.rows[0].id)
+  const valid = draft.rows.length > 0 && !incomplete && !fieldConflict
   const clearing = mode === 'simple' && !isNew && !draft.rows[0].field
   const update = (id: number, patch: Partial<DraftRule>) => setDraft(current => ({ ...current, rows: current.rows.map(row => row.id === id ? { ...row, ...patch } : row) }))
   const controls = (row: DraftRule, index: number) => <div className="dg-rule-controls">
-    <PrototypeSelect className="dg-rule-field" autoOpen={row.id === autoOpenId} label={`Field for condition ${index + 1}`} value={row.field} placeholder="Select field" options={fields} onChange={field => { update(row.id, { ...starterRule(row.id, field), operator: mode === 'advanced' ? operators[field][0] : starterRule(row.id, field).operator, range: undefined }); setAutoOpenId(null); setValueOpenId(mode === 'simple' ? row.id : null) }} />
+    <PrototypeSelect className="dg-rule-field" autoOpen={row.id === autoOpenId} label={`Field for condition ${index + 1}`} value={row.field} placeholder="Select field" options={mode === 'simple' ? fields.filter(field => !simpleFilters.some(filter => filter.field === field && filter.id !== row.id)) : fields} onChange={field => { update(row.id, { ...starterRule(row.id, field), operator: mode === 'advanced' ? operators[field][0] : starterRule(row.id, field).operator, range: undefined }); setAutoOpenId(null); setValueOpenId(mode === 'simple' ? row.id : null) }} />
     {row.field && <>
       <PrototypeSelect className="dg-rule-operator" label={`Operator for condition ${index + 1}`} value={row.operator} options={operators[row.field]} onChange={operator => { update(row.id, { operator, value: '', range: undefined }); setValueOpenId(mode === 'simple' ? row.id : null) }} />
       {row.field === 'PHQ-9' ? <PrototypeInput ref={numericInput} className="dg-rule-value dg-numeric-input" type="number" aria-label={`Value for condition ${index + 1}`} placeholder="Enter number" value={row.value} onChange={event => update(row.id, { value: event.target.value })} /> : <PrototypeSelect key={`${row.field}-${row.operator}`} autoOpen={row.id === valueOpenId} className="dg-rule-value" label={`Value for condition ${index + 1}`} value={row.value} options={values[row.field]} multiple={row.field === 'Priority' && row.operator === 'is any of'} onChange={value => update(row.id, { value, range: value === 'Date range' ? '1 Oct 2026 – 7 Oct 2026' : undefined })} />}
       {row.field === 'Next Contact' && row.value === 'Date range' && <span className="dg-date-range-control"><CalendarRange size={16} aria-hidden="true" /><PrototypeInput className="dg-date-range" aria-label={`Date range for condition ${index + 1}`} value={row.range ?? ''} onChange={event => update(row.id, { range: event.target.value })} /></span>}
     </>}
-    <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label={`Delete condition ${index + 1}`} onClick={() => { setAutoOpenId(null); setValueOpenId(null); setDraft(current => ({ ...current, rows: mode === 'simple' ? [starterRule(row.id)] : current.rows.filter(item => item.id !== row.id) })) }} />
+    <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label="Remove condition" onClick={() => { setAutoOpenId(null); setValueOpenId(null); setDraft(current => ({ ...current, rows: mode === 'simple' ? [starterRule(row.id)] : current.rows.filter(item => item.id !== row.id) })) }} />
   </div>
   return <section className={`dg-editor dg-editor-${mode}`} aria-labelledby="dg-editor-title">
     <header className="dg-editor-header"><h2 id="dg-editor-title">Filter</h2><div>
@@ -43,6 +44,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, isNew = false, onD
     </div></header>
     <div className={`dg-conditions${mode === 'simple' ? ' dg-simple-conditions' : ''}`} role="region" aria-label={mode === 'advanced' ? 'Representative conditions' : 'Simple filter rule'} tabIndex={0}>
       {mode === 'advanced' && <><h3>Conditions</h3>{draft.rows.length > 0 && <p>{draft.relationship === 'And' ? 'All' : 'Any'} conditions below must match.</p>}</>}
+      {fieldConflict && <p role="status">This field already has a Simple filter. Choose another field.</p>}
       <div className="dg-condition-stack">
       {draft.rows.map((row, index) => mode === 'simple' ? <div key={row.id} className="dg-simple-rule">{controls(row, index)}</div> : <div className="dg-rule-row" key={row.id}>
         {draft.rows.length > 1 && <div className="dg-relationship">{index === 1 ? <PrototypeSelect compact label="Condition relationship" value={draft.relationship} options={['And', 'Or']} onChange={relationship => setDraft(current => ({ ...current, relationship: relationship as 'And' | 'Or' }))} /> : index === 0 ? 'Where' : draft.relationship.toLowerCase()}</div>}
