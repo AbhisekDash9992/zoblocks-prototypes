@@ -167,7 +167,7 @@
 .dg-page button:not(:disabled):hover { background-color: var(--dg-level-one); }
 .dg-page button:not(:disabled):active { background-color: var(--dg-subtle); box-shadow: none; }
 .dg-page .dg-chip:hover, .dg-page .dg-chip:focus-within { background: #E2EEFF; }
-.dg-page .dg-chip:active { background: var(--dg-subtle); box-shadow: none; }
+.dg-page .dg-chip:active { background: #D5E5FF; box-shadow: none; }
 .dg-page .dg-chip-selected:hover, .dg-page .dg-chip-selected:focus-within { background: #1039C4; }
 .dg-page .dg-chip-selected:active { background: #0D2E9E; }
 .dg-page button:disabled { background: var(--dg-surface); color: var(--dg-disabled); cursor: not-allowed; }
@@ -272,7 +272,7 @@
 /* Summary pills own the surface; their nested controls never paint rectangles. */
 .dg-page .dg-chip button, .dg-page .dg-chip button:hover,
 .dg-page .dg-chip button:active, .dg-page .dg-chip button:focus-visible { background: transparent; box-shadow: none; }
-.dg-page .dg-chip:focus-within { outline: 2px solid var(--dg-primary); outline-offset: 2px; }
+.dg-page .dg-chip:has(button:focus-visible) { outline: 2px solid var(--dg-primary); outline-offset: 2px; }
 .dg-page .dg-chip button:focus-visible { outline: none; }
 .dg-page .dg-chip button:not(.dg-chip-open):hover svg,
 .dg-page .dg-chip button:not(.dg-chip-open):focus-visible svg { stroke-width: 3px; }
@@ -294,3 +294,6 @@
 .dg-conditions-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-shrink: 0; }
 .dg-conditions-heading p { margin: 0; color: var(--dg-tertiary); line-height: 16px; }
 .dg-conditions-heading > .dg-button { flex-shrink: 0; }
+
+/* Direct Cancel returns to the non-interactive Summary context. */
+.dg-page .dg-summary:focus { outline: none; }

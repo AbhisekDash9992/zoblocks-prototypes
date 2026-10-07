@@ -62,12 +62,13 @@ export function DataGridPrototypePage() {
     if (state.criteriaState === 'editor' && dirty.current) { setPickerAnchor(null); setPickerRequested(false); setPending({ action }) }
     else action()
   }
-  const finishEditor = () => {
+  const finishEditor = (restoreTrigger = true) => {
     dirty.current = false
     setSession(null)
     setPending(null)
     setState(current => withCriteriaState(current, 'summary'))
     requestAnimationFrame(() => {
+      if (!restoreTrigger) { document.querySelector<HTMLElement>('.dg-summary')?.focus({ preventScroll: true }); return }
       const control = editorTrigger.current
       if (control?.isConnected) control.focus({ preventScroll: true })
       else document.querySelector<HTMLButtonElement>('.dg-add-filter')?.focus({ preventScroll: true })
@@ -163,7 +164,7 @@ export function DataGridPrototypePage() {
       <div className="dg-scroll" role="region" aria-label="Data grid working surface, horizontally scrollable on narrow screens" tabIndex={0}>
         <div className="dg-surface">
           <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
-          <CriteriaArea guardOpen={pending !== null} onKeep={keepEditing} onDiscard={() => { if (pending) { dirty.current = false; setPending(null); pending.action() } }} onAdvanceSimple={advanceSimple} addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={finishEditor} onClear={clearSummary} onDirty={reportDirty}
+          <CriteriaArea guardOpen={pending !== null} onKeep={keepEditing} onDiscard={() => { if (pending) { dirty.current = false; setPending(null); pending.action() } }} onAdvanceSimple={advanceSimple} addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={() => finishEditor(false)} onClear={clearSummary} onDirty={reportDirty}
             onApplyAdvanced={snapshot => { const transferred = session?.transferSimpleId; finishEditor(); setState(current => ({ ...current, advancedSnapshot: snapshot, simpleFilters: current.simpleFilters.filter(row => row.id !== transferred), viewModified: true, criteriaActive: true })) }}
             onApplySimple={snapshot => { finishEditor(); setState(current => ({ ...current, simpleFilters: current.simpleFilters.some(row => row.id === snapshot.id) ? current.simpleFilters.map(row => row.id === snapshot.id ? snapshot : row) : [...current.simpleFilters, snapshot], viewModified: true, criteriaActive: true })) }}
             onDeleteSimple={() => { const id = session?.simple?.id ?? state.activeSimpleId; if (id !== null && id !== undefined) removeSimple(id) }} onRemoveSimple={removeSimple} onRemoveCriterion={removeCriterion} />
