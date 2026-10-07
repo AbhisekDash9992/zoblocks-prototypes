@@ -42,7 +42,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
     </>}
     <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label="Remove condition" onClick={() => { setAutoOpenId(null); setValueOpenId(null); setDraft(current => ({ ...current, rows: mode === 'simple' ? [starterRule(row.id)] : current.rows.filter(item => item.id !== row.id) })) }} />
   </div>
-  return <section className={`dg-editor dg-editor-${mode}`} aria-labelledby="dg-editor-title" onFocusCapture={event => { if (event.target instanceof HTMLElement && event.currentTarget.contains(event.target) && !event.target.closest('.dg-guard-dialog')) sourceFocus.current = event.target }}>
+  return <section className={`dg-editor dg-editor-${mode}`} aria-labelledby="dg-editor-title" tabIndex={-1} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.currentTarget.contains(event.target) && !event.target.closest('.dg-guard-dialog')) sourceFocus.current = event.target }}>
     <header className="dg-editor-header"><div className="dg-editor-title-group"><h2 id="dg-editor-title">Filter</h2><PrototypeIconButton className="dg-ai-action" icon={Sparkles} label="AI Filter" onClick={() => setAiNotice(true)} /></div><div>
       <PrototypeButton className="dg-editor-action" variant="text" onClick={onCancel}>Cancel</PrototypeButton>
       <PrototypeButton className={`dg-editor-action dg-apply${clearing ? ' dg-destructive' : ''}`} variant="primary" size={24} disabled={!clearing && ((!dirty && !isNew) || !valid)} onClick={() => clearing ? onDeleteSimple() : mode === 'advanced' ? onApplyAdvanced(structuredClone(draft)) : onApplySimple({ ...draft.rows[0] })}>{clearing ? 'Clear filter' : 'Apply'}</PrototypeButton>
@@ -50,7 +50,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
     <div className={`dg-editor-workspace${guardOpen ? ' dg-editor-guarded' : ''}`}>
     <div className={`dg-conditions${mode === 'simple' ? ' dg-simple-conditions' : ''}`} role="region" aria-label={mode === 'advanced' ? 'Representative conditions' : 'Simple filter rule'} tabIndex={0}>
       {aiNotice && <p className="dg-ai-notice" role="status">AI Filter is deferred in this prototype batch.</p>}
-      {mode === 'simple' && <div className="dg-conditions-heading"><div><h3>Conditions</h3><p>One condition.</p></div><PrototypeButton variant="text" textTone="primary" disabled={!valid} onClick={() => onAdvanceSimple({ ...draft.rows[0] })}>{hasAdvanced ? 'Add to Advanced Filter' : 'Convert to Advanced Filter'}</PrototypeButton></div>}
+      {mode === 'simple' && <div className="dg-conditions-heading"><div><h3>Conditions</h3><p>One condition.</p></div><PrototypeButton className="dg-conditions-action" variant="text" textTone="primary" disabled={!valid} onClick={() => onAdvanceSimple({ ...draft.rows[0] })}>{hasAdvanced ? 'Add to Advanced Filter' : 'Convert to Advanced Filter'}</PrototypeButton></div>}
       {mode === 'advanced' && <><h3>Conditions</h3>{draft.rows.length > 0 && <p>{draft.relationship === 'And' ? 'All' : 'Any'} conditions below must match.</p>}</>}
       {fieldConflict && <p role="status">This field already has a Simple filter. Choose another field.</p>}
       <div className="dg-condition-stack">

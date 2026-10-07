@@ -321,3 +321,7 @@
 .dg-page .dg-icon-action.dg-ai-action:not(:disabled):hover,
 .dg-page .dg-icon-action.dg-ai-action:not(:disabled):focus-visible { color: var(--dg-ai-accent-hover); background: var(--dg-ai-surface); }
 .dg-page .dg-icon-action.dg-ai-action:not(:disabled):active { color: var(--dg-ai-accent-hover); background: var(--dg-ai-border); }
+
+.dg-page .dg-conditions-action { height: 24px; padding: 0 8px; }
+/* Neutral destinations repair removed focus without highlighting a control. */
+.dg-page .dg-editor:focus, .dg-page .dg-working-region:focus { outline: none; }
