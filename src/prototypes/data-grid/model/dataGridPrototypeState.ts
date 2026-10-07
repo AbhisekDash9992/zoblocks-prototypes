@@ -13,6 +13,8 @@ export const initialAdvancedSnapshot: AdvancedSnapshot = {
 export type DataGridPrototypeState = {
   criteriaState: CriteriaState
   criteriaPreset: 'empty' | 'sampleCommitted'
+  groupCommitted: boolean
+  summarySortCommitted: boolean
   toolbarControls: 'expanded' | 'collapsed'
   heldArrivalsVisible: boolean
   caseloadVisible: boolean
@@ -33,6 +35,8 @@ export type DataGridPrototypeState = {
 export const defaultDataGridState: DataGridPrototypeState = {
   criteriaState: 'summary',
   criteriaPreset: 'sampleCommitted',
+  groupCommitted: true,
+  summarySortCommitted: true,
   toolbarControls: 'expanded',
   heldArrivalsVisible: true,
   caseloadVisible: true,
@@ -55,7 +59,7 @@ export function withCriteriaState(state: DataGridPrototypeState, criteriaState: 
     ...state, criteriaState,
     activeSimpleId: null,
     activeEditor: criteriaState === 'editor' ? 'advanced' : 'none',
-    activeCriterion: criteriaState === 'editor' && state.criteriaPreset === 'sampleCommitted' ? 'advanced' : 'none',
+    activeCriterion: criteriaState === 'editor' && state.advancedSnapshot.rows.length > 0 ? 'advanced' : 'none',
   }
 }
 
