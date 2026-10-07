@@ -5,6 +5,13 @@
   --dg-secondary: #4A5565; --dg-tertiary: #6A7282; --dg-disabled: #99A1AF;
   --dg-border: #D1D5DC; --dg-subtle: #EAECF0; --dg-surface: #F9FAFB; --dg-white: #FFFFFF;
   --dg-level-one: #F2F3F5;
+  /* AI candidates are prototype experiments, not approved/shared tokens. */
+  --dg-ai-a-accent: #1447F6; --dg-ai-a-accent-hover: #1039C4; --dg-ai-a-surface: #F2F8FF; --dg-ai-a-border: #D5E5FF;
+  --dg-ai-b-accent: #7C3AED; --dg-ai-b-accent-hover: #6D28D9; --dg-ai-b-surface: #F5F3FF; --dg-ai-b-border: #DDD6FE;
+  --dg-ai-c-accent: #6366F1; --dg-ai-c-accent-hover: #4F46E5; --dg-ai-c-surface: #EEF2FF; --dg-ai-c-border: #C7D2FE;
+  --dg-ai-c-gradient: linear-gradient(135deg, #7C3AED 0%, #1447F6 55%, #06B6D4 100%);
+  --dg-ai-accent: var(--dg-ai-b-accent); --dg-ai-accent-hover: var(--dg-ai-b-accent-hover);
+  --dg-ai-surface: var(--dg-ai-b-surface); --dg-ai-border: var(--dg-ai-b-border);
   --dg-critical: #B42318; --dg-critical-light: #FEF3F2;
   --dg-attention: #B54708; --dg-positive: #47745C;
   color: var(--dg-text);
@@ -297,3 +304,20 @@
 
 /* Direct Cancel returns to the non-interactive Summary context. */
 .dg-page .dg-summary:focus { outline: none; }
+
+/* Local paired editor actions; ordinary text-button padding stays unchanged. */
+.dg-page .dg-editor-header .dg-editor-action { height: 24px; padding: 0 8px; }
+.dg-page .dg-button-text.dg-text-primary:not(:disabled):hover,
+.dg-page .dg-button-text.dg-text-primary:not(:disabled):focus-visible,
+.dg-picker .dg-button-text.dg-text-primary:not(:disabled):hover,
+.dg-picker .dg-button-text.dg-text-primary:not(:disabled):focus-visible { background: #E2EEFF; }
+.dg-page .dg-button-text.dg-text-primary:not(:disabled):active,
+.dg-picker .dg-button-text.dg-text-primary:not(:disabled):active { background: #D5E5FF; }
+.dg-page .dg-button-text:disabled, .dg-picker .dg-button-text:disabled { color: #99A1AF; background: transparent; }
+.dg-tooltip-shortcut { display: flex; align-items: center; gap: 20px; }
+.dg-tooltip-label { font-size: 14px; line-height: 20px; }
+.dg-tooltip-key { font-size: 12px; line-height: 16px; }
+.dg-page .dg-icon-action.dg-ai-action { color: var(--dg-ai-accent); }
+.dg-page .dg-icon-action.dg-ai-action:not(:disabled):hover,
+.dg-page .dg-icon-action.dg-ai-action:not(:disabled):focus-visible { color: var(--dg-ai-accent-hover); background: var(--dg-ai-surface); }
+.dg-page .dg-icon-action.dg-ai-action:not(:disabled):active { color: var(--dg-ai-accent-hover); background: var(--dg-ai-border); }

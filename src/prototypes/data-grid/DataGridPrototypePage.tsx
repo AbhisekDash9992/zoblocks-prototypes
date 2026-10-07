@@ -1,3 +1,4 @@
+import { gridShortcuts } from './model/shortcuts'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FilterEditorSession } from './components/CriteriaArea'
 import { AddFilterPopover } from './components/AddFilterPopover'
@@ -159,7 +160,16 @@ export function DataGridPrototypePage() {
   return <div className="dg-page">
     <a className="dg-back" href="#/">← All prototypes</a>
     <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 2</p><h1>Toolbar &amp; Criteria Area</h1><p>Shared Add Filter / Simple Filter · 920px working surface</p></div>
-    <div className={`dg-working-region${state.fullScreen ? ' dg-full-screen' : ''}`} data-density={state.density}>
+    <div className={`dg-working-region${state.fullScreen ? ' dg-full-screen' : ''}`} data-density={state.density} onKeyDown={event => {
+      const target = event.target
+      if (!gridShortcuts.filter.active || event.key.toLowerCase() !== 'f' || event.repeat || event.nativeEvent.isComposing || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
+      if (!(target instanceof HTMLElement) || !event.currentTarget.contains(target) || target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"], .dg-input')) return
+      if (document.querySelector('.dg-picker, .dg-guard-dialog')) return
+      const trigger = event.currentTarget.querySelector<HTMLButtonElement>('.dg-toolbar-right button[aria-label="Filter"]') ?? summaryAddFilterRef.current
+      if (!trigger) return
+      event.preventDefault()
+      onFilterEntry(trigger)
+    }}>
       {state.fullScreen && <div className="dg-full-screen-review"><span>Review only · Simulated full-screen candidate</span><PrototypeButton ref={fullScreenExitRef} onClick={() => setState(current => ({ ...current, fullScreen: false }))}>Exit full screen</PrototypeButton></div>}
       <div className="dg-scroll" role="region" aria-label="Data grid working surface, horizontally scrollable on narrow screens" tabIndex={0}>
         <div className="dg-surface">

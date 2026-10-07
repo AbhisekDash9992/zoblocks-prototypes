@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import { canClaimOverlay, claimOverlay, releaseOverlay } from './overlayState'
 
 // Event-driven visibility: click/leave/blur dismiss even when focus remains.
-export function PrototypeTooltip({ content, children }: { content: string; children: ReactElement }) {
+export function PrototypeTooltip({ content, shortcut, children }: { content: string; shortcut?: string; children: ReactElement }) {
   const id = useId()
   const anchor = useRef<HTMLSpanElement>(null)
   const suppressed = useRef(false)
@@ -34,6 +34,6 @@ export function PrototypeTooltip({ content, children }: { content: string; child
   }, [open, id])
   return <span ref={anchor} className="dg-tooltip-anchor" onMouseEnter={() => { suppressed.current = false; show() }} onMouseLeave={() => { suppressed.current = false; close() }} onFocus={show} onBlur={() => { suppressed.current = false; close() }} onPointerDownCapture={() => { suppressed.current = true; close() }} onClickCapture={() => { suppressed.current = true; close() }} onKeyDown={event => { if (['Escape', 'Enter', ' '].includes(event.key)) { suppressed.current = true; close() } }}>
     {children}
-    {open && createPortal(<div id={id} role="tooltip" className="dg-tooltip" style={position}>{content}</div>, document.body)}
+    {open && createPortal(<div id={id} role="tooltip" className={`dg-tooltip${shortcut ? ' dg-tooltip-shortcut' : ''}`} style={position}>{shortcut ? <><span className="dg-tooltip-label">{content}</span><span className="dg-tooltip-key">{shortcut}</span></> : content}</div>, document.body)}
   </span>
 }
