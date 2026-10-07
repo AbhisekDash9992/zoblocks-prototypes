@@ -20,13 +20,13 @@ export function isAdvancedStarter(snapshot: AdvancedSnapshot) {
 const ruleMeaning = (row: DraftRule) => `${row.field} ${row.operator} ${row.value === 'Date range' ? row.range ?? row.value : row.value}`
 
 export function advancedMeaning(snapshot: AdvancedSnapshot) {
-  // A parent condition must match along with its nested set. Each nested set
-  // has its own relationship; parentheses preserve that scope in the summary.
+  // Each gray surface is one scoped expression: its internal relationship
+  // joins the primary condition and all Level 2 children equally.
   const expression = snapshot.rows.map(row => {
     const nested = row.nested
     const meaning = ruleMeaning(row)
     return nested?.rows.length
-      ? `(${meaning} AND\n(${nested.rows.map(ruleMeaning).join(` ${nested.relationship.toUpperCase()} `)}))`
+      ? `(${[row, ...nested.rows].map(ruleMeaning).join(` ${nested.relationship.toUpperCase()} `)})`
       : meaning
   }).join(` ${snapshot.relationship.toUpperCase()}\n`)
   // A local display budget bounds long committed expressions, not their data.
