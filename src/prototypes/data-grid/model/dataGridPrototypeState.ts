@@ -1,6 +1,10 @@
 export type CriteriaState = 'hidden' | 'summary' | 'editor'
 export type DraftRule = { id: number; field: string; operator: string; value: string; range?: string }
-export type AdvancedSnapshot = { relationship: 'And' | 'Or'; rows: DraftRule[] }
+export type BooleanRelationship = 'And' | 'Or'
+// Only two levels: a Level 1 condition owns a flat set of Level 2 conditions.
+// Optional nested sets also keep existing Batch 2 flat snapshots compatible.
+export type AdvancedRule = DraftRule & { nested?: { relationship: BooleanRelationship; rows: DraftRule[] } }
+export type AdvancedSnapshot = { relationship: BooleanRelationship; rows: AdvancedRule[] }
 export type SortColumn = 'Client' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
 export type DirectSort = { column: SortColumn; direction: 'ascending' | 'descending' } | null
 export const initialAdvancedSnapshot: AdvancedSnapshot = {

@@ -3,6 +3,7 @@ import { gridShortcuts } from './model/shortcuts'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FilterEditorSession } from './components/CriteriaArea'
 import { AddFilterPopover } from './components/AddFilterPopover'
+import { advancedLeaves, advancedStarter } from './model/advancedFilter'
 import { starterRule } from './model/filterFields'
 import type { DataGridPrototypeState, DraftRule } from './model/dataGridPrototypeState'
 import { CriteriaArea } from './components/CriteriaArea'
@@ -106,7 +107,7 @@ export function DataGridPrototypePage() {
     }
     editorTrigger.current = pickerAnchor
     dirty.current = false
-    setSession({ key: ++sessionKey.current, isNew: true, advanced: { relationship: 'And', rows: [starterRule(1)] }, simple: starterRule(nextSimpleId.current++, field) })
+    setSession({ key: ++sessionKey.current, isNew: true, advanced: advancedStarter(1), simple: starterRule(nextSimpleId.current++, field) })
     setPickerAnchor(null)
     setState(current => ({ ...current, criteriaState: 'editor', activeEditor: 'simple', activeCriterion: 'none', activeSimpleId: null }))
   }
@@ -114,14 +115,15 @@ export function DataGridPrototypePage() {
     editorTrigger.current = pickerAnchor
     const isNew = state.advancedSnapshot.rows.length === 0
     dirty.current = false
-    setSession({ key: ++sessionKey.current, isNew, advanced: isNew ? { relationship: 'And', rows: [starterRule(1)] } : structuredClone(state.advancedSnapshot), simple: null })
+    setSession({ key: ++sessionKey.current, isNew, advanced: isNew ? advancedStarter(1) : structuredClone(state.advancedSnapshot), simple: null })
     setPickerAnchor(null)
     setState(current => ({ ...current, criteriaState: 'editor', activeEditor: 'advanced', activeCriterion: isNew ? 'none' : 'advanced', activeSimpleId: null }))
+    if (!isNew) requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.dg-rule-field')?.focus({ preventScroll: true }))
   }
   const advanceSimple = (row: DraftRule) => {
     const existing = state.advancedSnapshot.rows.length > 0
     const advanced = structuredClone(state.advancedSnapshot)
-    const id = Math.max(0, ...advanced.rows.map(rule => rule.id)) + 1
+    const id = Math.max(0, ...advancedLeaves(advanced).map(rule => rule.id)) + 1
     advanced.rows.push({ ...row, id })
     dirty.current = true
     setSession({ key: ++sessionKey.current, isNew: !existing, forceDirty: true, advanced, simple: null, transferSimpleId: state.simpleFilters.find(filter => filter.id === row.id)?.id })
@@ -166,7 +168,7 @@ export function DataGridPrototypePage() {
 
   return <div className="dg-page">
     <a className="dg-back" href="#/">← All prototypes</a>
-    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 2</p><h1>Toolbar &amp; Criteria Area</h1><p>Shared Add Filter / Simple Filter · 920px working surface</p></div>
+    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 3A</p><h1>Toolbar &amp; Criteria Area</h1><p>Advanced Filter / Logic Groups · cumulative prototype</p></div>
     <div className={`dg-working-region${state.fullScreen ? ' dg-full-screen' : ''}`} data-density={state.density} tabIndex={-1} onKeyDown={event => {
       const target = event.target
       if (!gridShortcuts.filter.active || event.key.toLowerCase() !== 'f' || event.repeat || event.nativeEvent.isComposing || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return

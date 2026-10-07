@@ -45,6 +45,7 @@
 .dg-icon-action:hover, .dg-icon-action:focus-visible { background: var(--dg-surface); }
 .dg-icon-action.dg-applied { color: var(--dg-primary); background: transparent; }
 .dg-tooltip-anchor { display: inline-flex; flex-shrink: 0; }
+.dg-tooltip-bounded { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 10; max-height: 176px; overflow: hidden; }
 .dg-tooltip { position: fixed; z-index: 100; min-height: 28px; max-width: min(320px, calc(100vw - 16px)); width: max-content; white-space: pre-line; overflow-wrap: anywhere; pointer-events: none; background: #101828; color: #FFFFFF; border-radius: 8px; padding: 6px 10px; box-shadow: 0 3px 10px rgb(16 24 40 / 18%); font: 12px/16px 'DM Sans', system-ui, sans-serif; }
 .dg-collapse-affordance { opacity: 0; }
 .dg-toolbar-right:hover .dg-collapse-affordance, .dg-toolbar-right:focus-within .dg-collapse-affordance { opacity: 1; }
@@ -98,6 +99,16 @@
 .dg-nested-filter, .dg-editor-add { display: flex; align-items: center; gap: 4px; height: 24px; padding: 0; border: 0; background: transparent; color: var(--dg-secondary); }
 .dg-nested-filter { margin-top: 8px; }
 .dg-editor-add { margin-left: 0; }
+/* Two-level Advanced layout only; Simple keeps its existing unboxed controls. */
+.dg-editor-advanced .dg-conditions { max-height: 360px; }
+.dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: wrap; }
+.dg-editor-advanced .dg-rule-value { flex: 1 1 240px; max-width: 320px; }
+.dg-editor-advanced .dg-relationship { min-height: 32px; margin-top: 8px; }
+.dg-nested-rules { margin: 8px 0 0 24px; }
+.dg-nested-row .dg-relationship { margin-top: 0; }
+.dg-nested-row:last-child { margin-bottom: 0; }
+.dg-editor-advanced .dg-condition-stack { flex-shrink: 1; }
+.dg-conditions-heading { flex-shrink: 0; }
 .dg-caseload { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 16px; height: 84px; padding: 12px; background: var(--dg-white); }
 .dg-caseload strong { font-size: 11px; font-weight: 600; letter-spacing: .4px; }
 .dg-caseload p { margin: 5px 0 3px; font-size: 12px; }
