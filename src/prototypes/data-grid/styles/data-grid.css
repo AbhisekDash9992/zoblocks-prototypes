@@ -104,7 +104,7 @@
 .dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: wrap; }
 .dg-editor-advanced .dg-rule-value { flex: 1 1 240px; max-width: 320px; }
 .dg-editor-advanced .dg-relationship { min-height: 32px; margin-top: 8px; }
-.dg-nested-rules { margin: 8px 0 0 24px; }
+.dg-nested-rules { margin: 8px 0 0; }
 .dg-nested-row .dg-relationship { margin-top: 0; }
 .dg-nested-row:last-child { margin-bottom: 0; }
 .dg-editor-advanced .dg-condition-stack { flex-shrink: 1; }

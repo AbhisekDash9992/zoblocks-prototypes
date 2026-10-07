@@ -72,7 +72,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
     row={row} context={context} mode={mode} simpleFilters={simpleFilters} autoOpenId={autoOpenId} valueOpenId={valueOpenId} numericInput={numericInput}
     onUpdate={patch => update(row.id, patch)} onFieldChosen={() => { setAutoOpenId(null); setValueOpenId(mode === 'simple' ? row.id : null) }}
     onOperatorChosen={() => setValueOpenId(mode === 'simple' ? row.id : null)} canDelete={canDelete} onDelete={() => remove(row.id, parentId)} />
-  const relationship = (index: number, count: number, value: BooleanRelationship, label: string, onChange: (value: BooleanRelationship) => void) => count > 1 && <div className="dg-relationship">
+  const relationship = (index: number, count: number, value: BooleanRelationship, label: string, onChange: (value: BooleanRelationship) => void, showSingle = false) => (count > 1 || showSingle) && <div className="dg-relationship">
     {index === 1 ? <PrototypeSelect compact label={label} value={value} options={['And', 'Or']} onChange={next => onChange(next as BooleanRelationship)} /> : index === 0 ? 'Where' : value.toLowerCase()}
   </div>
   const addNested = (parentId: number) => {
@@ -101,7 +101,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
           {controls(row, `Level 1 condition ${index + 1}`, meaningfulRule(row) || draft.rows.length > 1 || Boolean(row.nested?.rows.length))}
           {row.nested && <div className="dg-nested-rules" aria-label={`Nested conditions for Level 1 condition ${index + 1}`}>
             {row.nested.rows.map((child, nestedIndex) => <div className="dg-rule-row dg-nested-row" key={child.id}>
-              {relationship(nestedIndex, row.nested!.rows.length, row.nested!.relationship, `Level 2 relationship for Level 1 condition ${index + 1}`, value => setDraft(current => ({ ...current, rows: current.rows.map(item => item.id === row.id && item.nested ? { ...item, nested: { ...item.nested, relationship: value } } : item) })))}
+              {relationship(nestedIndex, row.nested!.rows.length, row.nested!.relationship, `Level 2 relationship for Level 1 condition ${index + 1}`, value => setDraft(current => ({ ...current, rows: current.rows.map(item => item.id === row.id && item.nested ? { ...item, nested: { ...item.nested, relationship: value } } : item) })), true)}
               {controls(child, `Level 2 condition ${nestedIndex + 1} in Level 1 condition ${index + 1}`, true, row.id)}
             </div>)}
           </div>}
