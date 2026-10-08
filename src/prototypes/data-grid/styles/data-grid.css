@@ -111,8 +111,8 @@
 .dg-page .dg-sort-handle { position: relative; height: 32px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; user-select: none; }
 .dg-sort-rank, .dg-sort-grip { position: absolute; pointer-events: none; }
 .dg-sort-grip { opacity: 0; }
-.dg-sort-row:hover .dg-sort-grip, .dg-sort-row:focus-within .dg-sort-grip { opacity: 1; }
-.dg-sort-row:hover .dg-sort-rank, .dg-sort-row:focus-within .dg-sort-rank { opacity: 0; }
+.dg-sort-handle:hover .dg-sort-grip, .dg-sort-handle:focus .dg-sort-grip { opacity: 1; }
+.dg-sort-handle:hover .dg-sort-rank, .dg-sort-handle:focus .dg-sort-rank { opacity: 0; }
 .dg-sort-dragging, .dg-sort-dragging * { user-select: none; cursor: grabbing; }
 .dg-sort-row[data-drag-source] { opacity: .5; }
 .dg-sort-row[data-drop-before]::before, .dg-sort-row[data-drop-after]::after { content: ''; position: absolute; left: 0; width: 368px; max-width: 100%; height: 2px; background: var(--dg-primary); z-index: 1; pointer-events: none; }
