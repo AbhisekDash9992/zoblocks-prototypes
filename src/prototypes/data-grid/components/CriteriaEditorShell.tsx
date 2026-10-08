@@ -108,7 +108,6 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
           {complete(row) && <PrototypeButton variant="text" className="dg-nested-filter" aria-label={`Add Nested Filter to Level 1 condition ${index + 1}`} disabled={incomplete} onClick={() => addNested(row.id)}><Plus size={14} aria-hidden="true" />Add Nested Filter</PrototypeButton>}
         </div>
       </div>)}
-      </div>
       {mode === 'advanced' && <div className="dg-workspace-actions">
       <PrototypeButton variant="text" className="dg-editor-add" disabled={incomplete} onClick={() => {
         const id = nextId.current++
@@ -117,6 +116,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
       }}><Plus size={14} aria-hidden="true" />Add Filter</PrototypeButton>
       {leaves.filter(meaningfulRule).length >= 2 && <><span className="dg-summary-divider" aria-hidden="true" /><PrototypeButton className="dg-conditions-action" variant="text" onClick={resetDraft}>Clear all</PrototypeButton></>}
       </div>}
+      </div>
     </div>
     {guardOpen && <DirtyNavigationGuard sourceFocus={sourceFocus} onKeep={onKeep} onDiscard={onDiscard} />}
     </div>
