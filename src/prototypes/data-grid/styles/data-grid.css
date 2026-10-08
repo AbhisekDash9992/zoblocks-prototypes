@@ -107,6 +107,19 @@
 .dg-workspace-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .dg-sort-precedence { display: flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 32px; color: var(--dg-secondary); }
 .dg-sort-row .dg-rule-controls { flex: 0 0 auto; }
+.dg-sort-row { position: relative; }
+.dg-page .dg-sort-handle { position: relative; height: 32px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; user-select: none; }
+.dg-sort-rank, .dg-sort-grip { position: absolute; pointer-events: none; }
+.dg-sort-grip { opacity: 0; }
+.dg-sort-row:hover .dg-sort-grip, .dg-sort-row:focus-within .dg-sort-grip { opacity: 1; }
+.dg-sort-row:hover .dg-sort-rank, .dg-sort-row:focus-within .dg-sort-rank { opacity: 0; }
+.dg-sort-dragging, .dg-sort-dragging * { user-select: none; cursor: grabbing; }
+.dg-sort-row[data-drag-source] { opacity: .5; }
+.dg-sort-row[data-drop-before]::before, .dg-sort-row[data-drop-after]::after { content: ''; position: absolute; left: 0; width: 368px; max-width: 100%; height: 2px; background: var(--dg-primary); z-index: 1; pointer-events: none; }
+.dg-sort-row[data-drop-before]::before { top: 0; }
+.dg-sort-row[data-drop-after]::after { bottom: -6px; }
+.dg-sort-drag-preview { position: fixed; z-index: 100; max-width: 240px; padding: 8px; border: 1px solid var(--dg-border); border-radius: 4px; background: var(--dg-white); box-shadow: 0 4px 12px rgb(16 24 40 / 12%); pointer-events: none; }
+.dg-sort-assistive { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dg-editor-advanced .dg-relationship { min-height: 32px; margin-top: 8px; }
 .dg-internal-row .dg-relationship { margin-top: 0; }
 .dg-internal-row:last-child { margin-bottom: 0; }

@@ -23,7 +23,7 @@ export function PrototypeStateControls({ state, onChange }: { state: DataGridPro
       <p>Toolbar Filter and Summary Add Filter share the field picker. Field selection opens one Simple rule with its Value control ready. AI Filter remains deferred. Use Criteria Editor to review the Advanced sample.</p>
       <p>Synthetic people and visual states only, with no clinical threshold or scheduling contract. Summary chips and tooltips are independent representative committed examples.</p>
       <p>Review viewport: 720px. Conditions cap: 240px Simple / 360px Advanced. Density comparison: Figma baseline 42px, Patient 52px, Standard 40px, Clinical 30px. These are local review values, not production tokens.</p>
-      <p>Toolbar Sort and View Settings → Sort open the same ordered Sort workspace. Direct header sorting reorders synthetic rows using one column and remains separate; integration and drag reordering are deferred. Search, Group, Saved View editing, other View Settings and Let them in remain previews. Summary removals and Clear All support Undo.</p>
+      <p>Toolbar Sort and View Settings → Sort open the same ordered Sort workspace. Drag a row's leading grip or focus it and use Arrow Up / Arrow Down to change draft precedence. Direct header sorting reorders synthetic rows using one column and remains separate; integration is deferred. Search, Group, Saved View editing, other View Settings and Let them in remain previews. Summary removals and Clear All support Undo.</p>
       <p>Narrow-width product behavior remains unresolved; horizontal containment is for review. This code is not production ZoBlocks implementation.</p>
     </div></div>
   </aside>

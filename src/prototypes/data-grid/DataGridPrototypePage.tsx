@@ -175,7 +175,7 @@ export function DataGridPrototypePage() {
 
   return <div className="dg-page">
     <a className="dg-back" href="#/">← All prototypes</a>
-    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 3B.1</p><h1>Toolbar &amp; Criteria Area</h1><p>Advanced Filter / Sort · cumulative prototype</p></div>
+    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 3B.2</p><h1>Toolbar &amp; Criteria Area</h1><p>Advanced Filter / Sort · cumulative prototype</p></div>
     <div className={`dg-working-region${state.fullScreen ? ' dg-full-screen' : ''}`} data-density={state.density} tabIndex={-1} onKeyDown={event => {
       const target = event.target
       if (!gridShortcuts.filter.active || event.key.toLowerCase() !== 'f' || event.repeat || event.nativeEvent.isComposing || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
