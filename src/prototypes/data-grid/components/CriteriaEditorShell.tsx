@@ -90,8 +90,7 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
     <div className={`dg-conditions${mode === 'simple' ? ' dg-simple-conditions' : ''}`} role="region" aria-label={mode === 'advanced' ? 'Advanced filter conditions' : 'Simple filter rule'} tabIndex={0}>
       {aiNotice && <p className="dg-ai-notice" role="status">AI Filter is deferred in this prototype batch.</p>}
       <div className="dg-conditions-heading"><div><h3>Conditions</h3><p>{mode === 'simple' ? 'One condition.' : `${draft.relationship === 'And' ? 'All' : 'Any'} conditions below must match.`}</p></div>
-        {mode === 'simple' ? <PrototypeButton className="dg-conditions-action" variant="text" textTone="primary" disabled={!valid} onClick={() => onAdvanceSimple({ ...draft.rows[0] })}>{hasAdvanced ? 'Add to Advanced Filter' : 'Convert to Advanced Filter'}</PrototypeButton>
-          : leaves.filter(meaningfulRule).length >= 2 && <PrototypeButton className="dg-conditions-action" variant="text" onClick={resetDraft}>Clear all</PrototypeButton>}
+        {mode === 'simple' && <PrototypeButton className="dg-conditions-action" variant="text" textTone="primary" disabled={!valid} onClick={() => onAdvanceSimple({ ...draft.rows[0] })}>{hasAdvanced ? 'Add to Advanced Filter' : 'Convert to Advanced Filter'}</PrototypeButton>}
       </div>
       {fieldConflict && <p role="status">This field already has a Simple filter. Choose another field.</p>}
       <div className="dg-condition-stack">
@@ -109,12 +108,15 @@ export function CriteriaEditorShell({ mode, advanced, simple, simpleFilters, gua
           {complete(row) && <PrototypeButton variant="text" className="dg-nested-filter" aria-label={`Add Nested Filter to Level 1 condition ${index + 1}`} disabled={incomplete} onClick={() => addNested(row.id)}><Plus size={14} aria-hidden="true" />Add Nested Filter</PrototypeButton>}
         </div>
       </div>)}
-      {mode === 'advanced' && <PrototypeButton variant="text" className="dg-editor-add" disabled={incomplete} onClick={() => {
+      </div>
+      {mode === 'advanced' && <div className="dg-workspace-actions">
+      <PrototypeButton variant="text" className="dg-editor-add" disabled={incomplete} onClick={() => {
         const id = nextId.current++
         setDraft(current => ({ ...current, rows: [...current.rows, starterRule(id)] }))
         setAutoOpenId(id)
-      }}><Plus size={14} aria-hidden="true" />Add Filter</PrototypeButton>}
-      </div>
+      }}><Plus size={14} aria-hidden="true" />Add Filter</PrototypeButton>
+      {leaves.filter(meaningfulRule).length >= 2 && <><span className="dg-summary-divider" aria-hidden="true" /><PrototypeButton className="dg-conditions-action" variant="text" onClick={resetDraft}>Clear all</PrototypeButton></>}
+      </div>}
     </div>
     {guardOpen && <DirtyNavigationGuard sourceFocus={sourceFocus} onKeep={onKeep} onDiscard={onDiscard} />}
     </div>
