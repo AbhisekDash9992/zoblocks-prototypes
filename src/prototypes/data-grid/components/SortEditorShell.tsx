@@ -85,7 +85,7 @@ export function SortEditorShell({ snapshot, guardOpen, onKeep, onDiscard, onDirt
                 setAutoOpenId(null)
               }} />
               {row.field && <PrototypeSelect className="dg-rule-operator" label={`Direction for sort ${index + 1}`} value={row.direction} options={sortDirections[row.field]} onChange={direction => update(row.id, { direction })} />}
-              {(draft.length > 1 || row.field) && <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label={`Remove sort ${index + 1}`} onClick={() => {
+              {(draft.length > 1 || row.field) && <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label="Remove Sort" onClick={() => {
                 if (draft.length === 1) reset()
                 else { setAutoOpenId(null); setDraft(rows => rows.filter(item => item.id !== row.id)); repairFocus() }
               }} />}

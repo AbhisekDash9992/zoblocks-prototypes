@@ -20,6 +20,6 @@ export function FilterRuleControls({ row, context, mode, simpleFilters, autoOpen
       {row.field === 'PHQ-9' ? <PrototypeInput ref={numericInput} className="dg-rule-value dg-numeric-input" type="number" aria-label={`Value for ${context}`} placeholder="Enter number" value={row.value} onChange={event => onUpdate({ value: event.target.value })} /> : <PrototypeSelect key={`${row.field}-${row.operator}`} autoOpen={row.id === valueOpenId} className="dg-rule-value" label={`Value for ${context}`} value={row.value} options={values[row.field]} multiple={row.field === 'Priority' && row.operator === 'is any of'} onChange={value => onUpdate({ value, range: value === 'Date range' ? '1 Oct 2026 – 7 Oct 2026' : undefined })} />}
       {row.field === 'Next Contact' && row.value === 'Date range' && <span className="dg-date-range-control"><CalendarRange size={16} aria-hidden="true" /><PrototypeInput className="dg-date-range" aria-label={`Date range for ${context}`} value={row.range ?? ''} onChange={event => onUpdate({ range: event.target.value })} /></span>}
     </>}
-    {canDelete && <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label={mode === 'advanced' ? 'Remove Condition' : `Remove ${context}`} onClick={onDelete} />}
+    {canDelete && <PrototypeIconButton className="dg-rule-delete" icon={Trash2} label="Remove Condition" onClick={onDelete} />}
   </div>
 }

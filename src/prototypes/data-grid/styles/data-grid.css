@@ -101,9 +101,15 @@
 .dg-editor-add { margin-left: 0; }
 /* Two-level Advanced layout only; Simple keeps its existing unboxed controls. */
 .dg-editor-advanced .dg-conditions { max-height: 360px; }
-.dg-editor-advanced .dg-rule-surface { flex: 0 1 auto; width: max-content; max-width: 100%; }
+/* One intrinsic surface track aligns siblings to the widest required content. */
+.dg-editor-advanced .dg-condition-stack { display: grid; grid-template-columns: minmax(0, max-content); width: max-content; max-width: 100%; }
+.dg-editor-advanced .dg-condition-stack:has(> .dg-rule-row > .dg-relationship) { grid-template-columns: 72px minmax(0, max-content); column-gap: 8px; }
+.dg-editor-advanced .dg-condition-stack > .dg-rule-row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
+.dg-editor-advanced .dg-rule-surface { grid-column: -2 / -1; width: auto; min-width: 0; }
+.dg-editor-advanced .dg-workspace-actions { grid-column: 1 / -1; }
 .dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: wrap; }
-.dg-editor-advanced .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
+.dg-editor-simple .dg-rule-controls { width: fit-content; max-width: 100%; flex-wrap: wrap; }
+.dg-editor-advanced .dg-rule-value, .dg-editor-simple .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
 .dg-workspace-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .dg-sort-precedence { display: flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 32px; color: var(--dg-secondary); }
 .dg-sort-row .dg-rule-controls { flex: 0 0 auto; }
@@ -329,7 +335,7 @@
 .dg-conditions-heading p { margin: 0; color: var(--dg-tertiary); line-height: 16px; }
 .dg-conditions-heading > .dg-button { flex-shrink: 0; }
 
-/* Direct Cancel returns to the non-interactive Summary context. */
+/* Editor closure returns to the non-interactive Summary context. */
 .dg-page .dg-summary:focus { outline: none; }
 
 /* Local paired editor actions; ordinary text-button padding stays unchanged. */

@@ -28,7 +28,6 @@ export function DataGridPrototypePage() {
   const dirty = useRef(false)
   const sessionKey = useRef(0)
   const nextSimpleId = useRef(2)
-  const editorTrigger = useRef<HTMLButtonElement | null>(null)
   const reportDirty = useCallback((value: boolean) => { dirty.current = value }, [])
   const closePicker = useCallback(() => setPickerAnchor(null), [])
   const repairCriteriaFocus = useCallback(() => requestAnimationFrame(() => {
@@ -71,20 +70,18 @@ export function DataGridPrototypePage() {
     if (state.criteriaState === 'editor' && dirty.current) { setPickerAnchor(null); setPickerRequested(false); setPending({ action }) }
     else action()
   }
-  const finishEditor = (restoreTrigger = true) => {
+  const finishEditor = () => {
     dirty.current = false
     setSession(null)
     setPending(null)
     setState(current => withCriteriaState(current, 'summary'))
     requestAnimationFrame(() => {
-      if (!restoreTrigger) { document.querySelector<HTMLElement>('.dg-summary')?.focus({ preventScroll: true }); return }
-      const control = editorTrigger.current
-      if (control?.isConnected) control.focus({ preventScroll: true })
-      else document.querySelector<HTMLButtonElement>('.dg-add-filter')?.focus({ preventScroll: true })
+      claimOverlay(null)
+      // A neutral Summary destination keeps restored focus from reopening a trigger tooltip.
+      document.querySelector<HTMLElement>('.dg-summary')?.focus({ preventScroll: true })
     })
   }
   const openEditor = (mode: CriteriaEditorMode, trigger: HTMLButtonElement, id?: number) => navigate(() => {
-    editorTrigger.current = trigger
     dirty.current = false
     const newSort = mode === 'sort' && state.sortSnapshot.length === 0
     setPickerAnchor(null); setPickerRequested(false)
@@ -107,14 +104,12 @@ export function DataGridPrototypePage() {
       openEditor('simple', trigger, existing.id)
       return
     }
-    editorTrigger.current = pickerAnchor
     dirty.current = false
     setSession({ key: ++sessionKey.current, isNew: true, advanced: advancedStarter(1), simple: starterRule(nextSimpleId.current++, field) })
     setPickerAnchor(null)
     setState(current => ({ ...current, criteriaState: 'editor', activeEditor: 'simple', activeCriterion: 'none', activeSimpleId: null }))
   }
   const enterAdvanced = () => {
-    editorTrigger.current = pickerAnchor
     const isNew = state.advancedSnapshot.rows.length === 0
     dirty.current = false
     setSession({ key: ++sessionKey.current, isNew, advanced: isNew ? advancedStarter(1) : structuredClone(state.advancedSnapshot), simple: null })
@@ -136,13 +131,13 @@ export function DataGridPrototypePage() {
     if (kind === 'advanced') {
       const removed = structuredClone(state.advancedSnapshot)
       if (!removed.rows.length) return
-      if (state.activeEditor === 'advanced') finishEditor(false)
+      if (state.activeEditor === 'advanced') finishEditor()
       setState(current => ({ ...current, advancedSnapshot: { relationship: 'And', rows: [] }, viewModified: true }))
       setUndo({ id: ++undoId.current, message: 'Advanced filter removed.', restore: current => ({ ...current, advancedSnapshot: removed, viewModified: true }) })
     } else if (kind === 'sort') {
       const removed = structuredClone(state.sortSnapshot)
       if (!removed.length) return
-      if (state.activeEditor === 'sort') finishEditor(false)
+      if (state.activeEditor === 'sort') finishEditor()
       setState(current => ({ ...current, sortSnapshot: [], viewModified: true }))
       setUndo({ id: ++undoId.current, message: 'Sort removed.', restore: current => ({ ...current, sortSnapshot: removed, viewModified: true }) })
     } else {
@@ -155,7 +150,7 @@ export function DataGridPrototypePage() {
   const removeSimple = (id: number) => {
     const removed = state.simpleFilters.find(row => row.id === id)
     if (!removed) return
-    if (state.activeSimpleId === id) finishEditor(false)
+    if (state.activeSimpleId === id) finishEditor()
     else if (session?.transferSimpleId === id) setSession(current => current ? { ...current, transferSimpleId: undefined } : current)
     setState(current => ({ ...current, simpleFilters: current.simpleFilters.filter(row => row.id !== id), viewModified: true }))
     const index = state.simpleFilters.findIndex(row => row.id === id)
@@ -168,7 +163,7 @@ export function DataGridPrototypePage() {
   }
   const clearSummary = () => {
     const previous = structuredClone({ criteriaPreset: state.criteriaPreset, criteriaActive: state.criteriaActive, groupCommitted: state.groupCommitted, sortSnapshot: state.sortSnapshot, advancedSnapshot: state.advancedSnapshot, simpleFilters: state.simpleFilters, directSort: state.directSort })
-    finishEditor(false)
+    finishEditor()
     setState(current => ({ ...withCriteriaState(current, 'summary'), criteriaPreset: 'empty', criteriaActive: false, groupCommitted: false, sortSnapshot: [], advancedSnapshot: { relationship: 'And', rows: [] }, simpleFilters: [], directSort: null, viewModified: true }))
     setUndo({ id: ++undoId.current, message: 'All criteria cleared.', restore: current => ({ ...current, ...previous, viewModified: true }) })
   }
@@ -190,7 +185,7 @@ export function DataGridPrototypePage() {
       <div className="dg-scroll" role="region" aria-label="Data grid working surface, horizontally scrollable on narrow screens" tabIndex={0}>
         <div className="dg-surface">
           <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onSort={trigger => openEditor('sort', trigger)} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
-          <CriteriaArea guardOpen={pending !== null} onKeep={keepEditing} onDiscard={() => { if (pending) { dirty.current = false; setPending(null); pending.action() } }} onAdvanceSimple={advanceSimple} addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={() => finishEditor(false)} onClear={clearSummary} onDirty={reportDirty}
+          <CriteriaArea guardOpen={pending !== null} onKeep={keepEditing} onDiscard={() => { if (pending) { dirty.current = false; setPending(null); pending.action() } }} onAdvanceSimple={advanceSimple} addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={() => finishEditor()} onClear={clearSummary} onDirty={reportDirty}
             onApplyAdvanced={snapshot => { const transferred = session?.transferSimpleId; finishEditor(); setState(current => ({ ...current, advancedSnapshot: snapshot, simpleFilters: current.simpleFilters.filter(row => row.id !== transferred), viewModified: true, criteriaActive: true })) }}
             onApplySimple={snapshot => { finishEditor(); setState(current => ({ ...current, simpleFilters: current.simpleFilters.some(row => row.id === snapshot.id) ? current.simpleFilters.map(row => row.id === snapshot.id ? snapshot : row) : [...current.simpleFilters, snapshot], viewModified: true, criteriaActive: true })) }}
             onApplySort={snapshot => { finishEditor(); setState(current => ({ ...current, sortSnapshot: snapshot, viewModified: true, criteriaActive: true })) }}
