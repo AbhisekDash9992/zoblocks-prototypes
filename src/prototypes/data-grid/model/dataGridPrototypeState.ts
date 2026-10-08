@@ -7,6 +7,13 @@ export type AdvancedRule = DraftRule & { nested?: { relationship: BooleanRelatio
 export type AdvancedSnapshot = { relationship: BooleanRelationship; rows: AdvancedRule[] }
 export type SortColumn = 'Client' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
 export type DirectSort = { column: SortColumn; direction: 'ascending' | 'descending' } | null
+export type SortRule = { id: number; field: string; direction: string }
+export type CriteriaEditorMode = 'advanced' | 'simple' | 'sort'
+// Match the existing saved-view preview; this stack is separate from direct header sorting.
+export const initialSortSnapshot: SortRule[] = [
+  { id: 1, field: 'Priority', direction: 'High to Low' },
+  { id: 2, field: 'Next Contact', direction: 'Oldest to Newest' },
+]
 export const initialAdvancedSnapshot: AdvancedSnapshot = {
   relationship: 'And', rows: [
     { id: 1, field: 'Status', operator: 'is', value: 'Active' },
@@ -18,7 +25,7 @@ export type DataGridPrototypeState = {
   criteriaState: CriteriaState
   criteriaPreset: 'empty' | 'sampleCommitted'
   groupCommitted: boolean
-  summarySortCommitted: boolean
+  sortSnapshot: SortRule[]
   toolbarControls: 'expanded' | 'collapsed'
   heldArrivalsVisible: boolean
   caseloadVisible: boolean
@@ -28,8 +35,8 @@ export type DataGridPrototypeState = {
   viewModified: boolean
   criteriaActive: boolean
   fullScreen: boolean
-  activeEditor: 'none' | 'advanced' | 'simple'
-  activeCriterion: 'none' | 'advanced' | 'simple'
+  activeEditor: 'none' | CriteriaEditorMode
+  activeCriterion: 'none' | CriteriaEditorMode
   advancedSnapshot: AdvancedSnapshot
   simpleFilters: DraftRule[]
   activeSimpleId: number | null
@@ -40,7 +47,7 @@ export const defaultDataGridState: DataGridPrototypeState = {
   criteriaState: 'summary',
   criteriaPreset: 'sampleCommitted',
   groupCommitted: true,
-  summarySortCommitted: true,
+  sortSnapshot: initialSortSnapshot,
   toolbarControls: 'expanded',
   heldArrivalsVisible: true,
   caseloadVisible: true,

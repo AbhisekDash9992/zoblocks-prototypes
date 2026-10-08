@@ -6,8 +6,8 @@ import { PrototypeButton } from './PrototypeButton'
 import { PrototypeInput } from './PrototypeInput'
 import type { PrototypeInputState } from './PrototypeInput'
 
-export function PrototypeSelect({ label, value, options, onChange, placeholder = 'Select value', className = '', multiple = false, compact = false, autoOpen = false, state, disabled = false }: {
-  label: string; value: string; options: string[]; onChange: (value: string) => void; placeholder?: string; className?: string; multiple?: boolean; compact?: boolean; autoOpen?: boolean; state?: PrototypeInputState; disabled?: boolean
+export function PrototypeSelect({ label, value, options, onChange, placeholder = 'Select value', className = '', multiple = false, compact = false, autoOpen = false, searchable = false, state, disabled = false }: {
+  label: string; value: string; options: string[]; onChange: (value: string) => void; placeholder?: string; className?: string; multiple?: boolean; compact?: boolean; autoOpen?: boolean; searchable?: boolean; state?: PrototypeInputState; disabled?: boolean
 }) {
   const id = useId()
   const trigger = useRef<HTMLButtonElement>(null)
@@ -20,8 +20,8 @@ export function PrototypeSelect({ label, value, options, onChange, placeholder =
     if (isDisabled) return
     const rect = trigger.current!.getBoundingClientRect()
     setPosition({ left: rect.left, top: rect.bottom + 4, width: compact ? 80 : Math.max(rect.width, multiple ? 240 : 180) })
-    setKeepTriggerFocus(retainFocus); setQuery(''); setOpen(true)
-  }, [compact, multiple, isDisabled])
+    setKeepTriggerFocus(retainFocus && !searchable); setQuery(''); setOpen(true)
+  }, [compact, multiple, searchable, isDisabled])
   useEffect(() => {
     if (!autoOpen || isDisabled) return
     let openFrame = 0
@@ -47,13 +47,17 @@ export function PrototypeSelect({ label, value, options, onChange, placeholder =
   const toggle = (option: string) => onChange((selected.includes(option) ? selected.filter(item => item !== option) : options.filter(item => selected.includes(item) || item === option)).join(', '))
   const all = options.length > 0 && options.every(option => selected.includes(option))
   return <>
-    <button ref={trigger} type="button" disabled={isDisabled} aria-invalid={state === 'error' || undefined} className={`dg-input dg-input-${isDisabled ? 'disabled' : state ?? (open ? 'active' : value ? 'filled' : 'default')} dg-select-trigger ${className}${!value ? ' dg-placeholder' : ''}${open ? ' dg-select-open' : ''}`} aria-label={label} aria-haspopup={multiple ? 'dialog' : 'listbox'} aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => open ? close(true) : openMenu()} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); openMenu() } }}><span>{value || placeholder}</span><ChevronDown size={12} aria-hidden="true" /></button>
-    {open && <PrototypeMenu id={id} label={label} trigger={trigger} position={position} onClose={close} keepTriggerFocus={keepTriggerFocus} role={multiple ? 'dialog' : 'listbox'}>
+    <button ref={trigger} type="button" disabled={isDisabled} aria-invalid={state === 'error' || undefined} className={`dg-input dg-input-${isDisabled ? 'disabled' : state ?? (open ? 'active' : value ? 'filled' : 'default')} dg-select-trigger ${className}${!value ? ' dg-placeholder' : ''}${open ? ' dg-select-open' : ''}`} aria-label={label} aria-haspopup={multiple || searchable ? 'dialog' : 'listbox'} aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => open ? close(true) : openMenu()} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); openMenu() } }}><span>{value || placeholder}</span><ChevronDown size={12} aria-hidden="true" /></button>
+    {open && <PrototypeMenu id={id} label={label} trigger={trigger} position={position} onClose={close} keepTriggerFocus={keepTriggerFocus} role={multiple || searchable ? 'dialog' : 'listbox'}>
       {multiple ? <>
         <PrototypeInput className="dg-picker-search" aria-label="Search priorities" placeholder="Search" value={query} onChange={event => setQuery(event.target.value)} />
         <div className="dg-picker-section-header"><span className="dg-picker-heading">Priorities</span><PrototypeButton variant="text" textTone="primary" onClick={() => onChange(all ? '' : options.join(', '))}>{all ? 'Clear all' : 'Select all'}</PrototypeButton></div>
         {filtered.map(option => <label key={option} className="dg-menu-check-row"><span>{option}</span><PrototypeCheckbox label={option} checked={selected.includes(option)} onChange={() => toggle(option)} /></label>)}
         {filtered.length === 0 && <p className="dg-picker-empty">No results</p>}
+      </> : searchable ? <>
+        <PrototypeInput className="dg-picker-search" aria-label="Search fields" placeholder="Search fields…" value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === 'ArrowDown') { event.preventDefault(); event.currentTarget.parentElement?.querySelector<HTMLButtonElement>('[role="option"]')?.focus() } }} />
+        <div role="listbox" aria-label={label}>{filtered.map(option => <button key={option} type="button" role="option" aria-selected={value === option} onClick={() => { onChange(option); close(true) }}><span>{option}</span>{value === option && <Check size={14} aria-hidden="true" />}</button>)}</div>
+        {filtered.length === 0 && <p className="dg-picker-empty">No matching fields</p>}
       </> : options.map(option => <button key={option} type="button" role="option" aria-selected={value === option} onClick={() => { onChange(option); close(true) }}><span>{option}</span>{value === option && <Check size={14} aria-hidden="true" />}</button>)}
     </PrototypeMenu>}
   </>

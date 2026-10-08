@@ -3,8 +3,8 @@ import type { RefObject } from 'react'
 import { lockOverlay, unlockOverlay } from '../ui/overlayState'
 import { PrototypeButton } from '../ui/PrototypeButton'
 
-export function DirtyNavigationGuard({ sourceFocus, onKeep, onDiscard }: {
-  sourceFocus: RefObject<HTMLElement | null>; onKeep: () => void; onDiscard: () => void
+export function DirtyNavigationGuard({ sourceFocus, onKeep, onDiscard, subject = 'filter' }: {
+  sourceFocus: RefObject<HTMLElement | null>; onKeep: () => void; onDiscard: () => void; subject?: 'filter' | 'sort'
 }) {
   const id = useId()
   const dialog = useRef<HTMLDivElement>(null)
@@ -54,8 +54,8 @@ export function DirtyNavigationGuard({ sourceFocus, onKeep, onDiscard }: {
     }
   }, [id, sourceFocus, onKeep])
   return <div className="dg-guard-overlay">
-    <div ref={dialog} className="dg-guard-dialog" role="dialog" aria-modal="true" aria-label="Unsaved filter changes" aria-describedby={id}>
-      <p id={id}>Discard unsaved filter changes?</p>
+    <div ref={dialog} className="dg-guard-dialog" role="dialog" aria-modal="true" aria-label={`Unsaved ${subject} changes`} aria-describedby={id}>
+      <p id={id}>Discard unsaved {subject} changes?</p>
       <div className="dg-guard-actions">
         <PrototypeButton onClick={onKeep}>Keep editing</PrototypeButton>
         <PrototypeButton variant="primary" onClick={() => { restoreFocus.current = false; onDiscard() }}>Discard changes</PrototypeButton>

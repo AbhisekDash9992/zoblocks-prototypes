@@ -105,6 +105,8 @@
 .dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: wrap; }
 .dg-editor-advanced .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
 .dg-workspace-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.dg-sort-precedence { display: flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 32px; color: var(--dg-secondary); }
+.dg-sort-row .dg-rule-controls { flex: 0 0 auto; }
 .dg-editor-advanced .dg-relationship { min-height: 32px; margin-top: 8px; }
 .dg-internal-row .dg-relationship { margin-top: 0; }
 .dg-internal-row:last-child { margin-bottom: 0; }
