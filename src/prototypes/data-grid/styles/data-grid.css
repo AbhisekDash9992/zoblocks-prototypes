@@ -51,7 +51,8 @@
 .dg-tooltip-bounded { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 10; max-height: 176px; overflow: hidden; }
 .dg-tooltip { position: fixed; z-index: 100; min-height: 28px; max-width: min(320px, calc(100vw - 16px)); width: max-content; white-space: pre-line; overflow-wrap: anywhere; pointer-events: none; background: #101828; color: #FFFFFF; border-radius: 8px; padding: 6px 10px; box-shadow: 0 3px 10px rgb(16 24 40 / 18%); font: 12px/16px 'DM Sans', system-ui, sans-serif; }
 .dg-collapse-affordance { opacity: 0; }
-.dg-toolbar-right:hover .dg-collapse-affordance, .dg-toolbar-right:focus-within .dg-collapse-affordance { opacity: 1; }
+.dg-toolbar:hover .dg-collapse-affordance, .dg-collapse-affordance[data-keyboard-focus] { opacity: 1; }
+.dg-collapse-affordance:not([data-keyboard-focus]) button:focus-visible { outline: none; }
 .dg-save { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; border: 1px solid var(--dg-border); border-radius: 4px; background: var(--dg-white); color: var(--dg-secondary); }
 .dg-save.dg-modified { color: var(--dg-primary); border-color: var(--dg-primary); }
 .dg-toolbar-divider { width: 1px; height: 16px; margin: 0 4px; background: var(--dg-subtle); }
@@ -110,9 +111,17 @@
 .dg-editor-advanced .dg-condition-stack > .dg-rule-row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
 .dg-editor-advanced .dg-rule-surface { grid-column: -2 / -1; width: auto; min-width: 0; }
 .dg-editor-advanced .dg-workspace-actions { grid-column: 1 / -1; }
-.dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: wrap; }
+.dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: nowrap; }
 .dg-editor-simple .dg-rule-controls { width: fit-content; max-width: 100%; flex-wrap: wrap; }
-.dg-editor-advanced .dg-rule-value, .dg-editor-simple .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
+.dg-editor-simple .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
+/* Reserve fixed controls first; the Value grows on shorter shared-width rows.
+   178px includes the calendar icon/padding and fits the demo date range text.
+   Narrow screens retain the existing scrollable 920px review workspace. */
+.dg-editor-advanced .dg-rule-value { flex: 1 1 240px; width: 240px; min-width: 180px; max-width: 320px; }
+.dg-editor-advanced .dg-date-range-control { flex: 0 1 220px; min-width: 178px; }
+.dg-editor-advanced .dg-date-range { width: 100%; }
+.dg-page .dg-editor-advanced .dg-date-range-control .dg-input { padding-left: 28px; padding-right: 6px; }
+.dg-editor-advanced .dg-rule-controls > .dg-tooltip-anchor { flex: 0 0 24px; margin-left: auto; }
 .dg-workspace-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .dg-sort-precedence { display: flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 32px; color: var(--dg-secondary); }
 .dg-sort-row .dg-rule-controls { flex: 0 0 auto; }
@@ -167,7 +176,8 @@
 .dg-trend-improving { color: var(--dg-positive); }
 .dg-value-state { color: var(--dg-tertiary); }
 .dg-value-restricted, .dg-value-awaiting { color: var(--dg-tertiary); font-style: normal; }
-.dg-risk-chip { display: inline-flex; align-items: center; height: 22px; padding: 0 7px; border: 0; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+/* Prototype Risk Screen working radius: radius/sm = 4px; component mapping unverified. */
+.dg-risk-chip { display: inline-flex; align-items: center; height: 22px; padding: 0 7px; border: 0; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .dg-risk-chip.dg-badge-flat.dg-badge-primary { background: #E2EEFF; }
 .dg-disengagement { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
 .dg-progress-track { width: 40px; height: 4px; border-radius: 4px; background: var(--dg-subtle); overflow: hidden; }

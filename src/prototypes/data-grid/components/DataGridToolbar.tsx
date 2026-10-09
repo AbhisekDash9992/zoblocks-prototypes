@@ -13,6 +13,8 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onSort, onTo
   const settingsId = useId()
   const settingsTrigger = useRef<HTMLButtonElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [collapseKeyboardFocus, setCollapseKeyboardFocus] = useState(false)
+  const pointerFocusing = useRef(false)
   const [settingsPosition, setSettingsPosition] = useState({ left: 0, top: 0, width: 180 })
   const closeSettings = useCallback((restoreFocus: boolean) => {
     setSettingsOpen(false)
@@ -28,7 +30,15 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onSort, onTo
       <PrototypeTooltip content="More views"><PrototypeButton variant="ghost" aria-label="More views"><Ellipsis size={14} aria-hidden="true" />More</PrototypeButton></PrototypeTooltip>
     </div>
     <div className="dg-toolbar-right">
-      <span className="dg-collapse-affordance"><PrototypeIconButton icon={expanded ? ChevronsRight : ChevronsLeft} label={expanded ? 'Collapse controls' : 'Expand controls'} onClick={onToggleToolbar} /></span>
+      <span className="dg-collapse-affordance" data-keyboard-focus={collapseKeyboardFocus || undefined}><PrototypeIconButton icon={expanded ? ChevronsRight : ChevronsLeft} label={expanded ? 'Collapse controls' : 'Expand controls'} onPointerDown={event => {
+        if (event.button !== 0 || !event.isPrimary) return
+        // Keep focus without inheriting keyboard presentation from a previous Tab visit.
+        event.preventDefault()
+        setCollapseKeyboardFocus(false)
+        pointerFocusing.current = true
+        event.currentTarget.focus({ preventScroll: true })
+        pointerFocusing.current = false
+      }} onFocus={event => { if (!pointerFocusing.current && event.currentTarget.matches(':focus-visible')) setCollapseKeyboardFocus(true) }} onBlur={() => setCollapseKeyboardFocus(false)} onKeyDown={event => { if (event.key !== 'Tab') setCollapseKeyboardFocus(true) }} onClick={onToggleToolbar} /></span>
       <PrototypeButton className={`dg-save${state.viewModified ? ' dg-modified' : ''}`}>Save View<ChevronDown size={14} aria-hidden="true" /></PrototypeButton>
       <span className="dg-toolbar-divider" aria-hidden="true" />
       {expanded && <><PrototypeIconButton icon={Filter} label="Filter" shortcut={gridShortcuts.filter.display} aria-keyshortcuts={gridShortcuts.filter.aria} applied={filterApplied} onClick={event => onFilter(event.currentTarget)} /><PrototypeIconButton icon={ArrowUpDown} label="Sort" applied={sortApplied} onClick={event => onSort(event.currentTarget)} /></>}
