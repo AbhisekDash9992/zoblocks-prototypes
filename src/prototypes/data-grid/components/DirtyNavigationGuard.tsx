@@ -4,7 +4,7 @@ import { lockOverlay, unlockOverlay } from '../ui/overlayState'
 import { PrototypeButton } from '../ui/PrototypeButton'
 
 export function DirtyNavigationGuard({ sourceFocus, onKeep, onDiscard, subject = 'filter' }: {
-  sourceFocus: RefObject<HTMLElement | null>; onKeep: () => void; onDiscard: () => void; subject?: 'filter' | 'sort'
+  sourceFocus: RefObject<HTMLElement | null>; onKeep: () => void; onDiscard: () => void; subject?: 'filter' | 'sort' | 'group'
 }) {
   const id = useId()
   const dialog = useRef<HTMLDivElement>(null)

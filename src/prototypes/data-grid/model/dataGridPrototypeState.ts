@@ -8,7 +8,13 @@ export type AdvancedSnapshot = { relationship: BooleanRelationship; rows: Advanc
 export type SortColumn = 'Client' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
 export type DirectSort = { column: SortColumn; direction: 'ascending' | 'descending' } | null
 export type SortRule = { id: number; field: string; direction: string }
-export type CriteriaEditorMode = 'advanced' | 'simple' | 'sort'
+export type GroupField = 'Status' | 'Priority' | 'Assigned Provider' | 'Program' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
+export type GroupOrder = 'A to Z' | 'Z to A' | 'High to Low' | 'Low to High' | 'Newest to Oldest' | 'Oldest to Newest'
+export type GroupRule = { id: number; field: GroupField; order: GroupOrder }
+export type GroupSnapshot = GroupRule[]
+export type GroupDraftRule = { id: number; field: GroupField | ''; order: GroupOrder | '' }
+export type CriteriaEditorMode = 'advanced' | 'simple' | 'sort' | 'group'
+export const initialGroupSnapshot: GroupSnapshot = [{ id: 1, field: 'Status', order: 'A to Z' }]
 // Match the existing saved-view preview; this stack is separate from direct header sorting.
 export const initialSortSnapshot: SortRule[] = [
   { id: 1, field: 'Priority', direction: 'High to Low' },
@@ -24,7 +30,7 @@ export const initialAdvancedSnapshot: AdvancedSnapshot = {
 export type DataGridPrototypeState = {
   criteriaState: CriteriaState
   criteriaPreset: 'empty' | 'sampleCommitted'
-  groupCommitted: boolean
+  groupSnapshot: GroupSnapshot
   sortSnapshot: SortRule[]
   toolbarControls: 'expanded' | 'collapsed'
   heldArrivalsVisible: boolean
@@ -46,7 +52,7 @@ export type DataGridPrototypeState = {
 export const defaultDataGridState: DataGridPrototypeState = {
   criteriaState: 'summary',
   criteriaPreset: 'sampleCommitted',
-  groupCommitted: true,
+  groupSnapshot: initialGroupSnapshot,
   sortSnapshot: initialSortSnapshot,
   toolbarControls: 'expanded',
   heldArrivalsVisible: true,

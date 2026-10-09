@@ -129,6 +129,9 @@
 .dg-workspace-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .dg-sort-precedence { display: flex; align-items: center; justify-content: center; flex: 0 0 24px; width: 24px; height: 32px; color: var(--dg-secondary); }
 .dg-sort-row .dg-rule-controls { flex: 0 0 auto; }
+/* Batch 3C.1: compact single-field Group controls; reuse local Criteria values. */
+.dg-group-row .dg-rule-controls { flex: 0 0 auto; }
+.dg-editor-group .dg-rule-delete { margin-left: 0; }
 .dg-sort-row { position: relative; }
 .dg-page .dg-sort-handle { position: relative; height: 32px; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; user-select: none; }
 .dg-sort-rank, .dg-sort-grip { position: absolute; pointer-events: none; }

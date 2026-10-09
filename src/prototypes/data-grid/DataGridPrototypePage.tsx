@@ -83,11 +83,11 @@ export function DataGridPrototypePage() {
   }
   const openEditor = (mode: CriteriaEditorMode, trigger: HTMLButtonElement, id?: number) => navigate(() => {
     dirty.current = false
-    const newSort = mode === 'sort' && state.sortSnapshot.length === 0
+    const isNew = (mode === 'sort' && state.sortSnapshot.length === 0) || (mode === 'group' && state.groupSnapshot.length === 0)
     setPickerAnchor(null); setPickerRequested(false)
-    setSession({ key: ++sessionKey.current, isNew: newSort, advanced: structuredClone(state.advancedSnapshot), simple: state.simpleFilters.find(row => row.id === id) ?? null, sort: structuredClone(state.sortSnapshot) })
-    setState(current => ({ ...current, criteriaState: 'editor', activeEditor: mode, activeCriterion: newSort ? 'none' : mode, activeSimpleId: id ?? null }))
-    if (!newSort) requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.dg-rule-field')?.focus({ preventScroll: true }))
+    setSession({ key: ++sessionKey.current, isNew, advanced: structuredClone(state.advancedSnapshot), simple: state.simpleFilters.find(row => row.id === id) ?? null, sort: structuredClone(state.sortSnapshot), group: structuredClone(state.groupSnapshot) })
+    setState(current => ({ ...current, criteriaState: 'editor', activeEditor: mode, activeCriterion: isNew ? 'none' : mode, activeSimpleId: id ?? null }))
+    if (!isNew) requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.dg-rule-field')?.focus({ preventScroll: true }))
   }, trigger)
   const onFilterEntry = (trigger: HTMLButtonElement) => navigate(() => {
     dirty.current = false
@@ -141,9 +141,11 @@ export function DataGridPrototypePage() {
       setState(current => ({ ...current, sortSnapshot: [], viewModified: true }))
       setUndo({ id: ++undoId.current, message: 'Sort removed.', restore: current => ({ ...current, sortSnapshot: removed, viewModified: true }) })
     } else {
-      if (!state.groupCommitted) return
-      setState(current => ({ ...current, groupCommitted: false, viewModified: true }))
-      setUndo({ id: ++undoId.current, message: 'Group removed.', restore: current => ({ ...current, groupCommitted: true, viewModified: true }) })
+      const removed = structuredClone(state.groupSnapshot)
+      if (!removed.length) return
+      if (state.activeEditor === 'group') finishEditor()
+      setState(current => ({ ...current, groupSnapshot: [], viewModified: true }))
+      setUndo({ id: ++undoId.current, message: 'Group removed.', restore: current => ({ ...current, groupSnapshot: removed, viewModified: true }) })
     }
     repairCriteriaFocus()
   }
@@ -162,15 +164,15 @@ export function DataGridPrototypePage() {
     repairCriteriaFocus()
   }
   const clearSummary = () => {
-    const previous = structuredClone({ criteriaPreset: state.criteriaPreset, criteriaActive: state.criteriaActive, groupCommitted: state.groupCommitted, sortSnapshot: state.sortSnapshot, advancedSnapshot: state.advancedSnapshot, simpleFilters: state.simpleFilters, directSort: state.directSort })
+    const previous = structuredClone({ criteriaPreset: state.criteriaPreset, criteriaActive: state.criteriaActive, groupSnapshot: state.groupSnapshot, sortSnapshot: state.sortSnapshot, advancedSnapshot: state.advancedSnapshot, simpleFilters: state.simpleFilters, directSort: state.directSort })
     finishEditor()
-    setState(current => ({ ...withCriteriaState(current, 'summary'), criteriaPreset: 'empty', criteriaActive: false, groupCommitted: false, sortSnapshot: [], advancedSnapshot: { relationship: 'And', rows: [] }, simpleFilters: [], directSort: null, viewModified: true }))
+    setState(current => ({ ...withCriteriaState(current, 'summary'), criteriaPreset: 'empty', criteriaActive: false, groupSnapshot: [], sortSnapshot: [], advancedSnapshot: { relationship: 'And', rows: [] }, simpleFilters: [], directSort: null, viewModified: true }))
     setUndo({ id: ++undoId.current, message: 'All criteria cleared.', restore: current => ({ ...current, ...previous, viewModified: true }) })
   }
 
   return <div className="dg-page">
     <a className="dg-back" href="#/">← All prototypes</a>
-    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 3B.2</p><h1>Toolbar &amp; Criteria Area</h1><p>Advanced Filter / Sort · cumulative prototype</p></div>
+    <div className="dg-page-heading"><p className="eyebrow">Data Grid · Batch 3C.1</p><h1>Toolbar &amp; Criteria Area</h1><p>Advanced Filter / Sort / Group · cumulative prototype</p></div>
     <div className={`dg-working-region${state.fullScreen ? ' dg-full-screen' : ''}`} data-density={state.density} tabIndex={-1} onKeyDown={event => {
       const target = event.target
       if (!gridShortcuts.filter.active || event.key.toLowerCase() !== 'f' || event.repeat || event.nativeEvent.isComposing || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
@@ -184,11 +186,12 @@ export function DataGridPrototypePage() {
       {state.fullScreen && <div className="dg-full-screen-review"><span>Review only · Simulated full-screen candidate</span><PrototypeButton ref={fullScreenExitRef} onClick={() => setState(current => ({ ...current, fullScreen: false }))}>Exit full screen</PrototypeButton></div>}
       <div className="dg-scroll" role="region" aria-label="Data grid working surface, horizontally scrollable on narrow screens" tabIndex={0}>
         <div className="dg-surface">
-          <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onSort={trigger => openEditor('sort', trigger)} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
+          <DataGridToolbar state={state} onToggleToolbar={() => setState(current => ({ ...current, toolbarControls: current.toolbarControls === 'expanded' ? 'collapsed' : 'expanded' }))} onFilter={onFilterEntry} onSort={trigger => openEditor('sort', trigger)} onGroup={trigger => openEditor('group', trigger)} onToggleCriteria={trigger => navigate(() => { dirty.current = false; setSession(null); setPickerAnchor(null); setPickerRequested(false); setState(current => withCriteriaState(current, current.criteriaState === 'hidden' ? 'summary' : 'hidden')) }, trigger)} onToggleFullScreen={() => setState(current => ({ ...current, fullScreen: !current.fullScreen }))} />
           <CriteriaArea guardOpen={pending !== null} onKeep={keepEditing} onDiscard={() => { if (pending) { dirty.current = false; setPending(null); pending.action() } }} onAdvanceSimple={advanceSimple} addFilterRef={summaryAddFilterRef} state={state} session={session} onOpenEditor={openEditor} onAddFilter={onFilterEntry} onCancel={() => finishEditor()} onClear={clearSummary} onDirty={reportDirty}
             onApplyAdvanced={snapshot => { const transferred = session?.transferSimpleId; finishEditor(); setState(current => ({ ...current, advancedSnapshot: snapshot, simpleFilters: current.simpleFilters.filter(row => row.id !== transferred), viewModified: true, criteriaActive: true })) }}
             onApplySimple={snapshot => { finishEditor(); setState(current => ({ ...current, simpleFilters: current.simpleFilters.some(row => row.id === snapshot.id) ? current.simpleFilters.map(row => row.id === snapshot.id ? snapshot : row) : [...current.simpleFilters, snapshot], viewModified: true, criteriaActive: true })) }}
             onApplySort={snapshot => { finishEditor(); setState(current => ({ ...current, sortSnapshot: snapshot, viewModified: true, criteriaActive: true })) }}
+            onApplyGroup={snapshot => { finishEditor(); setState(current => ({ ...current, groupSnapshot: snapshot, viewModified: true, criteriaActive: true })) }}
             onDeleteSimple={() => { const id = session?.simple?.id ?? state.activeSimpleId; if (id !== null && id !== undefined) removeSimple(id) }} onRemoveSimple={removeSimple} onRemoveCriterion={removeCriterion} />
           {state.caseloadVisible && <div className="dg-caseload"><div><strong>CASELOAD · PHQ-9 RAISED OR RISK SCREENED</strong><p>{state.showMoreRows ? 11 : 6} of 312 clients on this team's caseload.</p><span>PHQ-9 of 10 or more, or a risk screen in the last 14 days.</span></div><span className="dg-window">14-DAY WINDOW</span></div>}
           <HeldArrivalsBar visible={state.heldArrivalsVisible} actionVisible={state.letThemInVisible} />
