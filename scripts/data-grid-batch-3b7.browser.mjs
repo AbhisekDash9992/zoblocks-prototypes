@@ -48,7 +48,8 @@ const geometry = async label => {
         assert.ok(control.right <= row.right + 1)
       }
       assert.equal(first.width, 160); assert.equal(row.controls[1].width, 136)
-      assert.ok(row.controls[2].width >= 180 && row.controls[2].width <= 320)
+      // Batch 3B.8 removes the Advanced cap and lets Date-range Values fit their label.
+      if (!row.date) assert.ok(row.controls[2].width >= 180)
       if (row.date) assert.ok(row.date.availableTextWidth >= row.date.textWidth, 'Entire demo date range must remain readable')
     }
   }
