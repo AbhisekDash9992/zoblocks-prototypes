@@ -19,33 +19,73 @@ const order = () => rows().locator('.dg-rule-field').allTextContents()
 const grip = locator => locator.locator('.dg-sort-grip').evaluate(el => getComputedStyle(el).opacity)
 const measure = async state => {
   const result = await page.evaluate(() => {
-    const toolbar = document.querySelector('.dg-toolbar'), css = getComputedStyle(toolbar)
+    const toolbar = document.querySelector('.dg-toolbar'), css = getComputedStyle(toolbar), stroke = getComputedStyle(toolbar, '::after')
     const area = document.querySelector('.dg-criteria-area'), surface = document.querySelector('.dg-criteria-surface')
     const summary = document.querySelector('.dg-summary'), editor = document.querySelector('.dg-editor-header')
     return {
       toolbar: toolbar.getBoundingClientRect().height,
       padding: [css.paddingTop, css.paddingRight, css.paddingBottom, css.paddingLeft],
-      radius: css.borderRadius, divider: css.boxShadow,
+      radius: css.borderRadius, shadow: css.boxShadow,
+      divider: { content: stroke.content, position: stroke.position, top: stroke.top, height: stroke.height, zIndex: stroke.zIndex, pointerEvents: stroke.pointerEvents },
       controls: [...toolbar.querySelectorAll('button')].map(el => el.getBoundingClientRect().height),
-      criteriaPadding: area ? [getComputedStyle(area).paddingTop, getComputedStyle(area).paddingBottom] : null,
+      criteriaPadding: area ? [getComputedStyle(area).paddingTop, getComputedStyle(area).paddingRight, getComputedStyle(area).paddingBottom, getComputedStyle(area).paddingLeft] : null,
       criteriaFootprint: area ? area.getBoundingClientRect().height : 0,
       summary: summary?.getBoundingClientRect().height,
       header: editor?.getBoundingClientRect().height,
       contiguous: editor ? document.querySelector('.dg-editor').getBoundingClientRect().bottom === summary.getBoundingClientRect().top : null,
       outerExtra: area ? area.getBoundingClientRect().height - surface.getBoundingClientRect().height : 0,
+      criteriaTopGap: area ? surface.getBoundingClientRect().top - toolbar.getBoundingClientRect().bottom : 0,
     }
   })
   assert.equal(result.toolbar, 40)
   assert.deepEqual(result.padding, ['8px', '0px', '8px', '0px'])
   assert.equal(result.radius, '0px')
   assert.ok(result.controls.every(height => height === 24))
-  if (state === 'hidden') { assert.notEqual(result.divider, 'none'); assert.equal(result.criteriaFootprint, 0) }
+  assert.equal(result.shadow, 'none')
+  if (state === 'hidden') {
+    assert.equal(result.divider.content, '""'); assert.equal(result.divider.position, 'absolute')
+    assert.equal(result.divider.top, '40px'); assert.equal(result.divider.height, '1px')
+    assert.equal(result.divider.pointerEvents, 'none'); assert.equal(result.criteriaFootprint, 0)
+  }
   else {
-    assert.equal(result.divider, 'none'); assert.deepEqual(result.criteriaPadding, ['8px', '8px'])
-    assert.equal(result.outerExtra, 16); assert.equal(result.summary, 40)
+    assert.equal(result.divider.content, 'none'); assert.deepEqual(result.criteriaPadding, ['0px', '0px', '8px', '0px'])
+    assert.equal(result.outerExtra, 8); assert.equal(result.criteriaTopGap, 0); assert.equal(result.summary, 40)
     if (state === 'editor') { assert.equal(result.header, 48); assert.equal(result.contiguous, true) }
   }
   console.log(JSON.stringify({ state, ...result }))
+}
+const measureDirectBoundary = async () => {
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await settle()
+  const result = await page.evaluate(() => {
+    const toolbar = document.querySelector('.dg-toolbar'), rect = toolbar.getBoundingClientRect()
+    const stroke = getComputedStyle(toolbar, '::after')
+    const viewport = document.querySelector('.dg-table-viewport'), table = document.querySelector('.dg-table')
+    const headers = [...document.querySelectorAll('.dg-table th')]
+    return {
+      directSibling: toolbar.nextElementSibling === viewport,
+      toolbarBottom: rect.bottom, dividerTop: rect.top + parseFloat(stroke.top), dividerHeight: parseFloat(stroke.height),
+      viewportTop: viewport.getBoundingClientRect().top, headerTop: headers[0].getBoundingClientRect().top,
+      toolbarLeft: rect.left, toolbarRight: rect.right,
+      tableLeft: table.getBoundingClientRect().left, tableRight: table.getBoundingClientRect().right,
+      dividerColor: stroke.backgroundColor, dividerZIndex: Number(stroke.zIndex),
+      headers: headers.map(el => {
+        const css = getComputedStyle(el)
+        return { top: el.getBoundingClientRect().top, height: el.getBoundingClientRect().height, border: css.borderTopWidth, color: css.borderTopColor, zIndex: Number(css.zIndex) }
+      }),
+    }
+  })
+  assert.equal(result.directSibling, true)
+  assert.equal(result.dividerTop, result.toolbarBottom)
+  assert.equal(result.dividerTop, result.viewportTop)
+  assert.equal(result.dividerTop, result.headerTop)
+  assert.equal(result.dividerHeight, 1)
+  assert.equal(result.toolbarLeft, result.tableLeft); assert.equal(result.toolbarRight, result.tableRight)
+  for (const header of result.headers) {
+    assert.equal(header.top, result.dividerTop); assert.equal(header.height, 28); assert.equal(header.border, '1px')
+    assert.equal(header.color, result.dividerColor); assert.ok(result.dividerZIndex > header.zIndex)
+  }
+  console.log(JSON.stringify({ directBoundary: result }))
 }
 const dragStart = async () => {
   const box = await handle().boundingBox()
@@ -63,9 +103,15 @@ try {
   await page.goto(url)
   await measure('summary')
   await button('Hide criteria').click(); await measure('hidden')
+  await page.getByRole('switch', { name: 'Caseload context visible', exact: true }).uncheck()
+  await page.getByRole('switch', { name: 'Held arrivals visible', exact: true }).uncheck()
+  await measureDirectBoundary()
   await button('Collapse controls').click(); await measure('hidden')
+  await measureDirectBoundary()
   await button('Show criteria').click(); await measure('summary')
   await button('Expand controls').click()
+  await page.getByRole('switch', { name: 'Caseload context visible', exact: true }).check()
+  await page.getByRole('switch', { name: 'Held arrivals visible', exact: true }).check()
   await openSort(); await measure('editor')
   await away(); assert.equal(await grip(handle()), '0')
   await rows().first().locator('.dg-rule-field').hover()
@@ -156,5 +202,5 @@ try {
   await page.setViewportSize({ width: 600, height: 900 }); await measure('hidden')
   await button('Show criteria').click(); await measure('summary')
   assert.deepEqual(errors, [])
-  console.log(`PASS: Batch 3B.5 geometry, pointer/keyboard reorder, cleanup, autoscroll, draft/committed state, filters and dirty guards: ${url}`)
+  console.log(`PASS: Batch 3B.6 geometry and divider alignment; Batch 3B.5 pointer/keyboard reorder, cleanup, autoscroll, draft/committed state, filters and dirty guards: ${url}`)
 } finally { await browser.close() }
