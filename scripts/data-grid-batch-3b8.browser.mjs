@@ -14,7 +14,7 @@ const option = name => page.getByRole('option', { name, exact: true })
 const settle = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
 const choose = async (name, value) => {
   await button(name).scrollIntoViewIfNeeded(); await settle()
-  await button(name).click()
+  if (await button(name).getAttribute('aria-expanded') !== 'true') await button(name).click()
   try { await option(value).click({ timeout: 5000 }) }
   catch (error) {
     console.log(JSON.stringify(await page.evaluate(() => ({ active: document.activeElement?.getAttribute('aria-label'), pickers: [...document.querySelectorAll('.dg-picker')].map(el => ({ label: el.getAttribute('aria-label'), text: el.textContent })), expanded: [...document.querySelectorAll('[aria-expanded="true"]')].map(el => el.getAttribute('aria-label')) }))))
@@ -35,7 +35,14 @@ const date = async context => {
   await choose(`Field for ${context}`, 'Next Contact')
   await choose(`Value for ${context}`, 'Date range')
 }
-const addNested = async () => { await button('Add Nested Filter to Level 1 condition 1').click(); await page.keyboard.press('Escape'); await settle() }
+const dismissAutoPicker = async field => {
+  await page.getByRole('listbox', { name: await field.getAttribute('aria-label'), exact: true }).waitFor()
+  await page.keyboard.press('Escape'); await settle()
+}
+const addNested = async () => {
+  await button('Add Nested Filter to Level 1 condition 1').click()
+  await dismissAutoPicker(page.locator('.dg-editor-advanced .dg-nested-row .dg-rule-field').last())
+}
 const capture = async label => {
   const result = await page.evaluate(() => {
     const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom } }
@@ -154,7 +161,7 @@ try {
   if (!baseline) assert.ok(removed.surfaces[0].width < wide.surfaces[0].width, 'Removing widest date condition recomputes natural shared width')
   // New primary and nested incomplete rules remain compact alongside completed groups.
   await page.locator('.dg-editor-advanced .dg-workspace-actions').getByRole('button', { name: 'Add Filter', exact: true }).click()
-  await page.keyboard.press('Escape'); await capture('primary-field-only')
+  await dismissAutoPicker(button('Field for Level 1 condition 4')); await capture('primary-field-only')
   await choose('Field for Level 1 condition 4', 'Status'); await capture('primary-partial')
   await choose('Value for Level 1 condition 4', 'Active'); await capture('primary-completed')
   await addNested(); await capture('incomplete-in-shared-surfaces')
