@@ -1,6 +1,7 @@
 import { additionalSyntheticGridData, syntheticGridData } from '../data/syntheticGridData'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import type { DirectSort, SortColumn } from '../model/dataGridPrototypeState'
+import { prototypeGridColumns } from '../model/dataGridPrototypeState'
 import { PrototypeIconButton } from '../ui/PrototypeIconButton'
 import { PrototypeBadge } from '../ui/PrototypeBadge'
 
@@ -28,7 +29,7 @@ export function PrototypeDataGrid({ showMoreRows, directSort, onSort }: { showMo
     <div className="dg-table-viewport" role="region" aria-label="Synthetic table, scrollable rows" tabIndex={0}>
     <table className="dg-table" aria-label="Synthetic caseload">
       <colgroup>{[200, 160, 200, 200, 160].map((width, index) => <col key={index} style={{ width }} />)}</colgroup>
-      <thead><tr>{(['Client', 'PHQ-9', 'Risk Screen', 'Disengagement', 'Next Contact'] as SortColumn[]).map(title => {
+      <thead><tr>{prototypeGridColumns.map(title => {
         const direction = directSort?.column === title ? directSort.direction : 'none'
         return <th key={title} scope="col" aria-sort={direction} className={title === 'Disengagement' || title === 'Next Contact' ? 'dg-align-right' : 'dg-align-left'}><span className="dg-header-content"><span className="dg-header-label">{title}</span><span className={`dg-header-sort${direction !== 'none' ? ' dg-header-sorted' : ''}`}><PrototypeIconButton tooltip={false} icon={direction === 'ascending' ? ArrowUp : direction === 'descending' ? ArrowDown : ArrowUpDown} label={`Sort ${title}`} applied={direction !== 'none'} onClick={event => { event.stopPropagation(); onSort(title) }} /></span></span></th>
       })}</tr></thead>

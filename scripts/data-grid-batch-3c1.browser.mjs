@@ -17,7 +17,7 @@ const choose = async (name, value) => {
   await option(value).click(); await settle()
 }
 const groupChip = field => button(`Group by: ${field}`)
-const openGroup = async () => { await button('Group').click(); await page.locator('.dg-editor-group').waitFor(); await settle() }
+const openGroup = async () => { await button('View settings').click(); await page.getByRole('dialog', { name: 'View settings', exact: true }).getByRole('button', { name: 'Group', exact: true }).click(); await page.locator('.dg-editor-group').waitFor(); await settle() }
 const focused = async name => {
   await page.waitForFunction(label => document.activeElement?.getAttribute('aria-label') === label, name)
 }

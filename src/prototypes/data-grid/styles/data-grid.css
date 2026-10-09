@@ -318,6 +318,27 @@
 .dg-page .dg-button-primary:disabled { background: var(--dg-subtle); color: var(--dg-disabled); }
 
 .dg-picker-divider { border: 0; border-top: 1px solid #EAECF0; margin: 4px 0; }
+/* Batch 3C.1a View Settings working geometry, scoped to this prototype popover. */
+.dg-picker.dg-view-settings { width: 320px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: 4px; }
+.dg-view-settings-content { display: flex; flex-direction: column; gap: 8px; }
+.dg-view-settings-group { padding: 0 8px; }
+.dg-view-identity { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.dg-view-identity > .dg-input { width: 100%; }
+.dg-view-settings .dg-picker-divider { margin: 0; flex-shrink: 0; }
+.dg-view-settings .dg-settings-row { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 0 8px; gap: 8px; border-radius: 8px; }
+.dg-settings-leading, .dg-settings-trailing { display: inline-flex; align-items: center; min-width: 0; }
+.dg-settings-leading { gap: 12px; }
+.dg-settings-trailing { gap: 8px; }
+.dg-settings-row svg { flex-shrink: 0; }
+.dg-settings-value { color: #6A7282; white-space: nowrap; }
+.dg-view-settings .dg-settings-row:disabled { color: #99A1AF; cursor: default; }
+.dg-view-settings .dg-settings-row:disabled:hover { background: transparent; }
+.dg-view-settings .dg-settings-delete:disabled { color: #B42318; opacity: .5; }
+.dg-view-settings .dg-density-row[aria-expanded="true"] { background: #F2F3F5; }
+/* One listbox within the parent overlay's ownership/dismissal boundary. Fixed
+   positioning lets this compact child escape the parent's scrolling content. */
+.dg-density-picker { position: fixed; z-index: 91; width: 120px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; padding: 4px; border: 1px solid #D1D5DC; border-radius: 5px; background: #FFFFFF; box-shadow: 0 4px 12px rgb(16 24 40 / 12%); }
+.dg-view-settings .dg-density-picker button { height: 36px; padding: 0 8px; border-radius: 3px; gap: 0; }
 .dg-picker .dg-input:focus-visible { outline: 2px solid #1447F6; outline-offset: -2px; }
 .dg-page .dg-destructive { background: var(--dg-critical); }
 .dg-page .dg-destructive:not(:disabled):hover { background: #912018; }

@@ -6,6 +6,7 @@ export type BooleanRelationship = 'And' | 'Or'
 export type AdvancedRule = DraftRule & { nested?: { relationship: BooleanRelationship; rows: DraftRule[] } }
 export type AdvancedSnapshot = { relationship: BooleanRelationship; rows: AdvancedRule[] }
 export type SortColumn = 'Client' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
+export const prototypeGridColumns: SortColumn[] = ['Client', 'PHQ-9', 'Risk Screen', 'Disengagement', 'Next Contact']
 export type DirectSort = { column: SortColumn; direction: 'ascending' | 'descending' } | null
 export type SortRule = { id: number; field: string; direction: string }
 export type GroupField = 'Status' | 'Priority' | 'Assigned Provider' | 'Program' | 'PHQ-9' | 'Risk Screen' | 'Disengagement' | 'Next Contact'
@@ -59,7 +60,7 @@ export const defaultDataGridState: DataGridPrototypeState = {
   caseloadVisible: true,
   letThemInVisible: true,
   showMoreRows: false,
-  density: 'baseline',
+  density: 'standard',
   viewModified: false,
   criteriaActive: true,
   fullScreen: false,

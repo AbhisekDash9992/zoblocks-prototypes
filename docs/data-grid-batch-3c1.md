@@ -12,7 +12,8 @@ controls; ordered field/order pairs determine semantic dirtiness. This batch
 validates exactly one complete row; the snapshot representation can support
 ordered rows in a later batch.
 
-Toolbar Group, View Settings → Group (also available with collapsed controls)
+Batch 3C.1a corrects entry architecture by removing the standalone toolbar
+Group icon. View Settings → Group (also available with collapsed controls)
 and the committed Summary Group chip route to the same Criteria editor. A new
 Group reveals the Criteria Area and opens one searchable Select field starter,
 with Search focused. Selecting a field assigns a valid default order immediately.
