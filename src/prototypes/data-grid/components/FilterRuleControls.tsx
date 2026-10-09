@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import { CalendarRange, Trash2 } from 'lucide-react'
-import { completeRule, filterFields as fields, filterOperators as operators, filterValues as values, starterRule } from '../model/filterFields'
+import { filterFields as fields, filterOperators as operators, filterValues as values, starterRule } from '../model/filterFields'
 import type { DraftRule } from '../model/dataGridPrototypeState'
 import { PrototypeSelect } from '../ui/PrototypeSelect'
 import { PrototypeIconButton } from '../ui/PrototypeIconButton'
@@ -13,7 +13,7 @@ export function FilterRuleControls({ row, context, mode, simpleFilters, autoOpen
   onUpdate: (patch: Partial<DraftRule>) => void; onFieldChosen: () => void; onOperatorChosen: () => void
   onDelete: () => void; canDelete: boolean
 }) {
-  return <div className="dg-rule-controls" data-complete={mode === 'advanced' ? completeRule(row) : undefined}>
+  return <div className="dg-rule-controls">
     <PrototypeSelect className="dg-rule-field" autoOpen={row.id === autoOpenId} label={`Field for ${context}`} value={row.field} placeholder="Select field" options={mode === 'simple' ? fields.filter(field => !simpleFilters.some(filter => filter.field === field && filter.id !== row.id)) : fields} onChange={field => { onUpdate({ ...starterRule(row.id, field), operator: mode === 'advanced' ? operators[field][0] : starterRule(row.id, field).operator, range: undefined }); onFieldChosen() }} />
     {row.field && <>
       <PrototypeSelect className="dg-rule-operator" label={`Operator for ${context}`} value={row.operator} options={operators[row.field]} onChange={operator => { onUpdate({ operator, value: '', range: undefined }); onOperatorChosen() }} />

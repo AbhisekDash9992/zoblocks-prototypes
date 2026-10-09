@@ -112,14 +112,14 @@
 .dg-editor-advanced .dg-rule-surface { grid-column: -2 / -1; width: auto; min-width: 0; }
 .dg-editor-advanced .dg-workspace-actions { grid-column: 1 / -1; }
 .dg-editor-advanced .dg-rule-controls { flex: 1; min-width: 0; flex-wrap: nowrap; }
-.dg-editor-advanced .dg-rule-controls[data-complete="false"] { flex: 0 1 auto; }
+.dg-editor-advanced .dg-rule-controls:not(:has(.dg-rule-value)) { flex: 0 1 auto; }
 .dg-editor-simple .dg-rule-controls { width: fit-content; max-width: 100%; flex-wrap: wrap; }
 .dg-editor-simple .dg-rule-value { flex: 0 1 240px; width: 240px; max-width: 320px; }
-/* Completed Values fill the shared track; incomplete rows hug visible controls.
+/* Every visible Value fills the shared track, including its empty placeholder.
+   Rows without a Value hug their visible controls independently of validation.
    Date-range Values may shrink to their label so the full date input stays readable.
    Narrow screens retain the existing scrollable 920px review workspace. */
 .dg-editor-advanced .dg-rule-value { flex: 1 1 240px; width: 240px; min-width: 180px; max-width: none; }
-.dg-editor-advanced .dg-rule-controls[data-complete="false"] .dg-rule-value { flex-grow: 0; }
 .dg-editor-advanced .dg-rule-controls:has(.dg-date-range-control) .dg-rule-value { min-width: max-content; }
 .dg-editor-advanced .dg-date-range-control { flex: 0 0 220px; }
 .dg-editor-advanced .dg-date-range { width: 100%; }

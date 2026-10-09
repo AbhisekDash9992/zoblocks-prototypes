@@ -64,7 +64,7 @@ const capture = async label => {
             })() : null
             return {
               ...rect(row), clientWidth: row.clientWidth, scrollWidth: row.scrollWidth,
-              complete: row.dataset.complete, controls: controls.map(el => ({ label: el.getAttribute('aria-label'), text: el instanceof HTMLInputElement ? el.value : el.textContent, ...rect(el) })),
+              controls: controls.map(el => ({ label: el.getAttribute('aria-label'), text: el instanceof HTMLInputElement ? el.value : el.textContent, ...rect(el) })),
               valueMax: value ? getComputedStyle(value).maxWidth : null,
               delete: remove ? rect(remove) : null, wrapper: wrapper ? rect(wrapper) : null,
               deleteClearance: wrapper ? bounds.right - wrapper.getBoundingClientRect().right : null,
@@ -98,7 +98,6 @@ const capture = async label => {
         assert.equal(first.width, 160)
         if (row.controls.length > 2) {
           assert.equal(row.controls[1].width, 136); assert.equal(row.valueMax, 'none')
-          if (row.complete === 'false') assert.ok(row.controls[2].width <= 240)
         } else assert.equal(row.width, 192, 'Select field + 8px + Delete hugs content')
         if (row.range) {
           assert.ok(row.range.availableText >= row.range.textWidth, 'Full selected date text fits')
@@ -112,6 +111,16 @@ const capture = async label => {
   return result
 }
 const allRows = result => result.surfaces.flatMap(surface => surface.rows)
+const contextRow = (result, context) => allRows(result).find(row => row.controls[0].label === `Field for ${context}`)
+const sameValueLayout = (before, after, context) => {
+  const a = contextRow(before, context), b = contextRow(after, context)
+  for (const property of ['x', 'width', 'right']) {
+    assert.equal(a.controls[2][property], b.controls[2][property], `Value ${property} must not change on selection`)
+    assert.equal(a.wrapper[property], b.wrapper[property], `Delete wrapper ${property} must not change on selection`)
+    assert.equal(a.delete[property], b.delete[property], `Delete target ${property} must not change on selection`)
+  }
+  assert.deepEqual(before.surfaces.map(surface => surface.width), after.surfaces.map(surface => surface.width))
+}
 try {
   await page.goto(url); await page.evaluate(() => document.fonts.ready)
   await page.getByRole('button', { name: /Advanced filter .*3 rules/ }).click()
@@ -123,10 +132,19 @@ try {
   await choose(`Value for ${nested}`, 'Date range')
   const mixed = await capture('priority-with-nested-date')
   if (!baseline) {
-    assert.ok(allRows(mixed).filter(row => row.complete === 'true' && !row.range).every(row => row.controls[2].width > 320))
+    assert.ok(allRows(mixed).filter(row => row.controls.length > 2 && !row.range).every(row => row.controls[2].width > 320))
   }
   await page.getByRole('textbox', { name: `Date range for ${nested}`, exact: true }).fill('12 Oct 2026 – 28 Oct 2026')
-  await capture('full-two-digit-date')
+  const fullDate = await capture('full-two-digit-date')
+  if (!baseline) {
+    const range = page.getByRole('textbox', { name: `Date range for ${nested}`, exact: true })
+    await range.fill('')
+    const emptyDate = await capture('empty-date-invalid-draft')
+    sameValueLayout(fullDate, emptyDate, nested)
+    assert.equal(await button('Apply').isDisabled(), true, 'Empty date remains invalid even though Value stretches')
+    await range.fill('12 Oct 2026 – 28 Oct 2026'); await settle()
+    assert.equal(await button('Apply').isDisabled(), false)
+  }
   // Stress the same layout with a reserved scrollbar gutter, representing less available inline space.
   await page.locator('.dg-editor-advanced .dg-condition-stack').evaluate(el => { el.style.scrollbarGutter = 'stable' })
   await capture('reserved-scrollbar-gutter')
@@ -135,8 +153,36 @@ try {
   await date(primary); await priority(nested)
   await capture('swapped-primary-date-nested-priority')
   await addNested(); await capture('third-field-only')
+  // Batch 3B.9: third nested Priority, default "is", Value still "Select value".
+  await choose(`Field for ${third}`, 'Priority')
+  const emptyPriority = await capture('third-priority-select-value')
+  if (!baseline) {
+    const row = contextRow(emptyPriority, third)
+    assert.equal(row.controls[1].text, 'is'); assert.equal(row.controls[2].text, 'Select value')
+    assert.equal(row.controls[2].width, row.width - 160 - 136 - 24 - 3 * 8)
+    assert.ok(row.controls[2].width > 320, 'Placeholder Value already expands without the old cap')
+    assert.equal(await button('Apply').isDisabled(), true, 'Layout growth must not make the incomplete draft valid')
+  }
+  await choose(`Value for ${third}`, 'Medium')
+  const selectedPriority = await capture('third-priority-medium')
+  if (!baseline) {
+    assert.equal(contextRow(selectedPriority, third).controls[2].text, 'Medium')
+    sameValueLayout(emptyPriority, selectedPriority, third)
+    assert.equal(await button('Apply').isDisabled(), false)
+  }
+  await choose(`Operator for ${third}`, 'is not')
+  const changedOperator = await capture('third-priority-operator-cleared-value')
+  if (!baseline) {
+    sameValueLayout(selectedPriority, changedOperator, third)
+    assert.equal(contextRow(changedOperator, third).controls[2].text, 'Select value')
+    assert.equal(await button('Apply').isDisabled(), true)
+  }
+  await choose(`Value for ${third}`, 'High')
+  if (!baseline) assert.equal(await button('Apply').isDisabled(), false)
   await choose(`Field for ${third}`, 'Status'); await capture('third-partial')
+  if (!baseline) assert.equal(await button('Apply').isDisabled(), true)
   await choose(`Value for ${third}`, 'Active'); await capture('third-completed')
+  if (!baseline) assert.equal(await button('Apply').isDisabled(), false)
   if (!baseline) {
     // Picker placement and keyboard focus stay connected to the newly stretched Value.
     await button(`Value for ${third}`).click()
@@ -175,6 +221,6 @@ try {
     assert.equal(await page.locator('.dg-editor-simple .dg-rule-value').evaluate(el => el.getBoundingClientRect().width), 240)
     assert.equal(await page.locator('.dg-editor-simple .dg-rule-value').evaluate(el => getComputedStyle(el).maxWidth), '320px')
     assert.deepEqual(errors, [])
-    console.log(`PASS: Batch 3B.8 incomplete/partial/completed transitions, wrapper containment, shared dynamic widths, full dates, narrow keyboard access and draft/committed regression: ${url}`)
+    console.log(`PASS: Batches 3B.8/3B.9 dynamic widths, placeholder/selected Value stability, validation, containment, dates, narrow keyboard access and draft/committed regression: ${url}`)
   }
 } finally { await browser.close() }
