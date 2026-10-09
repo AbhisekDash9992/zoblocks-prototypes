@@ -41,8 +41,12 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
     place()
     const selected = picker.querySelector<HTMLButtonElement>('[aria-selected="true"]') ?? picker.querySelector<HTMLButtonElement>('button')
     selected?.focus({ preventScroll: true })
-    window.addEventListener('resize', place)
-    return () => window.removeEventListener('resize', place)
+    // Parent placement runs first; measure this child after scroll/resize settles.
+    let frame = 0
+    const update = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(place) }
+    window.addEventListener('resize', update)
+    window.addEventListener('scroll', update, true)
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', update); window.removeEventListener('scroll', update, true) }
   }, [densityOpen])
   const closeDensity = () => { setDensityOpen(false); densityTrigger.current?.focus({ preventScroll: true }) }
   const route = (action: (source: HTMLButtonElement) => void) => {
@@ -50,7 +54,7 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
     onClose(false)
     if (source) action(source)
   }
-  return <PrototypeMenu id={id} label="View settings" role="dialog" className="dg-view-settings" trigger={trigger} position={position} onClose={onClose} restoreFocusOnOutside focusPolicy="surface">
+  return <PrototypeMenu id={id} label="View settings" role="dialog" className="dg-view-settings" trigger={trigger} position={position} onClose={onClose} restoreFocusOnOutside focusPolicy="surface" dismissalPolicy="explicit">
     <div className="dg-view-settings-content" onKeyDownCapture={event => {
       if (densityOpen && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeDensity() }
     }}>

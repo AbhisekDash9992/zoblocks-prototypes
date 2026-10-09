@@ -4,8 +4,8 @@ import { createPortal } from 'react-dom'
 import { claimOverlay, releaseOverlay } from './overlayState'
 
 // Shared local overlay shell; options and multi-value content remain bounded.
-export function PrototypeMenu({ id, label, trigger, position, onClose, children, role = 'listbox', keepTriggerFocus = false, className = '', restoreFocusOnOutside = false, focusPolicy = 'first-control' }: {
-  id: string; label: string; trigger: RefObject<HTMLElement | null>; position: { left: number; top: number; width: number }; onClose: (restoreFocus: boolean) => void; children: ReactNode; role?: 'listbox' | 'dialog'; keepTriggerFocus?: boolean; className?: string; restoreFocusOnOutside?: boolean; focusPolicy?: 'first-control' | 'surface'
+export function PrototypeMenu({ id, label, trigger, position, onClose, children, role = 'listbox', keepTriggerFocus = false, className = '', restoreFocusOnOutside = false, focusPolicy = 'first-control', dismissalPolicy = 'default' }: {
+  id: string; label: string; trigger: RefObject<HTMLElement | null>; position: { left: number; top: number; width: number }; onClose: (restoreFocus: boolean) => void; children: ReactNode; role?: 'listbox' | 'dialog'; keepTriggerFocus?: boolean; className?: string; restoreFocusOnOutside?: boolean; focusPolicy?: 'first-control' | 'surface'; dismissalPolicy?: 'default' | 'explicit'
 }) {
   const popup = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
@@ -21,17 +21,18 @@ export function PrototypeMenu({ id, label, trigger, position, onClose, children,
     }
     place()
     window.addEventListener('resize', place)
-    return () => window.removeEventListener('resize', place)
+    if (dismissalPolicy === 'explicit') window.addEventListener('scroll', place, true)
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', place, true) }
   })
   useEffect(() => {
-    claimOverlay(id)
+    claimOverlay(id, dismissalPolicy === 'explicit' ? 'persistent' : 'explicit')
     const pointer = (event: PointerEvent) => { if (!trigger.current?.contains(event.target as Node) && !popup.current?.contains(event.target as Node)) onClose(restoreFocusOnOutside) }
     const key = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); onClose(true) } }
     const scroll = (event: Event) => { if (!popup.current?.contains(event.target as Node)) onClose(false) }
     const changed = (event: Event) => { if ((event as CustomEvent).detail !== id) onClose(false) }
     window.addEventListener('dg-overlay-change', changed)
     document.addEventListener('pointerdown', pointer); document.addEventListener('keydown', key)
-    window.addEventListener('scroll', scroll, true)
+    if (dismissalPolicy === 'default') window.addEventListener('scroll', scroll, true)
     if (!keepTriggerFocus) {
       const destination = focusPolicy === 'surface' ? popup.current : popup.current?.querySelector<HTMLElement>('input, [aria-selected="true"], button')
       destination?.focus({ preventScroll: true })
@@ -40,7 +41,7 @@ export function PrototypeMenu({ id, label, trigger, position, onClose, children,
       window.removeEventListener('dg-overlay-change', changed); document.removeEventListener('pointerdown', pointer); document.removeEventListener('keydown', key)
       window.removeEventListener('scroll', scroll, true); releaseOverlay(id)
     }
-  }, [id, trigger, onClose, keepTriggerFocus, restoreFocusOnOutside, focusPolicy])
+  }, [id, trigger, onClose, keepTriggerFocus, restoreFocusOnOutside, focusPolicy, dismissalPolicy])
   return createPortal(<div ref={popup} id={id} role={role} aria-label={label} tabIndex={focusPolicy === 'surface' ? -1 : undefined} className={`dg-picker ${className}`} style={{ ...position, left: Math.max(8, Math.min(position.left, window.innerWidth - position.width - 8)) }} onKeyDown={event => {
     if (event.target instanceof HTMLInputElement) return
     const items = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled)')]

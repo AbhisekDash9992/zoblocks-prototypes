@@ -12,10 +12,10 @@ export function PrototypeTooltip({ content, shortcut, children, bounded = false,
   const [position, setPosition] = useState({ left: 0, top: 0 })
   const close = () => { setOpen(false); releaseOverlay(id) }
   const show = () => {
-    if (popupOpen || suppressed.current || !canClaimOverlay(id)) return
+    if (popupOpen || suppressed.current || !canClaimOverlay(id, 'passive')) return
     const rect = anchor.current?.getBoundingClientRect()
     if (!rect) return
-    claimOverlay(id)
+    claimOverlay(id, 'passive')
     setPosition({ left: Math.max(8, Math.min(rect.left, window.innerWidth - 328)), top: bounded ? Math.max(8, Math.min(rect.bottom + 6, window.innerHeight - 188)) : rect.bottom + 6 })
     setOpen(true)
   }

@@ -249,7 +249,7 @@
 .dg-button-primary { color: var(--dg-white); background: var(--dg-primary); }
 .dg-page .dg-button-primary:not(:disabled):hover { background: #1039C4; }
 .dg-page .dg-button-primary:not(:disabled):active { background: #0D2E9E; }
-.dg-page .dg-button-secondary:not(:disabled):hover, .dg-page .dg-button-ghost:not(:disabled):hover, .dg-page .dg-button-text:not(:disabled):hover { background: var(--dg-level-one); }
+.dg-page .dg-button-secondary:not(:disabled):hover, .dg-page .dg-button-ghost:not(:disabled):hover, .dg-page .dg-button-text:not(:disabled):hover, .dg-page .dg-icon-action.dg-view-settings-trigger[aria-expanded="true"]:not(:disabled) { background: var(--dg-level-one); }
 .dg-page .dg-button-secondary:not(:disabled):active, .dg-page .dg-button-ghost:not(:disabled):active, .dg-page .dg-button-text:not(:disabled):active { background: var(--dg-subtle); }
 .dg-page .dg-icon-action { padding: 0; }
 .dg-icon-action.dg-size-32 { width: 32px; }

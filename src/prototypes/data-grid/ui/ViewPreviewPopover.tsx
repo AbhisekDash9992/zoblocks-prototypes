@@ -16,11 +16,11 @@ export function ViewPreviewPopover({ index, children }: { index: number; childre
   const [position, setPosition] = useState({ left: 0, top: 0 })
   const close = () => { clearTimeout(timer.current); setOpen(false); releaseOverlay(id) }
   const show = () => {
-    if (!canClaimOverlay(id)) return
+    if (!canClaimOverlay(id, 'passive')) return
     clearTimeout(timer.current)
     const rect = anchor.current?.getBoundingClientRect()
     if (!rect) return
-    claimOverlay(id); setPosition({ left: Math.max(8, Math.min(rect.left, window.innerWidth - 268)), top: rect.bottom + 4 }); setOpen(true)
+    claimOverlay(id, 'passive'); setPosition({ left: Math.max(8, Math.min(rect.left, window.innerWidth - 268)), top: rect.bottom + 4 }); setOpen(true)
   }
   useEffect(() => {
     const changed = (event: Event) => { if ((event as CustomEvent).detail !== id) { clearTimeout(timer.current); setOpen(false) } }
@@ -29,10 +29,10 @@ export function ViewPreviewPopover({ index, children }: { index: number; childre
   }, [id])
   const config = configurations[index]
   return <span ref={anchor} className="dg-tooltip-anchor" onMouseEnter={() => {
-    if (!canClaimOverlay(id)) return
+    if (!canClaimOverlay(id, 'passive')) return
     clearTimeout(timer.current)
     // Reserve ownership before waiting: the previous chip cannot cancel this timer.
-    const previousOwner = claimOverlay(id)
+    const previousOwner = claimOverlay(id, 'passive')
     if (previousOwner !== null) show()
     else timer.current = setTimeout(show, 200)
   }} onMouseLeave={() => { clearTimeout(timer.current); timer.current = setTimeout(close, 120) }} onFocus={show} onBlur={close} onClickCapture={close} onKeyDown={event => { if (event.key === 'Escape') close() }}>
