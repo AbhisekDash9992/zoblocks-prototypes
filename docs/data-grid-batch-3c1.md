@@ -54,6 +54,7 @@ changed. Host skins remain future presentation modes using the common model.
 - `src/prototypes/data-grid/DataGridPrototypePage.tsx`
 - `src/prototypes/data-grid/styles/data-grid.css`
 - `scripts/data-grid-batch-3c1.browser.mjs` (new)
+- `scripts/data-grid-batch-3b7.browser.mjs` (wait for scheduled Delete focus repair)
 - This batch note.
 
 ## Verification
@@ -66,9 +67,11 @@ sample/reset, dirty guard, picker placement/search, selected chip, tooltips,
 access without document overflow. It passed in installed Chrome and Edge.
 
 Repository scripts for 3B.5/3B.6, 3B.7 and 3B.8/3B.9 passed in Chrome and Edge.
-One initial Edge 3B.7 run failed an immediate post-delete focus assertion; the
-unchanged script passed on recheck. This intermittent assertion is recorded,
-not counted as an initial pass.
+Initial local and published Edge 3B.7 runs intermittently failed an immediate
+post-delete focus assertion (an unchanged local recheck passed). The test now
+waits for the existing requestAnimationFrame focus repair before asserting.
+The accepted Filter implementation remains unchanged; the asynchronous focus
+result is still asserted, with no arbitrary timeout or relaxed expectation.
 
 External local 3B.4 suites were also exercised via temporary copies: 98 Filter,
 53 Sort and 40 cross-editor checks passed in Chrome, including nested Advanced

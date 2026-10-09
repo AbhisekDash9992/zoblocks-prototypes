@@ -134,6 +134,8 @@ try {
     assert.equal(access, true, 'Tab must reveal the narrow-screen Delete target within the working surface')
     await page.keyboard.press('Enter')
     assert.equal(await page.locator('.dg-nested-row').count(), 0)
+    // Delete repairs focus on requestAnimationFrame, after the removed row renders.
+    await page.waitForFunction(() => document.querySelector('.dg-editor') === document.activeElement)
     assert.equal(await page.locator('.dg-editor').evaluate(el => el === document.activeElement), true)
     await page.setViewportSize({ width: 1440, height: 1200 })
     await button('Cancel').click()
