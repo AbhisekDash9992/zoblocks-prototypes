@@ -320,9 +320,10 @@
 .dg-picker-divider { border: 0; border-top: 1px solid #EAECF0; margin: 4px 0; }
 /* Batch 3C.1a View Settings working geometry, scoped to this prototype popover. */
 .dg-picker.dg-view-settings { width: 320px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: 4px; }
+.dg-view-settings:focus { outline: none; }
 .dg-view-settings-content { display: flex; flex-direction: column; gap: 8px; }
-.dg-view-settings-group { padding: 0 8px; }
-.dg-view-identity { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.dg-view-settings-group { padding: 0; }
+.dg-view-identity { display: flex; flex-direction: column; gap: 4px; }
 .dg-view-identity > .dg-input { width: 100%; }
 .dg-view-settings .dg-picker-divider { margin: 0; flex-shrink: 0; }
 .dg-view-settings .dg-settings-row { display: flex; align-items: center; justify-content: space-between; height: 36px; padding: 0 8px; gap: 8px; border-radius: 8px; }
@@ -339,6 +340,9 @@
    positioning lets this compact child escape the parent's scrolling content. */
 .dg-density-picker { position: fixed; z-index: 91; width: 120px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; padding: 4px; border: 1px solid #D1D5DC; border-radius: 5px; background: #FFFFFF; box-shadow: 0 4px 12px rgb(16 24 40 / 12%); }
 .dg-view-settings .dg-density-picker button { height: 36px; padding: 0 8px; border-radius: 3px; gap: 0; }
+.dg-view-settings .dg-density-picker button[aria-selected="true"] { color: #101828; background: transparent; }
+.dg-view-settings .dg-density-picker button:hover, .dg-view-settings .dg-density-picker button:focus-visible { background: #F2F3F5; }
+.dg-view-settings .dg-density-picker button:active { background: #EAECF0; }
 .dg-picker .dg-input:focus-visible { outline: 2px solid #1447F6; outline-offset: -2px; }
 .dg-page .dg-destructive { background: var(--dg-critical); }
 .dg-page .dg-destructive:not(:disabled):hover { background: #912018; }

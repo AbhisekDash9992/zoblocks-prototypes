@@ -4,8 +4,8 @@ import { createPortal } from 'react-dom'
 import { claimOverlay, releaseOverlay } from './overlayState'
 
 // Shared local overlay shell; options and multi-value content remain bounded.
-export function PrototypeMenu({ id, label, trigger, position, onClose, children, role = 'listbox', keepTriggerFocus = false, className = '', restoreFocusOnOutside = false }: {
-  id: string; label: string; trigger: RefObject<HTMLElement | null>; position: { left: number; top: number; width: number }; onClose: (restoreFocus: boolean) => void; children: ReactNode; role?: 'listbox' | 'dialog'; keepTriggerFocus?: boolean; className?: string; restoreFocusOnOutside?: boolean
+export function PrototypeMenu({ id, label, trigger, position, onClose, children, role = 'listbox', keepTriggerFocus = false, className = '', restoreFocusOnOutside = false, focusPolicy = 'first-control' }: {
+  id: string; label: string; trigger: RefObject<HTMLElement | null>; position: { left: number; top: number; width: number }; onClose: (restoreFocus: boolean) => void; children: ReactNode; role?: 'listbox' | 'dialog'; keepTriggerFocus?: boolean; className?: string; restoreFocusOnOutside?: boolean; focusPolicy?: 'first-control' | 'surface'
 }) {
   const popup = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
@@ -32,13 +32,16 @@ export function PrototypeMenu({ id, label, trigger, position, onClose, children,
     window.addEventListener('dg-overlay-change', changed)
     document.addEventListener('pointerdown', pointer); document.addEventListener('keydown', key)
     window.addEventListener('scroll', scroll, true)
-    if (!keepTriggerFocus) popup.current?.querySelector<HTMLElement>('input, [aria-selected="true"], button')?.focus({ preventScroll: true })
+    if (!keepTriggerFocus) {
+      const destination = focusPolicy === 'surface' ? popup.current : popup.current?.querySelector<HTMLElement>('input, [aria-selected="true"], button')
+      destination?.focus({ preventScroll: true })
+    }
     return () => {
       window.removeEventListener('dg-overlay-change', changed); document.removeEventListener('pointerdown', pointer); document.removeEventListener('keydown', key)
       window.removeEventListener('scroll', scroll, true); releaseOverlay(id)
     }
-  }, [id, trigger, onClose, keepTriggerFocus, restoreFocusOnOutside])
-  return createPortal(<div ref={popup} id={id} role={role} aria-label={label} className={`dg-picker ${className}`} style={{ ...position, left: Math.max(8, Math.min(position.left, window.innerWidth - position.width - 8)) }} onKeyDown={event => {
+  }, [id, trigger, onClose, keepTriggerFocus, restoreFocusOnOutside, focusPolicy])
+  return createPortal(<div ref={popup} id={id} role={role} aria-label={label} tabIndex={focusPolicy === 'surface' ? -1 : undefined} className={`dg-picker ${className}`} style={{ ...position, left: Math.max(8, Math.min(position.left, window.innerWidth - position.width - 8)) }} onKeyDown={event => {
     if (event.target instanceof HTMLInputElement) return
     const items = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled)')]
     const index = items.indexOf(document.activeElement as HTMLElement)

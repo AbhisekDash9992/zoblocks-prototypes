@@ -1,5 +1,9 @@
 # Data Grid Batch 3C.1a — View Settings and Group entry correction
 
+Batch [3C.1b](data-grid-batch-3c1b.md) supersedes the initial settings-input
+focus, group padding and Density selected-surface behavior described below.
+The remaining functionality and deferred boundaries are preserved.
+
 Prototype/review implementation only. Starting local `main` and fetched
 `origin/main`: `2f494053fa9a270d1dd64fd5adbbf0ac66893914`.
 

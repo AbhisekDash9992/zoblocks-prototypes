@@ -50,7 +50,7 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
     onClose(false)
     if (source) action(source)
   }
-  return <PrototypeMenu id={id} label="View settings" role="dialog" className="dg-view-settings" trigger={trigger} position={position} onClose={onClose} restoreFocusOnOutside>
+  return <PrototypeMenu id={id} label="View settings" role="dialog" className="dg-view-settings" trigger={trigger} position={position} onClose={onClose} restoreFocusOnOutside focusPolicy="surface">
     <div className="dg-view-settings-content" onKeyDownCapture={event => {
       if (densityOpen && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeDensity() }
     }}>

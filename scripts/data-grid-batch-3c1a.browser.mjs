@@ -48,7 +48,7 @@ try {
   assert.equal(await toolbar.evaluate(el => el.getBoundingClientRect().height), 40)
   assert.equal(await toolbar.evaluate(el => getComputedStyle(el).borderRadius), '0px')
   assert.equal(await button('Filter').getAttribute('aria-keyshortcuts'), 'F')
-  await openSettings(); await focusLabel('View name')
+  await openSettings(); assert.equal(await settings().evaluate(el => el === document.activeElement), true)
   // C–F: hierarchy, identity, grounded supporting values and working geometry.
   assert.deepEqual(await settings().getByRole('group').evaluateAll(elements => elements.map(el => el.getAttribute('aria-label'))), ['View identity', 'Data configuration', 'View actions'])
   assert.equal(await settings().getByRole('separator').count(), 2)
@@ -77,8 +77,8 @@ try {
     }
   })
   assert.equal(geometry.width, 320); assert.equal(geometry.padding, '4px'); assert.equal(geometry.groupGap, '8px')
-  assert.equal(geometry.identityPadding, '8px 8px 0px'); assert.equal(geometry.identityGap, '4px'); assert.equal(geometry.inputHeight, 32)
-  assert.ok(geometry.rows.every(height => height === 36)); assert.equal(geometry.configPadding, '0px 8px')
+  assert.equal(geometry.identityPadding, '0px'); assert.equal(geometry.identityGap, '4px'); assert.equal(geometry.inputHeight, 32)
+  assert.ok(geometry.rows.every(height => height === 36)); assert.equal(geometry.configPadding, '0px')
   assert.equal(geometry.rowPadding, '0px 8px'); assert.equal(geometry.iconGap, '12px'); assert.equal(geometry.rowRadius, '8px')
   assert.deepEqual(geometry.configGaps, [0, 0, 0])
   assert.deepEqual(await settings().locator('.dg-data-configuration button').evaluateAll(elements => elements.map(el => el.getAttribute('aria-label'))), ['Manage columns', 'Filter', 'Group', 'Sort'])
