@@ -32,6 +32,7 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
       const bounds = panel?.getBoundingClientRect()
       const inside = bounds && current.y >= bounds.top && current.y <= bounds.bottom && current.x >= bounds.left && current.x <= bounds.right
       drag.current = null
+      delete current.handle.dataset.pointerHeld
       cancelAnimationFrame(frame)
       if (current.handle.hasPointerCapture(current.pointerId)) current.handle.releasePointerCapture(current.pointerId)
       panel?.classList.remove('dg-sort-dragging')
@@ -53,6 +54,7 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
     }
     const up = (event: PointerEvent) => { if (drag.current?.pointerId === event.pointerId) { move(event); stop(true) } }
     const cancel = () => stop(false)
+    const visibility = () => { if (document.hidden) stop(false) }
     const key = (event: KeyboardEvent) => {
       if (!drag.current) return
       if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); stop(false) }
@@ -73,11 +75,13 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
     document.addEventListener('keydown', key, true)
     window.addEventListener('wheel', wheel, { passive: false })
     window.addEventListener('blur', cancel)
+    document.addEventListener('visibilitychange', visibility)
     return () => {
       stop(false)
       document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up)
       document.removeEventListener('pointercancel', cancel); document.removeEventListener('lostpointercapture', lost)
       document.removeEventListener('keydown', key, true); window.removeEventListener('wheel', wheel); window.removeEventListener('blur', cancel)
+      document.removeEventListener('visibilitychange', visibility)
     }
   }, [stack])
   return {
@@ -87,6 +91,7 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
       event.preventDefault()
       event.currentTarget.focus({ preventScroll: true })
       event.currentTarget.setPointerCapture(event.pointerId)
+      event.currentTarget.dataset.pointerHeld = 'true'
       drag.current = { id: row.id, pointerId: event.pointerId, handle: event.currentTarget, startY: event.clientY, y: event.clientY, x: event.clientX, active: false, position }
     },
   }

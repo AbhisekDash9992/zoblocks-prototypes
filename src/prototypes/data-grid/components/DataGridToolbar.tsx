@@ -22,7 +22,7 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onSort, onTo
   const criteriaVisible = state.criteriaState !== 'hidden'
   const filterApplied = (state.advancedSnapshot.rows.length > 0 || state.simpleFilters.length > 0)
   const sortApplied = state.directSort !== null || state.sortSnapshot.length > 0
-  return <div className="dg-toolbar" role="toolbar" aria-label="Data grid toolbar">
+  return <div className="dg-toolbar" data-criteria-hidden={!criteriaVisible || undefined} role="toolbar" aria-label="Data grid toolbar">
     <div className="dg-views" aria-label="Saved view previews">
       {[0, 1, 2].map(index => <ViewPreviewPopover key={index} index={index}><PrototypeButton variant="ghost" className={index === 0 ? 'dg-view-selected' : ''} aria-current={index === 0 ? 'true' : undefined}>View {index + 1}</PrototypeButton></ViewPreviewPopover>)}
       <PrototypeTooltip content="More views"><PrototypeButton variant="ghost" aria-label="More views"><Ellipsis size={14} aria-hidden="true" />More</PrototypeButton></PrototypeTooltip>

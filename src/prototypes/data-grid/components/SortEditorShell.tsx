@@ -23,6 +23,8 @@ export function SortEditorShell({ snapshot, guardOpen, onKeep, onDiscard, onDirt
   const instructionsId = useId()
   const validationId = useId()
   const [announcement, setAnnouncement] = useState('')
+  const [keyboardFocusId, setKeyboardFocusId] = useState<number | null>(null)
+  const pointerFocusing = useRef(false)
   const [aiNotice, setAiNotice] = useState(false)
   const dirty = sortMeaning(draft) !== sortMeaning(initial)
   const incomplete = draft.some(row => !completeSort(row))
@@ -74,7 +76,17 @@ export function SortEditorShell({ snapshot, guardOpen, onKeep, onDiscard, onDirt
         <span className="dg-sort-assistive" role="status" aria-live="polite" aria-atomic="true">{announcement}</span>
         <div ref={stack} className="dg-condition-stack">
           {draft.map((row, index) => <div className="dg-rule-row dg-sort-row" key={row.id} data-sort-id={row.id} data-drag-source={preview?.id === row.id || undefined} data-drop-before={beforeId === row.id || undefined} data-drop-after={afterId === row.id || undefined} role="group" aria-label={`Sort rank ${index + 1}`}>
-            {completeSort(row) ? <PrototypeButton variant="ghost" className="dg-sort-precedence dg-sort-handle" aria-label={`Reorder ${row.field}, rank ${index + 1} of ${draft.length}. Use Arrow Up or Arrow Down to move.`} aria-describedby={instructionsId} onPointerDown={event => begin(event, row, index)} onKeyDown={event => {
+            {completeSort(row) ? <PrototypeButton variant="ghost" className="dg-sort-precedence dg-sort-handle" data-keyboard-focus={keyboardFocusId === row.id || undefined} aria-label={`Reorder ${row.field}, rank ${index + 1} of ${draft.length}. Use Arrow Up or Arrow Down to move.`} aria-describedby={instructionsId} onPointerDown={event => {
+              if (event.button !== 0 || !event.isPrimary) return
+              // Pointer focus is retained for accessibility, but must not look like keyboard focus.
+              setKeyboardFocusId(null)
+              pointerFocusing.current = true
+              begin(event, row, index)
+              pointerFocusing.current = false
+            }} onFocus={event => {
+              if (!pointerFocusing.current && event.currentTarget.matches(':focus-visible')) setKeyboardFocusId(row.id)
+            }} onBlur={() => setKeyboardFocusId(null)} onKeyDown={event => {
+              if (event.key !== 'Tab') setKeyboardFocusId(row.id)
               if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); move(row.id, index + (event.key === 'ArrowUp' ? -1 : 1)) }
             }}><span className="dg-sort-rank" aria-hidden="true">{index + 1}</span><GripVertical className="dg-sort-grip" size={14} aria-hidden="true" /></PrototypeButton>
               : <span className="dg-sort-precedence" aria-label={`Precedence ${index + 1}`}>{index + 1}</span>}
