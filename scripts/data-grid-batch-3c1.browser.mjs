@@ -91,7 +91,7 @@ try {
     await page.keyboard.press('Escape'); await settle()
   }
   await choose('Field for group 1', 'Status')
-  assert.equal(await button('Add Subgroup').isDisabled(), true)
+  assert.equal(await button('Add Subgroup').isEnabled(), true) // Enabled by Batch 3C.2 after a valid first row.
   assert.equal(await button('More group options (deferred)').isDisabled(), true)
   assert.equal(await button('AI Group (deferred)').isDisabled(), true)
   assert.equal(await page.locator('.dg-workspace-actions').getByRole('button', { name: 'Clear all', exact: true }).count(), 0)

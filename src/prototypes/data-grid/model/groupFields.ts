@@ -17,7 +17,7 @@ export const isGroupField = (field: string): field is GroupField => groupFields.
 export const isGroupOrder = (order: string): order is GroupOrder => Object.values(groupOrders).some(options => options.some(item => item === order))
 export const groupStarter = (id: number): GroupDraftRule => ({ id, field: '', order: '' })
 export const completeGroup = (row: GroupDraftRule): row is GroupRule => Boolean(row.field && row.order && groupOrders[row.field].some(order => order === row.order))
-// Batch 3C.1 validates one field only; snapshots can carry ordered rows later.
-export const validGroup = (rows: GroupDraftRule[]): rows is GroupSnapshot => rows.length === 1 && rows.every(completeGroup)
+// No approved depth or uniqueness restriction: retain the full existing catalog.
+export const validGroup = (rows: GroupDraftRule[]): rows is GroupSnapshot => rows.length > 0 && rows.every(completeGroup)
 export const groupMeaning = (rows: GroupDraftRule[]) => JSON.stringify(rows.map(({ field, order }) => ({ field, order })))
 export const groupSummary = (rows: GroupSnapshot) => rows.length === 1 ? `Group by: ${rows[0].field}` : `Group · ${rows.length} fields`

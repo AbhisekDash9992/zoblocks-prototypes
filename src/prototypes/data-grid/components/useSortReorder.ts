@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent, RefObject } from 'react'
-import type { SortRule } from '../model/dataGridPrototypeState'
 import { claimOverlay } from '../ui/overlayState'
 
 type Drag = { id: number; pointerId: number; handle: HTMLButtonElement; startY: number; y: number; x: number; active: boolean; position: number }
 type Preview = { id: number; position: number; x: number; y: number }
 
 // Local pointer interaction: preview a gap, then change the draft only on a valid drop.
-export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: (id: number, position: number) => void, onCancel: () => void) {
+export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: (id: number, position: number) => void, onCancel: () => void, rowSelector = '.dg-sort-row', idAttribute = 'data-sort-id') {
   const drag = useRef<Drag | null>(null)
   const callbacks = useRef({ onMove, onCancel })
   const [preview, setPreview] = useState<Preview | null>(null)
@@ -21,7 +20,7 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
       // Autoscroll the Condition Stack only, with bounded speed near its edges.
       if (current.y < bounds.top + 24) panel.scrollTop -= Math.min(10, (bounds.top + 24 - current.y) / 3)
       else if (current.y > bounds.bottom - 24) panel.scrollTop += Math.min(10, (current.y - bounds.bottom + 24) / 3)
-      const otherRows = [...panel.querySelectorAll<HTMLElement>('.dg-sort-row')].filter(row => Number(row.dataset.sortId) !== current.id)
+      const otherRows = [...panel.querySelectorAll<HTMLElement>(rowSelector)].filter(row => Number(row.getAttribute(idAttribute)) !== current.id)
       current.position = otherRows.filter(row => { const rect = row.getBoundingClientRect(); return current.y > rect.top + rect.height / 2 }).length
       setPreview({ id: current.id, position: current.position, x: current.x, y: current.y })
     }
@@ -83,10 +82,10 @@ export function useSortReorder(stack: RefObject<HTMLDivElement | null>, onMove: 
       document.removeEventListener('keydown', key, true); window.removeEventListener('wheel', wheel); window.removeEventListener('blur', cancel)
       document.removeEventListener('visibilitychange', visibility)
     }
-  }, [stack])
+  }, [stack, rowSelector, idAttribute])
   return {
     preview,
-    begin: (event: ReactPointerEvent<HTMLButtonElement>, row: SortRule, position: number) => {
+    begin: (event: ReactPointerEvent<HTMLButtonElement>, row: { id: number }, position: number) => {
       if (event.button !== 0 || !event.isPrimary || drag.current) return
       event.preventDefault()
       event.currentTarget.focus({ preventScroll: true })
