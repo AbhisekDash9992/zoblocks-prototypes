@@ -100,12 +100,15 @@ try {
   await density().focus(); await page.keyboard.press('ArrowRight'); await picker().waitFor()
   await page.keyboard.press('Escape'); assert.equal(await picker().count(), 0); await remainsOpen(); await focusLabel('Density')
   await page.keyboard.press('Escape'); await closed(); await focusLabel('View settings')
-  // S/L: keyboard restoration retains focus-visible feedback; a later pointer
+  // S/L: dismissal restoration is quiet in 3C.1d; a later keyboard navigation
+  // restores focus-visible feedback. A later pointer
   // dismissal returns to the resting surface, while genuine hover still works.
   await page.keyboard.press('Enter'); await settings().waitFor(); await page.mouse.move(5, 5); await remainsOpen()
   assert.deepEqual(await styles(), hover)
   await page.keyboard.press('Escape'); await closed(); await focusLabel('View settings')
   assert.equal(await trigger().evaluate(el => el.matches(':focus-visible')), true)
+  assert.equal(await trigger().evaluate(el => getComputedStyle(el).outlineStyle), 'none')
+  await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Tab'); await focusLabel('View settings')
   assert.equal(await trigger().evaluate(el => getComputedStyle(el).outlineWidth), '2px')
   await open(); await page.mouse.click(5, 5); await closed(); await focusLabel('View settings')
   // Restored keyboard-visible focus may retain its existing focus surface.
@@ -156,8 +159,8 @@ try {
   await page.setViewportSize({ width: 280, height: 280 }); await open(); await contained(settings())
   await density().click(); await picker().waitFor()
   await settings().evaluate(el => { el.scrollTop = 16 }); await settle(); await remainsOpen(); await contained(settings()); await contained(picker())
-  const densityBounds = await density().boundingBox(), childBounds = await picker().boundingBox()
-  assert.equal(childBounds.y, densityBounds.y + densityBounds.height + 4)
+  const chevronBounds = await density().locator('.lucide-chevron-down').boundingBox(), childBounds = await picker().boundingBox()
+  assert.equal(childBounds.y, chevronBounds.y + chevronBounds.height + 6)
   await page.keyboard.press('Escape'); await page.keyboard.press('Escape'); await closed()
   await page.setViewportSize({ width: 1440, height: 1200 }); await open()
   await page.locator('.dg-back').click(); await settle(); assert.equal(await settings().count(), 0)

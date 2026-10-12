@@ -344,6 +344,9 @@
 .dg-view-settings .dg-density-picker button:hover, .dg-view-settings .dg-density-picker button:focus-visible { background: #F2F3F5; }
 .dg-view-settings .dg-density-picker button:active { background: #EAECF0; }
 .dg-picker .dg-input:focus-visible { outline: 2px solid #1447F6; outline-offset: -2px; }
+/* Quiet only programmatic dismissal restoration; blur/navigation re-arms focus. */
+.dg-page .dg-view-settings-trigger[data-dismissal-focus]:focus-visible,
+.dg-view-settings .dg-density-row[data-dismissal-focus]:focus-visible { outline: none; }
 .dg-page .dg-destructive { background: var(--dg-critical); }
 .dg-page .dg-destructive:not(:disabled):hover { background: #912018; }
 .dg-snackbar { position: fixed; z-index: 110; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 8px; background: #101828; color: #FFFFFF; box-shadow: 0 4px 12px rgb(16 24 40 / 18%); font-size: 12px; }

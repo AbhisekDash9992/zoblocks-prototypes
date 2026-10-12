@@ -21,7 +21,11 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onSort, onGr
   const closeSettings = useCallback((restoreFocus: boolean) => {
     setSettingsOpen(false)
     // Outside pointer dismissal must restore after the browser's default focus.
-    if (restoreFocus) requestAnimationFrame(() => settingsTrigger.current?.focus({ preventScroll: true }))
+    if (restoreFocus) requestAnimationFrame(() => {
+      const control = settingsTrigger.current
+      control?.setAttribute('data-dismissal-focus', '')
+      control?.focus({ preventScroll: true })
+    })
   }, [])
   const expanded = state.toolbarControls === 'expanded'
   const criteriaVisible = state.criteriaState !== 'hidden'
@@ -47,8 +51,8 @@ export function DataGridToolbar({ state, onToggleToolbar, onFilter, onSort, onGr
       {expanded && <><PrototypeIconButton icon={Filter} label="Filter" shortcut={gridShortcuts.filter.display} aria-keyshortcuts={gridShortcuts.filter.aria} applied={filterApplied} onClick={event => onFilter(event.currentTarget)} /><PrototypeIconButton icon={ArrowUpDown} label="Sort" applied={sortApplied} onClick={event => onSort(event.currentTarget)} /></>}
       <PrototypeIconButton icon={Search} label="Search" />
       {expanded && <><span className="dg-toolbar-divider" aria-hidden="true" /><PrototypeIconButton icon={state.fullScreen ? Minimize2 : MoveDiagonal} label={state.fullScreen ? 'Exit full screen' : 'Full screen'} onClick={onToggleFullScreen} /></>}
-      <PrototypeIconButton icon={SlidersHorizontal} label="View settings" className="dg-view-settings-trigger" tooltipPopupOpen={settingsOpen} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsOpen ? settingsId : undefined} onClick={event => { settingsTrigger.current = event.currentTarget; const rect = event.currentTarget.getBoundingClientRect(); setSettingsPosition({ left: rect.left, top: rect.bottom + 4, width: 320 }); setSettingsOpen(open => !open) }} />
-      <span className="dg-criteria-disclosure"><PrototypeIconButton icon={criteriaVisible ? PanelTopClose : PanelTopOpen} label={criteriaVisible ? 'Hide criteria' : 'Show criteria'} aria-expanded={criteriaVisible} aria-controls="dg-criteria-area" onClick={event => onToggleCriteria(event.currentTarget)} /></span>
+      <PrototypeIconButton icon={SlidersHorizontal} label="View settings" className="dg-view-settings-trigger" tooltipPopupOpen={settingsOpen} aria-haspopup="dialog" aria-expanded={settingsOpen} aria-controls={settingsOpen ? settingsId : undefined} onBlur={event => event.currentTarget.removeAttribute('data-dismissal-focus')} onKeyDown={event => { if (event.key !== 'Escape') event.currentTarget.removeAttribute('data-dismissal-focus') }} onClick={event => { settingsTrigger.current = event.currentTarget; const rect = event.currentTarget.getBoundingClientRect(); setSettingsPosition({ left: rect.left, top: rect.bottom + 4, width: 320 }); setSettingsOpen(open => !open) }} />
+      <span className="dg-criteria-disclosure"><PrototypeIconButton icon={criteriaVisible ? PanelTopOpen : PanelTopClose} label={criteriaVisible ? 'Hide criteria' : 'Show criteria'} aria-expanded={criteriaVisible} aria-controls="dg-criteria-area" onClick={event => onToggleCriteria(event.currentTarget)} /></span>
     </div>
     {settingsOpen && <ViewSettingsPopover id={settingsId} state={state} viewName={`View ${currentViewIndex + 1}`} trigger={settingsTrigger} position={settingsPosition} onClose={closeSettings} onFilter={onFilter} onGroup={onGroup} onSort={onSort} onDensityChange={onDensityChange} />}
   </div>

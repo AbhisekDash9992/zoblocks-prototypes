@@ -21,6 +21,7 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
 }) {
   const [densityOpen, setDensityOpen] = useState(false)
   const densityTrigger = useRef<HTMLButtonElement>(null)
+  const densityChevron = useRef<SVGSVGElement>(null)
   const densityPicker = useRef<HTMLDivElement>(null)
   const currentDensity = densities.find(item => item.value === state.density)?.label ?? 'Figma baseline (review)'
   const filterCount = advancedLeaves(state.advancedSnapshot).length + state.simpleFilters.length
@@ -30,11 +31,11 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
     const picker = densityPicker.current
     if (!picker) return
     const place = () => {
-      const anchor = densityTrigger.current?.getBoundingClientRect()
+      const anchor = densityChevron.current?.getBoundingClientRect()
       if (!anchor) return
       const { height, width } = picker.getBoundingClientRect()
-      const below = anchor.bottom + 4
-      const top = below + height <= window.innerHeight - 8 ? below : anchor.top - height - 4
+      const below = anchor.bottom + 6
+      const top = below + height <= window.innerHeight - 8 ? below : anchor.top - height - 6
       picker.style.left = Math.max(8, Math.min(anchor.right - width, window.innerWidth - width - 8)) + 'px'
       picker.style.top = Math.max(8, Math.min(top, window.innerHeight - height - 8)) + 'px'
     }
@@ -48,7 +49,12 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
     window.addEventListener('scroll', update, true)
     return () => { cancelAnimationFrame(frame); window.removeEventListener('resize', update); window.removeEventListener('scroll', update, true) }
   }, [densityOpen])
-  const closeDensity = () => { setDensityOpen(false); densityTrigger.current?.focus({ preventScroll: true }) }
+  const closeDensity = (dismissalFocus = false) => {
+    setDensityOpen(false)
+    const control = densityTrigger.current
+    if (dismissalFocus) control?.setAttribute('data-dismissal-focus', '')
+    control?.focus({ preventScroll: true })
+  }
   const route = (action: (source: HTMLButtonElement) => void) => {
     const source = trigger.current
     onClose(false)
@@ -56,14 +62,15 @@ export function ViewSettingsPopover({ id, state, viewName, trigger, position, on
   }
   return <PrototypeMenu id={id} label="View settings" role="dialog" className="dg-view-settings" trigger={trigger} position={position} onClose={onClose} restoreFocusOnOutside focusPolicy="surface" dismissalPolicy="explicit">
     <div className="dg-view-settings-content" onKeyDownCapture={event => {
-      if (densityOpen && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeDensity() }
+      if (densityOpen && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeDensity(true) }
     }}>
       <div className="dg-view-settings-group dg-view-identity" role="group" aria-label="View identity">
         <PrototypeInput aria-label="View name" aria-describedby={`${id}-view-note`} value={viewName} readOnly />
         <span id={`${id}-view-note`} className="dg-sort-assistive">Review-only current view. Saved View selection and renaming are deferred.</span>
-        <PrototypeButton ref={densityTrigger} variant="ghost" className="dg-settings-row dg-density-row" aria-label="Density" aria-describedby={`${id}-density-value`} aria-haspopup="listbox" aria-expanded={densityOpen} aria-controls={densityOpen ? `${id}-density` : undefined} onClick={() => setDensityOpen(open => !open)} onKeyDown={event => {
+        <PrototypeButton ref={densityTrigger} variant="ghost" className="dg-settings-row dg-density-row" aria-label="Density" aria-describedby={`${id}-density-value`} aria-haspopup="listbox" aria-expanded={densityOpen} aria-controls={densityOpen ? `${id}-density` : undefined} onClick={() => setDensityOpen(open => !open)} onBlur={event => event.currentTarget.removeAttribute('data-dismissal-focus')} onKeyDown={event => {
+          if (event.key !== 'Escape') event.currentTarget.removeAttribute('data-dismissal-focus')
           if (event.key === 'ArrowDown' || event.key === 'ArrowRight') { event.preventDefault(); event.stopPropagation(); setDensityOpen(true) }
-        }}><span>Density</span><span className="dg-settings-trailing"><span id={`${id}-density-value`} className="dg-settings-value">{currentDensity}</span>{densityOpen ? <ChevronDown size={16} aria-hidden="true" /> : <ChevronRight size={16} aria-hidden="true" />}</span></PrototypeButton>
+        }}><span>Density</span><span className="dg-settings-trailing"><span id={`${id}-density-value`} className="dg-settings-value">{currentDensity}</span>{densityOpen ? <ChevronDown ref={densityChevron} size={16} aria-hidden="true" /> : <ChevronRight size={16} aria-hidden="true" />}</span></PrototypeButton>
         {densityOpen && <div ref={densityPicker} id={`${id}-density`} role="listbox" aria-label="Density options" className="dg-density-picker" onBlur={event => {
           if (!event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== densityTrigger.current) setDensityOpen(false)
         }} onKeyDown={event => {
