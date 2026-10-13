@@ -1,0 +1,110 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as IconButtonStories from './IconButton.stories';
+import * as ContextStories from './IconButtonContext.stories';
+import { Anatomy, Geometry, VariantsTable, TokensTable } from './ReferenceGuide';
+
+<Meta of={IconButtonStories} />
+
+# Icon Button
+
+CS-01 · Designer workspace · Small / Square reference
+
+<div className="dg-page cs01-reference">
+  <span className="cs01-badge">Designer-supplied geometry · 13 Oct 2026</span>
+  <span className="cs01-badge">Ghost focus · supplied Inspect values</span>
+  <span className="cs01-badge">Ghost-primary outer ring · provisional adaptation</span>
+  <span className="cs01-badge">Brand-disabled color · unresolved</span>
+  <span className="cs01-badge">Lucide artwork approximation</span>
+</div>
+
+## Overview
+
+Use an Icon Button for a compact, familiar action when its purpose remains clear through an accessible name and context. This pilot codes Small Square Ghost and Ghost-primary only. It is a non-production design reference, not a production component contract.
+
+## Playground
+
+Change the working Controls below. Small and Square are fixed. Hover the actual button or use Tab and Shift+Tab to see keyboard focus; Enter and Space activate it.
+
+<Canvas of={IconButtonStories.PlaygroundExample} />
+<Controls of={IconButtonStories.PlaygroundExample} />
+
+## Anatomy
+
+<Anatomy />
+
+## Geometry
+
+<Geometry />
+
+Small is Fixed in the supplied evidence. The 6px radius is the Oxygen-local `radius/md` binding; padding is 4px. These are separate measurements. Existing Data Grid buttons retain their 4px radius.
+
+## Types and states
+
+Type describes the visual family. State describes interaction. Committed criteria determine the contextual Type; opening an editor or hovering a button does not mean applied.
+
+Ghost Default/Hover/Focused uses `icon/primary`; Hover and Focused use `bg/primary-hover`. Ghost Disabled uses `icon/disabled` on transparent. Ghost-primary Default/Hover/Focused uses `icon/brand-primary`; Hover and Focused use `bg/brand-primary-hover`. Ghost-primary Disabled requires `icon/brand-disabled` on transparent. Its exact number is unavailable, so its icon color specimen is withheld rather than painted generic gray or a guessed brand color. Native disabled behavior is still testable; this is not visual acceptance.
+
+<Canvas of={IconButtonStories.States} />
+
+<VariantsTable />
+
+The full source matrix is 2 shapes × 5 Types × 3 Sizes × 4 States = 120 combinations. Medium was observed Fixed; Large was observed Hug. Neither sizing mode nor their numeric radii is implemented here. Pressed feedback is provisional browser interaction feedback, not an additional verified Figma State.
+
+## Data Grid context
+
+### Filter
+
+This small simulation illustrates committed versus draft criteria. It does not implement the complete Filter editor. Visible status text supplements the Type color.
+
+The committed criterion and effective Type remain visible. The checkbox updates only the draft; Apply is unavailable when there is no difference to commit. Check and Apply to see Ghost-primary, reopen and Cancel to preserve the commit, or uncheck and Apply to return to Ghost.
+
+The designer specifies **Round** delete Icon Buttons in Simple Filter. That contextual Shape is reference-only in this Small/Square pilot; no existing Filter consumer is migrated.
+
+<Canvas of={ContextStories.FilterContext} />
+
+### Sort and Delete Sort
+
+The harness below reuses the actual Sort editor. Its existing Delete Sort action has the accessible label “Remove Sort” and changes the draft only. The editor retains legacy styling; its consumers have not been migrated.
+
+Sort Editor Delete Sort uses **Square**, distinct from Simple Filter’s Round delete usage.
+
+The example initially has two committed editor rules, so toggling direct header sort leaves Ghost-primary. Use the review preset “Use zero editor rules” to isolate header-only sorting: Off gives Ghost, On gives Ghost-primary. Counts, direct-sort status and effective Type are reported independently. Presets are disabled during editing to preserve the actual editor’s draft session.
+
+The editor sits in its normal criteria host surface with a complete border. Only the Storybook host width and selector layout adapt here; on narrow previews controls wrap within the workspace while retaining 32px selector height and single-line selected text.
+
+<Canvas of={ContextStories.SortAndDelete} />
+
+The actual toolbar reads `advancedSnapshot.rows` / `simpleFilters` for Filter and `sortSnapshot` / `directSort` for Sort. Clear sort clears editor criteria while direct header sorting remains independent. Apply, Cancel and last-row starter behavior are preserved by the existing editor.
+
+## Usage guidance
+
+- Use a recognizable icon for a compact action, with a specific accessible name such as “Filter” or “Remove Sort.”
+- Use Ghost-primary when matching criteria are committed. Provide contextual text or a summary so applied status is understandable beyond color.
+- Prefer a text button when the action is unfamiliar or needs explanation. A tooltip does not replace a visible label in those situations.
+- Do not use this pilot to infer unsupported Sizes, Shapes, Types, production semantics or clinical behavior.
+
+## Accessibility
+
+The reference reuses a native button. The accessible label remains present when tooltips are disabled; SVG and slot are decorative. Native disabled buttons cannot activate and are skipped by sequential keyboard navigation.
+
+Use Tab / Shift+Tab to move focus, Enter / Space to activate, and Escape while the trigger is focused to dismiss its tooltip. The existing tooltip opens on hover or focus and dismisses on pointer leave, blur, click, activation keys or scroll. A hover-only tooltip does not receive Escape when keyboard focus is elsewhere; move the pointer away to dismiss it. It uses `role="tooltip"` and an open-time description relationship. Disabled controls cannot receive ordinary keyboard focus; their tooltip must never contain essential instructions.
+
+The reused tooltip is pointer-inert and does not support hovering its content. Description preservation and assistive-technology behavior need human review. This batch does not modify the tooltip implementation or claim full accessibility conformance.
+
+Tooltip visuals, including Remove Sort, are pending their own component specification. Existing hover/focus/dismissal behavior and the accessible name “Remove Sort” are retained.
+
+A 24px visual control does not certify touch-target suitability. Ghost keyboard focus uses the supplied solid white 2px inner shadow and neutral hsl(216 15% 34%) 4px outer shadow, with bg/primary-hover even without hover. The inherited outline is suppressed to avoid a third ring. Forced-colors mode uses a solid system-color Highlight outline because shadows can be suppressed by the browser. Disabled controls have no hover/focus background or ring.
+
+Ghost-primary uses the directed layered behavior with white 2px and a provisional #155DFC outer layer adapted from the inspected **Primary** bg/brand-solid reference. The exact Ghost-primary outer binding is not independently verified. The Ghost diagram depicts its neutral ring, not Primary’s brand ring. External numbered leaders connect to precise feature endpoints; dashed/dotted slot and glyph-box guides are construction only. Keyboard tests and human visual review are separate evidence.
+
+## Tokens and evidence
+
+<TokensTable />
+
+Oxygen foundations separately report `text/brand-primary` as #1447E6. That does not verify CS-01 `icon/brand-primary`, and this pilot keeps the task-local #1447F6. No global or production token definitions are introduced.
+
+Evidence combines supplied designer measurements/state bindings/Ghost Inspect values, a read-only foundations inventory lookup and prototype source at baseline `5f23b28e4733607da779421462beeaf182338bf4`. The inventory reports brand-primary hover #E2EEFE and Primary bg/brand-solid #155DFC; it does not verify the requested icon colors. No direct Figma or original screenshot inspection was performed. Private source documents/images are not copied into this page; diagrams are reconstructed and examples synthetic.
+
+Open decisions: exact icon/primary, icon/disabled, icon/brand-primary and icon/brand-disabled numbers; bg/primary-hover number; Ghost-primary outer shadow binding; SVG artwork/stroke fidelity and touch-target suitability. Medium/Large numeric radii and Round remain outside this batch.
+
+This designer-owned handoff library is a limited, non-production reference, not the actual Joblogs design-system implementation. The library path is `/zoblocks-prototypes/storybook/`; the separate Data Grid prototype is `/zoblocks-prototypes/#/data-grid`. Only the stated Small/Square variants are implemented. Ghost-primary Disabled remains explicitly pending with its color specimen withheld until `icon/brand-disabled` has an exact verified value. These examples do not establish complete Figma parity or production acceptance.

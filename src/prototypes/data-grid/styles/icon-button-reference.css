@@ -1,0 +1,113 @@
+/* Storybook-only, approved designer-workspace reference. Never imported by the app.
+   Geometry/radius: designer-supplied CS-01 measurements, 13 Oct 2026.
+   Ghost focus: supplied Figma Inspect values, 13 Oct 2026.
+   Brand hover: foundations inventory. Other color mappings remain provisional.
+   These do not define shared or production ZoBlocks tokens. */
+.cs01-reference {
+  --cs01-small-root-size: 24px;
+  --cs01-small-slot-size: 16px;
+  --cs01-small-padding: 4px;
+  --cs01-small-radius: 6px;
+  --cs01-icon-primary: var(--dg-secondary); /* icon/primary: provisional numeric mapping */
+  --cs01-icon-disabled: var(--dg-disabled); /* icon/disabled: provisional numeric mapping */
+  --cs01-icon-brand-primary: var(--dg-primary); /* icon/brand-primary: provisional numeric mapping */
+  /* icon/brand-disabled is unresolved. No neutral alias or guessed hex is defined. */
+  --cs01-bg-primary-hover: var(--dg-level-one); /* bg/primary-hover: provisional numeric mapping */
+  --cs01-bg-brand-primary-hover: #E2EEFE; /* foundations inventory + supplied state binding */
+  --cs01-focus-inner: white;
+  --cs01-ghost-focus-outer: hsl(216 15% 34%); /* Ghost Inspect: 0/0/0/4px */
+  --cs01-ghost-primary-focus-outer: #155DFC; /* directed adaptation from Primary; specific variant unverified */
+  color: var(--dg-text);
+  font: 14px/1.55 'DM Sans', system-ui, sans-serif;
+}
+.cs01-reference *, .cs01-reference *::before, .cs01-reference *::after { box-sizing: border-box; }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type] {
+  display: inline-flex;
+  flex: 0 0 var(--cs01-small-root-size);
+  width: var(--cs01-small-root-size);
+  height: var(--cs01-small-root-size);
+  min-width: var(--cs01-small-root-size);
+  padding: var(--cs01-small-padding);
+  border: 0;
+  border-radius: var(--cs01-small-radius);
+  gap: 0;
+  color: var(--cs01-icon-primary);
+  background: transparent;
+  box-shadow: none;
+}
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"] { color: var(--cs01-icon-brand-primary); }
+.cs01-reference .cs01-icon-slot { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 var(--cs01-small-slot-size); width: var(--cs01-small-slot-size); height: var(--cs01-small-slot-size); }
+.cs01-reference .cs01-icon-slot svg { flex-shrink: 0; }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost"]:not(:disabled):is(:hover, :focus-visible) { background: var(--cs01-bg-primary-hover); }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:not(:disabled):is(:hover, :focus-visible) { background: var(--cs01-bg-brand-primary-hover); }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type]:not(:disabled):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--cs01-focus-inner), 0 0 0 4px var(--cs01-ghost-focus-outer);
+}
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:not(:disabled):focus-visible {
+  box-shadow: 0 0 0 2px var(--cs01-focus-inner), 0 0 0 4px var(--cs01-ghost-primary-focus-outer);
+}
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type]:not(:disabled):active { background: var(--dg-subtle); }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:not(:disabled):active { background: #D5E5FF; }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type]:disabled { background: transparent; outline: none; box-shadow: none; cursor: default; }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost"]:disabled { color: var(--cs01-icon-disabled); }
+/* Withhold the brand-disabled color specimen until its exact value is supplied.
+   The native disabled button/name/geometry remain testable; this is not a color match. */
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:disabled .cs01-icon-slot { visibility: hidden; }
+@media (forced-colors: active) {
+  .dg-page.cs01-reference .dg-icon-action[data-cs01-type]:not(:disabled):focus-visible { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none; }
+}
+.cs01-panel { width: 100%; min-width: 0; padding: 24px; border: 1px solid var(--dg-subtle); border-radius: 12px; background: var(--dg-white); max-width: 760px; }
+.cs01-panel > :first-child { margin-top: 0; }
+.cs01-panel h3 { font-size: 16px; margin: 0 0 12px; }
+.cs01-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cs01-stack { display: grid; gap: 16px; }
+.cs01-muted { color: var(--dg-secondary); font-size: 13px; }
+.cs01-status { margin: 12px 0 0; color: var(--dg-secondary); }
+.cs01-reference .cs01-action { padding: 6px 10px; border: 1px solid var(--dg-border); border-radius: 6px; color: var(--dg-secondary); background: white; }
+.cs01-reference .cs01-action:disabled { color: var(--dg-disabled); }
+.cs01-reference .cs01-control { display: inline-flex; gap: 8px; align-items: center; }
+.cs01-reference .cs01-control input { width: 16px; height: 16px; }
+.cs01-state-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.cs01-state-cell { padding: 16px; border: 1px solid var(--dg-subtle); border-radius: 8px; }
+.cs01-state-cell p { margin: 8px 0 0; }
+.cs01-reference table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.cs01-reference th, .cs01-reference td { padding: 10px 12px; border-bottom: 1px solid var(--dg-subtle); text-align: left; vertical-align: top; }
+.cs01-reference th { color: var(--dg-secondary); font-weight: 600; }
+.cs01-badge { display: inline-block; border: 1px solid var(--dg-border); border-radius: 999px; padding: 2px 8px; font-size: 12px; color: var(--dg-secondary); background: var(--dg-surface); margin: 0 6px 6px 0; }
+.cs01-anatomy { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); max-width: 1000px; gap: 24px; align-items: center; }
+.cs01-anatomy-diagram { display: block; width: 100%; height: auto; }
+.cs01-anatomy-focus-outer { fill: var(--cs01-ghost-focus-outer); }
+.cs01-anatomy-focus-inner { fill: var(--cs01-focus-inner); }
+.cs01-anatomy-root { fill: var(--cs01-bg-primary-hover); }
+.cs01-anatomy-slot, .cs01-anatomy-glyph-box { fill: none; stroke: var(--dg-border); stroke-width: 1; }
+.cs01-anatomy-slot { stroke-dasharray: 4 3; }
+.cs01-anatomy-glyph-box { stroke-dasharray: 1 2; }
+.cs01-anatomy-glyph { color: var(--cs01-icon-primary); }
+.cs01-anatomy-name { fill: var(--dg-surface); stroke: var(--dg-border); }
+.cs01-anatomy-label { fill: var(--dg-secondary); font-size: 13px; }
+.cs01-leader { fill: none; stroke: var(--dg-secondary); stroke-width: 1; }
+.cs01-anchor, .cs01-number-marker { fill: var(--dg-secondary); }
+.cs01-number { fill: white; font-size: 18px; }
+.cs01-legend { margin: 0; padding-left: 20px; }
+.cs01-legend li { margin: 6px 0; }
+.cs01-reference .dg-editor { margin-top: 16px; }
+.cs01-context-status { display: grid; gap: 2px; font-size: 13px; }
+.cs01-context-presets { margin-top: 12px; }
+.cs01-reference .cs01-sort-workspace { width: 100%; max-width: 100%; margin-top: 16px; }
+.cs01-reference .cs01-sort-workspace .dg-editor { margin: 0; border-bottom: 0; border-radius: inherit; }
+.cs01-reference .cs01-sort-workspace .dg-condition-stack { overflow-x: auto; }
+.cs01-reference .cs01-sort-workspace .dg-rule-controls { flex: 1 1 0; min-width: 0; flex-wrap: wrap; }
+.cs01-reference .cs01-sort-workspace .dg-rule-operator { width: 180px; flex: 0 0 180px; }
+.cs01-reference .cs01-sort-workspace .dg-select-trigger { height: 32px; line-height: 20px; }
+.cs01-reference .cs01-sort-workspace .dg-select-trigger > span { white-space: nowrap; }
+.cs01-reference .cs01-sort-workspace .dg-select-trigger > svg { flex-shrink: 0; }
+@media (max-width: 760px) {
+  .cs01-anatomy { grid-template-columns: 1fr; }
+  .cs01-anatomy-diagram { max-width: 440px; margin-inline: auto; }
+}
+@media (max-width: 560px) {
+  .cs01-anatomy { grid-template-columns: 1fr; }
+  .cs01-state-grid { grid-template-columns: 1fr; }
+  .cs01-panel { padding: 16px; }
+}
