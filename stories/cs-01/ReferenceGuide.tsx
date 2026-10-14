@@ -29,7 +29,7 @@ export function Anatomy() {
         <text className="cs01-number" x={marker[0]} y={marker[1]} textAnchor="middle" dominantBaseline="central">{number}</text>
       </g>)}
     </svg>
-    <div><p className="cs01-muted">Ghost Focused · schematic enlarged 6×, not source artwork. Dashed/dotted slot and glyph-box guides are construction only. Numbered leaders terminate on each stated feature.</p><ol className="cs01-legend"><li>Root: 24 × 24px interactive button, Square, 6px corner radius.</li><li>Internal padding: 4px on every side.</li><li>Content slot: 16 × 16px.</li><li>Filter glyph box: approximately 14 × 14px, centered. Lucide art is approximate.</li><li>Focus: solid white 2px inner shadow and neutral 4px outer shadow, hsl(216 15% 34%). Background uses bg/primary-hover; no extra outline.</li><li>Accessible name: “Filter” is supplied to aria-label by the label property; tooltip is supplemental.</li></ol></div>
+    <div><p className="cs01-muted">Ghost Focused · schematic enlarged 6×, not source artwork. Dashed/dotted slot and glyph-box guides are construction only. Numbered leaders terminate on each stated feature.</p><ol className="cs01-legend"><li>Root: 24 × 24px interactive button, Square, 6px corner radius.</li><li>Internal padding: 4px on every side.</li><li>Content slot: 16 × 16px.</li><li>Exported immediate icon instance: 14 × 14px. The centered Filter SVG uses a 14px box; Lucide artwork and stroke are approximate.</li><li>Focus: solid white 2px inner shadow and neutral #4A5565 4px outer shadow. Background uses bg/primary-hover; no extra outline.</li><li>Accessible name: “Filter” is supplied to aria-label by the label property; tooltip is supplemental.</li></ol></div>
   </div>
 }
 
@@ -37,31 +37,28 @@ export function VariantsTable() {
   const rows = [
     ['Shape', 'Small Square; Sort Editor Delete Sort is Square', 'Simple Filter delete is Figma-specified Round, reference-only'],
     ['Type', 'Ghost, Ghost-primary', 'Primary, Secondary, Danger'],
-    ['Size', 'Small: root 24, slot 16, padding 4, radius 6px', 'Medium: root 30, slot 18, padding 6, radius/lg; Large: root 40, slot 20, padding 10, radius/xl'],
-    ['State', 'Default, native hover, disabled behavior, real keyboard layered focus', 'Brand-disabled color withheld; Ghost-primary outer focus binding unverified'],
+    ['Size', 'Small (see Geometry)', 'Medium: root 30, slot 18, padding 6, radius/lg; Large: root 40, slot 20, padding 10, radius/xl'],
+    ['State', 'Default, native hover, disabled behavior, real keyboard layered focus', 'Pressed feedback remains provisional'],
   ]
   return <div className="dg-page cs01-reference"><table><caption>Implemented scope and deferred source variants</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Coded in this pilot</th><th scope="col">Reference only</th></tr></thead><tbody>{rows.map(([dimension, coded, reference]) => <tr key={dimension}><th scope="row">{dimension}</th><td>{coded}</td><td>{reference}</td></tr>)}</tbody></table></div>
 }
 
 export function TokensTable() {
   const rows = [
-    ['Root 24px; slot 16px; padding 4px', 'Verified designer-supplied CS-01 measurements'],
-    ['Radius 6px', 'Approved Oxygen-local radius/md; reference mode only'],
-    ['Filter SVG box 14px', 'Approximate source artwork size; painted SVG geometry and stroke unverified'],
-    ['icon/primary → --dg-secondary, #4A5565', 'Ghost Default/Hover/Focused; supplied binding, provisional number'],
-    ['icon/disabled → --dg-disabled, #99A1AF', 'Ghost Disabled; supplied binding, provisional number'],
-    ['icon/brand-primary → --dg-primary, #1447F6', 'Ghost-primary Default/Hover/Focused; supplied binding, provisional number'],
-    ['icon/brand-disabled → value unavailable', 'Ghost-primary Disabled color specimen withheld; not visually accepted'],
-    ['bg/primary-hover → --dg-level-one, #F2F3F5', 'Ghost Hover/Focused; supplied binding, provisional number'],
-    ['bg/brand-primary-hover → #E2EEFE', 'Supplied state binding + read-only foundations inventory; not direct variant inspection'],
-    ['Default/Disabled surfaces → transparent', 'Both Types; supplied state matrix'],
-    ['Neutral pressed → --dg-subtle, #EAECF0', 'Existing prototype behavior; provisional'],
-    ['Ghost-primary pressed → #D5E5FF', 'Existing prototype behavior; provisional, separate from source states'],
-    ['Ghost Focused → white 2px + hsl(216 15% 34%) 4px', 'Source-inspected values supplied by designer; solid shadows, no third ring'],
-    ['Ghost-primary Focused → white 2px + #155DFC 4px', 'Designer-directed layered adaptation from Primary bg/brand-solid; specific Ghost-primary outer binding remains provisional'],
-    ['Forced-colors focus → solid 2px Highlight outline', 'Browser accessibility fallback; not Figma artwork'],
+    ['icon/primary → #101828', 'Ghost Default / Hover / Focused'],
+    ['icon/disabled → #99A1AF', 'Ghost Disabled'],
+    ['icon/brand-primary → #1447E6', 'Ghost-primary Default / Hover / Focused'],
+    ['icon/brand-disabled → #8EC5FF', 'Ghost-primary Disabled'],
+    ['bg/primary-hover → #F2F3F5', 'Ghost Hover / Focused'],
+    ['bg/brand-primary-hover → #E2EEFE', 'Ghost-primary Hover / Focused'],
+    ['Ghost Focused → white 2px inner + #4A5565 4px outer', 'Verified Icon Button master 233:5486'],
+    ['Ghost-primary Focused → white 2px inner + #155DFC 4px outer', 'Verified Icon Button master 233:5486'],
+    ['Default / Disabled → transparent', 'Both Types; Disabled has no hover / focus effects'],
+    ['Forced-colors → solid 2px Highlight outline', 'Accessibility fallback when shadows are suppressed'],
+    ['Pressed feedback', 'Existing prototype interaction feedback; provisional'],
   ]
-  return <div className="dg-page cs01-reference"><table><caption>Designer-workspace mappings, not production tokens</caption><thead><tr><th scope="col">Reference value / mapping</th><th scope="col">Source and status</th></tr></thead><tbody>{rows.map(([value, status]) => <tr key={value}><th scope="row">{value}</th><td>{status}</td></tr>)}</tbody></table></div>
+
+  return <div className="dg-page cs01-reference"><table><caption>Designer-workspace mappings, not production tokens</caption><thead><tr><th scope="col">Reference value / mapping</th><th scope="col">Application / evidence</th></tr></thead><tbody>{rows.map(([value, status]) => <tr key={value}><th scope="row">{value}</th><td>{status}</td></tr>)}</tbody></table></div>
 }
 
 type Measurements = { root: string; slot: string; padding: string; radius: string; glyph: string }
@@ -80,7 +77,7 @@ export function Geometry() {
     observer.observe(button)
     return () => observer.disconnect()
   }, [])
-  const rows: [keyof Measurements, string, string][] = [['root', 'Root', '24 × 24px'], ['slot', 'Slot', '16 × 16px'], ['padding', 'Padding', '4px'], ['radius', 'Radius / md', '6px'], ['glyph', 'Filter glyph box', '14 × 14px (approximate art)']]
+  const rows: [keyof Measurements, string, string][] = [['root', 'Root', '24 × 24px'], ['slot', 'Implemented icon slot', '16 × 16px'], ['padding', 'Padding', '4px'], ['radius', 'Radius / md', '6px'], ['glyph', 'Filter SVG box', '14 × 14px immediate instance; artwork approximate']]
   return <div className="dg-page cs01-reference cs01-panel">
     <div ref={anchor}><PrototypeIconButton referenceType="ghost" referenceGlyphSize={14} icon={Filter} label="Geometry example Filter" tooltip={false} /></div>
     <table><caption>Source measurements and this browser’s rendered result</caption><thead><tr><th scope="col">Aspect</th><th scope="col">Designer-supplied evidence</th><th scope="col">Rendered now</th></tr></thead><tbody>{rows.map(([key, name, evidence]) => <tr key={key}><th scope="row">{name}</th><td>{evidence}</td><td>{actual?.[key] ?? 'Awaiting browser measurement'}</td></tr>)}</tbody></table>

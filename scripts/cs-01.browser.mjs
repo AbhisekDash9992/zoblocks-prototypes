@@ -9,9 +9,9 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 1000 } })
 page.setDefaultTimeout(10000)
 const storybook = (process.argv[2] ?? 'http://127.0.0.1:6006').replace(/\/$/, '')
 const app = process.argv[3] ?? 'http://127.0.0.1:5173/zoblocks-prototypes/#/data-grid'
-const errors = [], passed = [], unresolved = ['Ghost-primary Disabled visual color: exact icon/brand-disabled unavailable; specimen withheld', 'Ghost-primary Focused outer token: #155DFC is a provisional directed adaptation, not source-certified', 'Icon token mappings and bg/primary-hover numerical mapping remain provisional']
+const errors = [], passed = [], unresolved = ['Exact icon artwork/stroke fidelity, Tooltip specification, assistive-technology behavior and touch suitability remain under review']
 page.on('pageerror', error => errors.push(error.message))
-page.on('console', message => { if (message.type() === 'error' && !message.text().includes('404')) errors.push(message.text()) })
+page.on('console', message => { if (message.type() === 'error' && !message.location().url.endsWith('/favicon.ico')) errors.push(message.text()) })
 page.on('response', response => { if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) errors.push(`${response.status()} ${response.url()}`) })
 const button = name => page.getByRole('button', { name, exact: true })
 const settle = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
@@ -27,14 +27,14 @@ const visual = locator => locator.evaluate(element => {
   return { color: css.color, background: css.backgroundColor, shadow: css.boxShadow, outline: css.outlineStyle, hovered: element.matches(':hover'), focused: element.matches(':focus-visible'), slotVisibility: getComputedStyle(element.querySelector('.cs01-icon-slot')).visibility }
 })
 const white = 'rgb(255, 255, 255) 0px 0px 0px 2px'
-const neutral = 'rgb(74, 84, 100) 0px 0px 0px 4px'
-const brandAdaptation = 'rgb(21, 93, 252) 0px 0px 0px 4px'
+const neutral = 'rgb(74, 85, 101) 0px 0px 0px 4px'
+const brandOuter = 'rgb(21, 93, 252) 0px 0px 0px 4px'
 
 try {
   await story('cs-01-icon-button--playground-example')
   const target = button('Filter')
   assert.deepEqual(await geometry(target), { root: [24, 24], slot: [16, 16], glyph: [14, 14], padding: '4px', radius: '6px', border: '0px' })
-  assert.equal((await visual(target)).color, 'rgb(74, 85, 101)')
+  assert.equal((await visual(target)).color, 'rgb(16, 24, 40)')
   assert.equal((await visual(target)).background, 'rgba(0, 0, 0, 0)')
   await target.hover(); await page.getByRole('tooltip', { name: 'Filter', exact: true }).waitFor()
   assert.equal(await target.evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(242, 243, 245)')
@@ -75,15 +75,15 @@ try {
   await story('cs-01-icon-button--ghost-primary')
   await page.mouse.move(1, 1)
   const brand = button('Filter')
-  assert.equal((await visual(brand)).color, 'rgb(20, 71, 246)')
+  assert.equal((await visual(brand)).color, 'rgb(20, 71, 230)')
   assert.equal((await visual(brand)).background, 'rgba(0, 0, 0, 0)')
   await brand.hover(); assert.equal((await visual(brand)).background, 'rgb(226, 238, 254)')
   await page.mouse.move(1, 1); await page.locator('body').click({ position: { x: 1, y: 1 } }); await page.keyboard.press('Tab')
   const brandFocus = await visual(brand)
   assert.equal(brandFocus.hovered, false); assert.equal(brandFocus.focused, true)
   assert.equal(brandFocus.background, 'rgb(226, 238, 254)')
-  assert.equal(brandFocus.outline, 'none'); assert.equal(brandFocus.shadow, `${white}, ${brandAdaptation}`)
-  passed.push('Ghost-primary transparent rest, inventory hover/focus background without hover, provisional solid layered outer ring')
+  assert.equal(brandFocus.outline, 'none'); assert.equal(brandFocus.shadow, `${white}, ${brandOuter}`)
+  passed.push('Verified Ghost-primary icon/hover colors and white 2px + #155DFC 4px keyboard focus without hover')
 
   // Solid system-color fallback survives browsers suppressing shadows in forced colors.
   await page.emulateMedia({ forcedColors: 'active' })
@@ -101,16 +101,21 @@ try {
   passed.push('Both Types retain a solid system-color keyboard outline in forced-colors mode')
 
   await story('cs-01-icon-button--states')
-  const unresolvedBrand = button('Disabled ghost-primary Filter')
-  await unresolvedBrand.hover()
-  const withheld = await visual(unresolvedBrand)
-  assert.equal(withheld.slotVisibility, 'hidden')
-  assert.equal(withheld.background, 'rgba(0, 0, 0, 0)'); assert.equal(withheld.shadow, 'none'); assert.equal(withheld.outline, 'none')
-  const withheldBounds = await unresolvedBrand.boundingBox()
-  await page.mouse.click(withheldBounds.x + 12, withheldBounds.y + 12)
-  assert.equal(await unresolvedBrand.isDisabled(), true)
-  assert.ok((await page.locator('.cs01-panel').textContent()).includes('Disabled color specimen withheld'))
-  passed.push('Brand-disabled has transparent surface/no treatment and no guessed/neutral color specimen; visual color acceptance explicitly skipped')
+  const disabledBrand = button('Disabled ghost-primary Filter')
+  assert.deepEqual(await geometry(disabledBrand), { root: [24, 24], slot: [16, 16], glyph: [14, 14], padding: '4px', radius: '6px', border: '0px' })
+  await disabledBrand.hover()
+  const disabledVisual = await visual(disabledBrand)
+  assert.equal(disabledVisual.slotVisibility, 'visible')
+  assert.equal(disabledVisual.color, 'rgb(142, 197, 255)')
+  assert.equal(await disabledBrand.locator('svg').evaluate(el => getComputedStyle(el).color), 'rgb(142, 197, 255)')
+  assert.equal(disabledVisual.background, 'rgba(0, 0, 0, 0)'); assert.equal(disabledVisual.shadow, 'none'); assert.equal(disabledVisual.outline, 'none')
+  const disabledBrandBounds = await disabledBrand.boundingBox()
+  await page.mouse.click(disabledBrandBounds.x + 12, disabledBrandBounds.y + 12)
+  await disabledBrand.evaluate(el => el.focus())
+  assert.equal(await disabledBrand.evaluate(el => el === document.activeElement), false)
+  assert.equal(await disabledBrand.isDisabled(), true)
+  assert.ok((await page.locator('.cs01-panel').textContent()).includes('verified icon/brand-disabled #8EC5FF'))
+  passed.push('Verified visible brand-disabled #8EC5FF specimen, 24px geometry, native disabled behavior and no hover/focus effects')
 
   await story('cs-01-icon-button--focus-reference')
   await page.locator('body').click({ position: { x: 1, y: 1 } }); await page.keyboard.press('Tab')
@@ -122,7 +127,7 @@ try {
   assert.equal(await page.locator('.cs01-anatomy-focus-inner').getAttribute('width'), '168')
   assert.equal(await page.locator('.cs01-anatomy-focus-outer').getAttribute('width'), '192')
   assert.equal(await page.locator('.cs01-anatomy-focus-inner').evaluate(el => getComputedStyle(el).fill), 'rgb(255, 255, 255)')
-  assert.equal(await page.locator('.cs01-anatomy-focus-outer').evaluate(el => getComputedStyle(el).fill), 'rgb(74, 84, 100)')
+  assert.equal(await page.locator('.cs01-anatomy-focus-outer').evaluate(el => getComputedStyle(el).fill), 'rgb(74, 85, 101)')
   assert.equal(await page.locator('.cs01-anatomy-focus-outer').evaluate(el => getComputedStyle(el).strokeDasharray), 'none')
   const leaders = await page.locator('.cs01-callout').evaluateAll(groups => groups.map(group => {
     const line = group.querySelector('polyline'), marker = group.querySelector('.cs01-number-marker'), anchor = group.querySelector('.cs01-anchor')
@@ -138,7 +143,7 @@ try {
   assert.deepEqual(byFeature.glyph, [262, 150]) // Right edge of the 14px glyph box.
   assert.ok(byFeature.focus[1] > 56 && byFeature.focus[1] < 68) // Neutral outer ring, outside white separator.
   assert.deepEqual(byFeature.name, [292, 280]) // Accessible label box's right edge.
-  for (const width of [480, 360]) {
+  for (const width of [1280, 760, 480, 360]) {
     await page.setViewportSize({ width, height: 1000 }); await settle()
     assert.ok(await page.locator('.cs01-anatomy-diagram').evaluate(el => { const bounds = el.getBoundingClientRect(); return bounds.x >= 0 && bounds.right <= innerWidth }))
     assert.equal(await page.locator('.cs01-legend li').count(), 6)
@@ -155,7 +160,7 @@ try {
   await typeControl.selectOption('Ghost-primary')
   await applied(playground.getByRole('button', { name: 'Filter', exact: true }), 'ghost-primary')
   const primary = playground.getByRole('button', { name: 'Filter', exact: true })
-  assert.equal(await primary.evaluate(el => getComputedStyle(el).color), 'rgb(20, 71, 246)')
+  assert.equal(await primary.evaluate(el => getComputedStyle(el).color), 'rgb(20, 71, 230)')
   await primary.hover()
   assert.equal(await primary.evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(226, 238, 254)')
   await page.locator('select[id$="-icon"]').selectOption('Delete')
@@ -167,6 +172,9 @@ try {
   await renamed.hover(); assert.equal(await page.getByRole('tooltip').count(), 0)
   assert.equal(await renamed.getAttribute('aria-label'), 'Remove demo rule')
   await page.locator('input[name="disabled"]').focus(); await page.keyboard.press('Space'); await settle(); assert.equal(await renamed.isDisabled(), true)
+  assert.equal((await visual(renamed)).color, 'rgb(142, 197, 255)')
+  assert.equal((await visual(renamed)).slotVisibility, 'visible')
+  await renamed.evaluate(el => el.click()); assert.equal(await playground.getByRole('status').textContent(), 'Activations: 0')
   await page.locator('input[name="disabled"]').focus(); await page.keyboard.press('Space'); await settle(); await renamed.click()
   await playground.getByRole('status').filter({ hasText: 'Activations: 1' }).waitFor()
   await page.locator('select[id$="-icon"]').selectOption('Sort'); await settle(); assert.equal(await renamed.locator('svg.lucide-arrow-up-down').count(), 1)
@@ -177,6 +185,38 @@ try {
   assert.ok((await page.locator('body').textContent()).includes('Round'))
   assert.ok((await page.locator('body').textContent()).includes('Sort Editor Delete Sort uses'))
   passed.push('Native Docs Controls: both Types, all three icons, label, tooltip, disabled; semantic tables and six anatomy callouts')
+  const docsText = await page.locator('body').textContent()
+  for (const color of ['#101828', '#99A1AF', '#1447E6', '#8EC5FF', '#F2F3F5', '#E2EEFE', '#4A5565', '#155DFC']) assert.ok(docsText.includes(color), `Missing verified value ${color}`)
+  assert.ok(docsText.includes('233:5486') && docsText.includes('exported 14px immediate icon instance'))
+  assert.ok(!/value unavailable|color specimen withheld|numeric.*unresolved|outer.*unverified/.test(docsText))
+  for (const width of [1280, 760, 480, 360]) {
+    await page.setViewportSize({ width, height: 1000 }); await settle()
+    assert.equal(await page.locator('.cs01-evidence-group').count(), 2)
+    assert.equal(await page.locator('.cs01-badge').count(), 6)
+    for (const row of await page.locator('.cs01-badge-row').all()) {
+      assert.equal(await row.evaluate(el => getComputedStyle(el).gap), '8px')
+      assert.equal(await row.evaluate(el => getComputedStyle(el).flexWrap), 'wrap')
+    }
+    for (const badge of await page.locator('.cs01-badge').all()) assert.ok(await badge.evaluate(el => { const r=el.getBoundingClientRect(); return r.x >= 0 && r.right <= innerWidth && el.scrollWidth <= el.clientWidth }))
+    const spacing = await page.locator('.cs01-evidence').evaluate(el => { const heading=[...document.querySelectorAll('h2')].find(el => el.textContent.includes('Overview')); return { margin: getComputedStyle(el).marginBottom, gap: heading.getBoundingClientRect().top-el.getBoundingClientRect().bottom } })
+    assert.equal(spacing.margin, '32px'); assert.ok(spacing.gap >= 24)
+    assert.equal(await page.locator('.cs01-callout').count(), 6)
+    assert.ok(await page.locator('.cs01-anatomy').evaluate(el => el.scrollWidth <= el.clientWidth))
+    const controls = page.getByRole('region', { name: 'Icon Button Controls', exact: true })
+    assert.equal(await controls.getAttribute('tabindex'), '0')
+    if (width <= 480) {
+      if (await controls.evaluate(el => el.scrollWidth > el.clientWidth)) {
+        await controls.focus(); await page.keyboard.press('ArrowRight')
+        await page.waitForFunction(() => document.querySelector('.cs01-controls').scrollLeft > 0)
+      }
+      await typeControl.focus(); await typeControl.selectOption('Ghost')
+      assert.equal((await visual(renamed)).color, 'rgb(16, 24, 40)')
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Docs overflow at ${width}px`)
+  }
+  await page.setViewportSize({ width: 1280, height: 1000 })
+  passed.push('Docs evidence grouping, 8px wrapping gaps, Overview separation, exact token evidence and full-page containment at 1280/760/480/360px')
+
 
   await story('cs-01-data-grid-context--filter-context')
   await applied(button('Filter'), 'ghost')
@@ -218,7 +258,7 @@ try {
   assert.equal(await workspace.evaluate(el => getComputedStyle(el).borderBottomWidth), '1px')
   assert.equal(await workspace.evaluate(el => getComputedStyle(el).borderLeftStyle), 'solid')
   assert.equal(await workspace.evaluate(el => getComputedStyle(el).borderRadius), '8px')
-  for (const width of [1280, 480, 360]) {
+  for (const width of [1280, 760, 480, 360]) {
     await page.setViewportSize({ width, height: 1000 }); await settle()
     const direction = button('Direction for sort 2')
     const layout = await direction.evaluate(el => {
@@ -262,7 +302,7 @@ try {
   await button('Clear sort').click(); await applied(button('Sort'), 'ghost')
   await page.getByRole('checkbox').check(); await applied(button('Sort'), 'ghost-primary')
   await page.getByRole('checkbox').uncheck(); await applied(button('Sort'), 'ghost')
-  passed.push('Sort presets/header-only Type, pointer/keyboard toggles, outer border, one-line centered 32px dropdowns/menus at 1280/480/360px, unobstructive tooltip; Delete/Cancel/Apply/Clear preserved')
+  passed.push('Sort presets/header-only Type, pointer/keyboard toggles, outer border, one-line centered 32px dropdowns/menus at 1280/760/480/360px, unobstructive tooltip; Delete/Cancel/Apply/Clear preserved')
 
   // Manager and Docs deep link, in addition to direct preview stories.
   await page.goto(`${storybook}/?path=/docs/cs-01-icon-button--docs`)

@@ -22,9 +22,9 @@ function Playground({ type, icon, disabled, label, tooltip }: PlaygroundProps) {
       <span>Small / Square · {type}{disabled ? ' · Disabled' : ''}</span>
     </div>
     {!label.trim() && <p role="alert">Supply an accessible label. This preview uses “Icon action” while the field is empty.</p>}
-    {type === 'Ghost-primary' && disabled && <p className="cs01-muted">icon/brand-disabled value unavailable: the color specimen is withheld. Native disabled behavior remains testable; visual acceptance is pending.</p>}
+    {type === 'Ghost-primary' && disabled && <p className="cs01-muted">Verified icon/brand-disabled: #8EC5FF. Native disabled behavior prevents activation.</p>}
     <p id={statusId} className="cs01-status" role="status">Activations: {activations}</p>
-    <p className="cs01-muted">Hover the button, or use Tab / Shift+Tab to focus it. Enter and Space activate it. Ghost’s solid neutral/white ring uses supplied Inspect values; icon colors and Ghost-primary’s outer ring remain provisional.</p>
+    <p className="cs01-muted">Hover the button, or use Tab / Shift+Tab to focus it. Enter and Space activate it. Both solid focus rings are verified from Icon Button master 233:5486; Lucide artwork remains approximate.</p>
   </div>
 }
 
@@ -56,7 +56,7 @@ export const States: Story = {
       </div>
       <p>{type === 'ghost' ? 'Ghost' : 'Ghost-primary'} · enabled and disabled</p>
       <p className="cs01-muted">Default at rest. Hover / Focused through real interaction.</p>
-      {type === 'ghost-primary' && <p className="cs01-muted">Disabled color specimen withheld: exact icon/brand-disabled value required.</p>}
+      {type === 'ghost-primary' && <p className="cs01-muted">Disabled icon: verified icon/brand-disabled #8EC5FF.</p>}
     </div>)}
   </div>,
 }

@@ -1,22 +1,22 @@
-/* Storybook-only, approved designer-workspace reference. Never imported by the app.
-   Geometry/radius: designer-supplied CS-01 measurements, 13 Oct 2026.
-   Ghost focus: supplied Figma Inspect values, 13 Oct 2026.
-   Brand hover: foundations inventory. Other color mappings remain provisional.
-   These do not define shared or production ZoBlocks tokens. */
+/* Storybook-only CS-01 reference; never imported by the app.
+   Accepted Small/Square geometry and verified Oxygen colors supplied by designer.
+   Both focus layers: authoritative Icon Button master 233:5486.
+   No shared or production ZoBlocks tokens are changed. */
 .cs01-reference {
+  box-sizing: border-box;
   --cs01-small-root-size: 24px;
   --cs01-small-slot-size: 16px;
   --cs01-small-padding: 4px;
   --cs01-small-radius: 6px;
-  --cs01-icon-primary: var(--dg-secondary); /* icon/primary: provisional numeric mapping */
-  --cs01-icon-disabled: var(--dg-disabled); /* icon/disabled: provisional numeric mapping */
-  --cs01-icon-brand-primary: var(--dg-primary); /* icon/brand-primary: provisional numeric mapping */
-  /* icon/brand-disabled is unresolved. No neutral alias or guessed hex is defined. */
-  --cs01-bg-primary-hover: var(--dg-level-one); /* bg/primary-hover: provisional numeric mapping */
-  --cs01-bg-brand-primary-hover: #E2EEFE; /* foundations inventory + supplied state binding */
+  --cs01-icon-primary: #101828; /* verified icon/primary */
+  --cs01-icon-disabled: #99A1AF; /* verified icon/disabled */
+  --cs01-icon-brand-primary: #1447E6; /* verified icon/brand-primary */
+  --cs01-icon-brand-disabled: #8EC5FF; /* verified icon/brand-disabled */
+  --cs01-bg-primary-hover: #F2F3F5; /* verified bg/primary-hover */
+  --cs01-bg-brand-primary-hover: #E2EEFE; /* verified bg/brand-primary-hover */
   --cs01-focus-inner: white;
-  --cs01-ghost-focus-outer: hsl(216 15% 34%); /* Ghost Inspect: 0/0/0/4px */
-  --cs01-ghost-primary-focus-outer: #155DFC; /* directed adaptation from Primary; specific variant unverified */
+  --cs01-ghost-focus-outer: #4A5565; /* verified Ghost outer focus layer */
+  --cs01-ghost-primary-focus-outer: #155DFC; /* verified Ghost-primary outer focus layer */
   color: var(--dg-text);
   font: 14px/1.55 'DM Sans', system-ui, sans-serif;
 }
@@ -51,9 +51,7 @@
 .dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:not(:disabled):active { background: #D5E5FF; }
 .dg-page.cs01-reference .dg-icon-action[data-cs01-type]:disabled { background: transparent; outline: none; box-shadow: none; cursor: default; }
 .dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost"]:disabled { color: var(--cs01-icon-disabled); }
-/* Withhold the brand-disabled color specimen until its exact value is supplied.
-   The native disabled button/name/geometry remain testable; this is not a color match. */
-.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:disabled .cs01-icon-slot { visibility: hidden; }
+.dg-page.cs01-reference .dg-icon-action[data-cs01-type="ghost-primary"]:disabled { color: var(--cs01-icon-brand-disabled); }
 @media (forced-colors: active) {
   .dg-page.cs01-reference .dg-icon-action[data-cs01-type]:not(:disabled):focus-visible { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none; }
 }
@@ -74,7 +72,14 @@
 .cs01-reference table { border-collapse: collapse; width: 100%; font-size: 13px; }
 .cs01-reference th, .cs01-reference td { padding: 10px 12px; border-bottom: 1px solid var(--dg-subtle); text-align: left; vertical-align: top; }
 .cs01-reference th { color: var(--dg-secondary); font-weight: 600; }
-.cs01-badge { display: inline-block; border: 1px solid var(--dg-border); border-radius: 999px; padding: 2px 8px; font-size: 12px; color: var(--dg-secondary); background: var(--dg-surface); margin: 0 6px 6px 0; }
+.dg-page.cs01-reference.cs01-evidence { display: grid; gap: 16px; margin: 16px 0 32px; }
+.cs01-evidence-group { min-width: 0; }
+.cs01-evidence .cs01-evidence-label { margin: 0 0 8px; color: var(--dg-secondary); font-size: 12px; font-weight: 600; }
+.cs01-badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs01-badge { display: inline-flex; align-items: center; max-width: 100%; min-width: 0; border: 1px solid var(--dg-border); border-radius: 999px; padding: 2px 8px; font-size: 12px; line-height: 20px; color: var(--dg-secondary); background: var(--dg-surface); overflow-wrap: anywhere; }
+.cs01-reference th, .cs01-reference td { overflow-wrap: anywhere; }
+.cs01-controls { max-width: 100%; overflow-x: auto; }
+
 .cs01-anatomy { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); max-width: 1000px; gap: 24px; align-items: center; }
 .cs01-anatomy-diagram { display: block; width: 100%; height: auto; }
 .cs01-anatomy-focus-outer { fill: var(--cs01-ghost-focus-outer); }

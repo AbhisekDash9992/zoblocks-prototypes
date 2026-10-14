@@ -9,12 +9,23 @@ import { Anatomy, Geometry, VariantsTable, TokensTable } from './ReferenceGuide'
 
 CS-01 · Designer workspace · Small / Square reference
 
-<div className="dg-page cs01-reference">
-  <span className="cs01-badge">Designer-supplied geometry · 13 Oct 2026</span>
-  <span className="cs01-badge">Ghost focus · supplied Inspect values</span>
-  <span className="cs01-badge">Ghost-primary outer ring · provisional adaptation</span>
-  <span className="cs01-badge">Brand-disabled color · unresolved</span>
-  <span className="cs01-badge">Lucide artwork approximation</span>
+<div className="dg-page cs01-reference cs01-evidence">
+  <div className="cs01-evidence-group">
+    <p className="cs01-evidence-label">Verified evidence</p>
+    <div className="cs01-badge-row">
+      <span className="cs01-badge">Small / Square geometry</span>
+      <span className="cs01-badge">Oxygen colors</span>
+      <span className="cs01-badge">Both focus rings · master 233:5486</span>
+    </div>
+  </div>
+  <div className="cs01-evidence-group">
+    <p className="cs01-evidence-label">Still under review</p>
+    <div className="cs01-badge-row">
+      <span className="cs01-badge">Approximate icon artwork</span>
+      <span className="cs01-badge">Tooltip specification</span>
+      <span className="cs01-badge">Accessibility / touch suitability</span>
+    </div>
+  </div>
 </div>
 
 ## Overview
@@ -26,7 +37,9 @@ Use an Icon Button for a compact, familiar action when its purpose remains clear
 Change the working Controls below. Small and Square are fixed. Hover the actual button or use Tab and Shift+Tab to see keyboard focus; Enter and Space activate it.
 
 <Canvas of={IconButtonStories.PlaygroundExample} />
-<Controls of={IconButtonStories.PlaygroundExample} />
+<div className="cs01-controls" role="region" aria-label="Icon Button Controls" tabIndex={0}>
+  <Controls of={IconButtonStories.PlaygroundExample} />
+</div>
 
 ## Anatomy
 
@@ -36,13 +49,13 @@ Change the working Controls below. Small and Square are fixed. Hover the actual 
 
 <Geometry />
 
-Small is Fixed in the supplied evidence. The 6px radius is the Oxygen-local `radius/md` binding; padding is 4px. These are separate measurements. Existing Data Grid buttons retain their 4px radius.
+Small is Fixed in the supplied evidence. The implemented icon slot is 16px; the exported immediate icon instance is 14px. The Filter preview uses a 14px SVG box inside that slot, with approximate Lucide artwork. Radius is the Oxygen-local `radius/md` value of 6px; padding is 4px. Existing Data Grid buttons retain their 4px radius.
 
 ## Types and states
 
 Type describes the visual family. State describes interaction. Committed criteria determine the contextual Type; opening an editor or hovering a button does not mean applied.
 
-Ghost Default/Hover/Focused uses `icon/primary`; Hover and Focused use `bg/primary-hover`. Ghost Disabled uses `icon/disabled` on transparent. Ghost-primary Default/Hover/Focused uses `icon/brand-primary`; Hover and Focused use `bg/brand-primary-hover`. Ghost-primary Disabled requires `icon/brand-disabled` on transparent. Its exact number is unavailable, so its icon color specimen is withheld rather than painted generic gray or a guessed brand color. Native disabled behavior is still testable; this is not visual acceptance.
+Both Types use transparent Default and Disabled surfaces. Hover and keyboard Focused use their matching hover background. The verified token values and focus layers are listed below; the Ghost-primary Disabled icon is rendered in `icon/brand-disabled` (#8EC5FF). Disabled controls retain native behavior with no hover background or focus ring.
 
 <Canvas of={IconButtonStories.States} />
 
@@ -93,18 +106,18 @@ The reused tooltip is pointer-inert and does not support hovering its content. D
 
 Tooltip visuals, including Remove Sort, are pending their own component specification. Existing hover/focus/dismissal behavior and the accessible name “Remove Sort” are retained.
 
-A 24px visual control does not certify touch-target suitability. Ghost keyboard focus uses the supplied solid white 2px inner shadow and neutral hsl(216 15% 34%) 4px outer shadow, with bg/primary-hover even without hover. The inherited outline is suppressed to avoid a third ring. Forced-colors mode uses a solid system-color Highlight outline because shadows can be suppressed by the browser. Disabled controls have no hover/focus background or ring.
+A 24px visual control does not certify touch-target suitability. Ghost keyboard focus uses solid white 2px inner and #4A5565 4px outer shadows, with bg/primary-hover even without hover. The inherited outline is suppressed to avoid a third ring. Forced-colors mode uses a solid system-color Highlight outline because shadows can be suppressed by the browser. Disabled controls have no hover/focus background or ring.
 
-Ghost-primary uses the directed layered behavior with white 2px and a provisional #155DFC outer layer adapted from the inspected **Primary** bg/brand-solid reference. The exact Ghost-primary outer binding is not independently verified. The Ghost diagram depicts its neutral ring, not Primary’s brand ring. External numbered leaders connect to precise feature endpoints; dashed/dotted slot and glyph-box guides are construction only. Keyboard tests and human visual review are separate evidence.
+Ghost-primary uses solid white 2px inner and #155DFC 4px outer shadows. Both focus layers are verified from the authoritative Figma Icon Button master, node `233:5486`, using the evidence supplied for this update. The Ghost anatomy diagram depicts its neutral ring. External numbered leaders connect to feature endpoints; dashed/dotted slot and glyph-box guides are construction only. Keyboard checks remain separate from visual and assistive-technology review.
 
 ## Tokens and evidence
 
 <TokensTable />
 
-Oxygen foundations separately report `text/brand-primary` as #1447E6. That does not verify CS-01 `icon/brand-primary`, and this pilot keeps the task-local #1447F6. No global or production token definitions are introduced.
+The six Oxygen color tokens and both Focused-state shadow layers are verified values supplied for this update. They are implemented only in the CS-01 reference CSS; no global Data Grid or production token definitions are changed.
 
-Evidence combines supplied designer measurements/state bindings/Ghost Inspect values, a read-only foundations inventory lookup and prototype source at baseline `5f23b28e4733607da779421462beeaf182338bf4`. The inventory reports brand-primary hover #E2EEFE and Primary bg/brand-solid #155DFC; it does not verify the requested icon colors. No direct Figma or original screenshot inspection was performed. Private source documents/images are not copied into this page; diagrams are reconstructed and examples synthetic.
+Geometry retains the accepted Small/Square measurements. The implemented 16px slot and exported 14px immediate icon instance are distinct from the painted glyph bounds. Focus evidence comes from the authoritative Icon Button master, node `233:5486`. This update uses supplied evidence, without another Figma lookup or copying private source documents/screenshots; the diagram is reconstructed and the examples synthetic.
 
-Open decisions: exact icon/primary, icon/disabled, icon/brand-primary and icon/brand-disabled numbers; bg/primary-hover number; Ghost-primary outer shadow binding; SVG artwork/stroke fidelity and touch-target suitability. Medium/Large numeric radii and Round remain outside this batch.
+Remaining questions: exact SVG artwork and stroke fidelity, Tooltip specification, assistive-technology behavior and touch-target suitability. Medium, Large, Round and other Types remain reference-only; this pilot does not implement all 120 combinations. Pressed feedback remains provisional.
 
-This designer-owned handoff library is a limited, non-production reference, not the actual Joblogs design-system implementation. The library path is `/zoblocks-prototypes/storybook/`; the separate Data Grid prototype is `/zoblocks-prototypes/#/data-grid`. Only the stated Small/Square variants are implemented. Ghost-primary Disabled remains explicitly pending with its color specimen withheld until `icon/brand-disabled` has an exact verified value. These examples do not establish complete Figma parity or production acceptance.
+This designer-owned handoff library is a limited, non-production reference, not the actual Joblogs design-system implementation. The library path is `/zoblocks-prototypes/storybook/`; the separate Data Grid prototype is `/zoblocks-prototypes/#/data-grid`. Only the stated Small/Square variants are implemented. The Ghost-primary Disabled specimen now uses verified `icon/brand-disabled` (#8EC5FF). These examples do not establish complete Figma parity or production acceptance.

@@ -43,9 +43,9 @@ npm.cmd run typecheck-storybook
 npm.cmd run build-storybook
 ```
 
-Open `http://localhost:6006/?path=/docs/cs-01-icon-button--docs`. The native Docs page includes working Controls, anatomy, live geometry and minimal Filter/Sort examples. Only Small Square Ghost/Ghost-primary are coded. The opted-in reference uses the approved 6px Oxygen-local radius; existing application buttons retain their current appearance and behavior. Colors, icon art and focus fidelity are explicitly provisional.
+Open `http://localhost:6006/?path=/docs/cs-01-icon-button--docs`. The native Docs page includes working Controls, anatomy, live geometry and minimal Filter/Sort examples. Only Small Square Ghost/Ghost-primary are coded. The opted-in reference uses the approved 6px Oxygen-local radius; existing application buttons retain their current appearance and behavior. Oxygen color tokens and both Focused-state shadow layers are verified; icon artwork remains approximate.
 
-This designer-owned, non-production handoff library is not the actual Joblogs design-system implementation. Storybook output is isolated in ignored `storybook-static/`; its CSS is loaded only by Storybook. No private source images or Drive files are included. Ghost-primary Disabled remains pending: the exact `icon/brand-disabled` value is unresolved and its color specimen is withheld. Other color mappings, icon art, the Ghost-primary outer focus binding, tooltip design and touch-target suitability remain provisional. The full 120-variant matrix is reference-only.
+This designer-owned, non-production handoff library is not the actual Joblogs design-system implementation. Storybook output is isolated in ignored `storybook-static/`; its CSS is loaded only by Storybook. No private source images or Drive files are included. Ghost-primary Disabled renders the verified `icon/brand-disabled` value #8EC5FF. Tooltip design, assistive-technology behavior and touch-target suitability remain under review. The full 120-variant matrix is reference-only.
 
 Focused browser QA uses the existing external tooling convention:
 
@@ -96,7 +96,7 @@ Storybook's existing relative `./` base handles nested preview assets; the appli
 
 The single workflow uses `npm ci`, lint, Storybook type-check, combined build and dependency-free static artifact/path/content checks before upload. Full Chrome/Edge QA is local using existing external tooling. Pattern scans do not prove the absence of PHI or unknown secrets; source review remains required. No source maps, raw screenshots, evidence archives, environment files or private context belong in the public artifact.
 
-Gate 1 authorizes local preparation and validation only. Gate 2 requires explicit approval of the complete uncommitted CS-01/publication diff and commit scope. Pushing to `main` triggers publication automatically, so push/deployment approval is a separate gate. No workflow dispatch, push or release is authorized by local preparation. Before release the designer must choose whether to resolve the exact disabled token first or publish a limited pilot with the specimen explicitly pending.
+Gate 1 authorizes local preparation and validation only. Gate 2 requires explicit approval of the complete uncommitted CS-01/publication diff and commit scope. Pushing to `main` triggers publication automatically, so push/deployment approval is a separate gate. No workflow dispatch, push or release is authorized by local preparation.
 
 If a future approved publication breaks Pages, review a safe revert of the publication changes and redeploy through this same workflow, then retest the Data Grid route and behavior. The last verified app-only deployment is `5f23b28e4733607da779421462beeaf182338bf4`. Preserve intervening unrelated work; use reviewed revert commits, never reset or force-push. No rollback is performed during local preparation.
 
