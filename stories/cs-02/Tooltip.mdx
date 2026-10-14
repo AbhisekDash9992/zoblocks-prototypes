@@ -1,0 +1,66 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TooltipStories from './Tooltip.stories';
+import { Anatomy, GeometryTokens } from './ReferenceGuide';
+
+<Meta of={TooltipStories} />
+
+# Tooltip
+
+CS-02 · Designer-owned, non-production reference
+
+## Overview
+
+Label-only is the default and Figma-verified baseline. The supplied source is Oxygen Design System → ❖ Tooltip, node `317:890`: a standalone container with one TEXT child. This reference uses designer-supplied measurements; no private screenshots or source documents are included.
+
+## Playground
+
+Hover the actual button or use Tab / Shift+Tab. Enter and Space activate it. The accessible button name exists independently of the tooltip. Controls update the live example.
+
+<Canvas of={TooltipStories.LabelOnly} />
+<div className="cs02-controls" role="region" aria-label="Tooltip Controls" tabIndex={0}>
+  <Controls of={TooltipStories.LabelOnly} />
+</div>
+
+## Source and proposal distinction
+
+No shortcut slot or shortcut variant was verified in Figma. A shortcut hint is an optional proposed enhancement, never a requirement for all Tooltips. Show one only when the shortcut is implemented, active and useful in its context. Keep the label meaningful without it.
+
+The example below implements R to reset a nonzero demo count while focus is in its section. It ignores typing fields, editable content, composition, repeats and modified keys. The hint and `aria-keyshortcuts` are supplied only while that action is available. It does not establish a Data Grid shortcut or a production contract.
+
+<Canvas of={TooltipStories.ShortcutHintProposal} />
+
+## Anatomy
+
+<Anatomy />
+
+The diagram enlarges the label-only structure. Numbers and dashed padding guides are annotations. The optional proposal adds a hint only in that separate example; it is not a second verified Figma child.
+
+## Geometry and tokens
+
+<GeometryTokens />
+
+The 64 × 28px source example is Hug content, not a width to impose on every label. Height is 20px text plus 8px vertical padding for a single line. Values are scoped to `.dg-tooltip.cs02-tooltip-reference` on the actual portal; existing consumers retain their styling.
+
+## Behavior
+
+The shared Data Grid Tooltip opens on hover or focus. Pointer leave, blur, pointer down, click, Enter, Space and captured scroll dismiss it. Escape dismisses while its trigger has focus. Popup-open suppression persists through programmatic focus restoration; a new hover or blur/focus interaction re-arms it. The harness below demonstrates this existing behavior with a synthetic disclosure.
+
+<Canvas of={TooltipStories.PopupSuppression} />
+
+## Usage
+
+Use a brief, specific label for a familiar action. Keep essential instructions and clinical meaning visible in the surrounding interface. Tooltips contain no interactive controls. Avoid long explanations; the limited longer-label example checks wrapping without proposing a rich-content variant.
+
+<Canvas of={TooltipStories.LongLabel} />
+
+## Accessibility
+
+The trigger is a native button with an independent accessible name. The open portal has `role="tooltip"`; the shared implementation adds `aria-describedby` while visible and removes it on dismissal. Use keyboard focus as well as hover to inspect the example. A shortcut is supplemental, and the proposed action remains available by button.
+
+Existing limitations remain: hover-only Escape is not handled when focus is elsewhere, the tooltip is pointer-inert and cannot be hovered, and existing description attributes are not preserved by the shared implementation. These checks do not establish full accessibility conformance. Screen-reader announcement, touch suitability and hoverable-content expectations need human review.
+
+## Open issues
+
+Tooltip placement uses its rendered dimensions. It normally appears below the trigger with a 6px gap, adjusts horizontal alignment near viewport edges while preserving visual association with the trigger, and flips above when there is insufficient space below. When neither side fully fits, a viewport-constrained fallback is used where feasible. Exceptionally large tooltips may still overlap the trigger or exceed the available viewport.
+
+Shortcut visuals and semantics remain a proposal. Long-text limits, touch interaction and assistive-technology behavior remain unresolved. CS-01 and the separate Data Grid route retain their accepted appearance and behavior.
