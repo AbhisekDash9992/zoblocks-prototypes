@@ -10,21 +10,44 @@
 }
 /* Shortcut spacing is a proposal; no shortcut slot was verified in Figma. */
 .dg-tooltip.cs02-tooltip-reference.dg-tooltip-shortcut { gap: 12px; }
-.dg-tooltip.cs02-tooltip-reference .dg-tooltip-key { font: inherit; }
+.dg-tooltip.cs02-tooltip-reference .dg-tooltip-label { min-width: 0; }
+.dg-tooltip.cs02-tooltip-reference .dg-tooltip-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  height: 20px;
+  min-width: 20px;
+  max-width: 100%;
+  padding: 1px 6px;
+  border: 1px solid #6A7282;
+  border-radius: 4px;
+  background: transparent;
+  color: #EAECF0;
+  font: 500 12px/16px 'DM Sans', system-ui, sans-serif;
+}
 
 /* Storybook presentation, separate from the component reference. */
 .cs02-reference { color: #101828; font: 14px/1.5 'DM Sans', system-ui, sans-serif; box-sizing: border-box; }
 .cs02-reference *, .cs02-reference *::before, .cs02-reference *::after { box-sizing: border-box; }
 .cs02-panel { max-width: 760px; min-width: 0; padding: 24px; border: 1px solid #d0d5dd; border-radius: 12px; background: white; }
 .cs02-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.cs02-reference .cs02-action { padding: 6px 10px; border: 1px solid #d0d5dd; border-radius: 6px; color: #101828; background: white; font: inherit; cursor: pointer; }
-.cs02-reference .cs02-action:focus-visible { outline: 2px solid #101828; outline-offset: 2px; }
-.cs02-reference .cs02-action:disabled { opacity: .5; cursor: default; }
+.cs02-icon-context { display: inline-flex; }
+.cs02-safety-test { margin-top: 24px; padding-top: 16px; border-top: 1px solid #EAECF0; }
+.cs02-safety-test label { font-weight: 500; }
+.cs02-safety-test p { margin: 6px 0 10px; color: #475467; }
 .cs02-reference input { max-width: 100%; font: inherit; }
 .cs02-muted { color: #475467; }
-.cs02-anatomy { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 16px; align-items: center; }
+.cs02-anatomy { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); max-width: 1000px; gap: 24px; align-items: center; }
 .cs02-anatomy svg { display: block; width: 100%; height: auto; }
+.cs02-anatomy-diagram { max-width: 440px; }
+.cs02-leader { fill: none; stroke: #4A5565; stroke-width: 1; }
+.cs02-anchor, .cs02-number-marker { fill: #4A5565; }
+.cs02-number { fill: white; font-size: 18px; }
+.cs02-label-guide { fill: none; stroke: #6A7282; stroke-width: 1; stroke-dasharray: 4 3; }
 .cs02-legend { padding-left: 20px; }
+.cs02-legend li { margin: 6px 0; }
 .cs02-reference table { width: 100%; border-collapse: collapse; font: inherit; }
 .cs02-reference th, .cs02-reference td { padding: 8px; text-align: left; border-bottom: 1px solid #d0d5dd; overflow-wrap: anywhere; }
 .cs02-controls { max-width: 100%; overflow-x: auto; }
