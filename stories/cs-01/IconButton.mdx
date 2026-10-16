@@ -3,7 +3,11 @@ import * as IconButtonStories from './IconButton.stories';
 import * as ContextStories from './IconButtonContext.stories';
 import { Anatomy, Geometry, VariantsTable, TokensTable } from './ReferenceGuide';
 
+import { TokenKey } from '../cs-01/ReferenceTokens';
+
 <Meta of={IconButtonStories} />
+
+<div className="zw-docs cs01-docs">
 
 # Icon Button
 
@@ -22,7 +26,7 @@ CS-01 · Designer workspace · Small / Square reference
     <p className="cs01-evidence-label">Still under review</p>
     <div className="cs01-badge-row">
       <span className="cs01-badge">Approximate icon artwork</span>
-      <span className="cs01-badge">Tooltip specification</span>
+      <span className="cs01-badge">Tooltip accessibility</span>
       <span className="cs01-badge">Accessibility / touch suitability</span>
     </div>
   </div>
@@ -37,7 +41,7 @@ Use an Icon Button for a compact, familiar action when its purpose remains clear
 Change the working Controls below. Small and Square are fixed. Hover the actual button or use Tab and Shift+Tab to see keyboard focus; Enter and Space activate it.
 
 <Canvas of={IconButtonStories.PlaygroundExample} />
-<div className="cs01-controls" role="region" aria-label="Icon Button Controls" tabIndex={0}>
+<div className="cs01-controls zw-docs-controls zw-docs-motion" role="region" aria-label="Icon Button Controls" tabIndex={0}>
   <Controls of={IconButtonStories.PlaygroundExample} />
 </div>
 
@@ -45,33 +49,46 @@ Change the working Controls below. Small and Square are fixed. Hover the actual 
 
 <Anatomy />
 
-## Geometry
+## Geometry and Tokens
 
-<Geometry />
+<TokenKey />
+
+<div className="zw-docs-table"><Geometry /></div>
 
 Small is Fixed in the supplied evidence. The implemented icon slot is 16px; the exported immediate icon instance is 14px. The Filter preview uses a 14px SVG box inside that slot, with approximate Lucide artwork. Radius is the Oxygen-local `radius/md` value of 6px; padding is 4px. Existing Data Grid buttons retain their 4px radius.
 
-## Types and states
+### Token mappings
 
-Type describes the visual family. State describes interaction. Committed criteria determine the contextual Type; opening an editor or hovering a button does not mean applied.
+<div className="zw-docs-table"><TokensTable /></div>
+
+## Properties, Variants and States
+
+**Type** describes the visual family. **State** describes interaction. Committed criteria determine the contextual **Type**; opening an editor or hovering a button does not mean applied.
 
 Both Types use transparent Default and Disabled surfaces. Hover and keyboard Focused use their matching hover background. The verified token values and focus layers are listed below; the Ghost-primary Disabled icon is rendered in `icon/brand-disabled` (#8EC5FF). Disabled controls retain native behavior with no hover background or focus ring.
 
 <Canvas of={IconButtonStories.States} />
 
-<VariantsTable />
+<div className="zw-docs-table"><VariantsTable /></div>
 
-The full source matrix is 2 shapes × 5 Types × 3 Sizes × 4 States = 120 combinations. Medium was observed Fixed; Large was observed Hug. Neither sizing mode nor their numeric radii is implemented here. Pressed feedback is provisional browser interaction feedback, not an additional verified Figma State.
+<details>
+<summary>Source scope · 120 combinations</summary>
 
-## Data Grid context
+The full source matrix is 2 shapes × 5 Types × 3 Sizes × 4 States = 120 combinations. Medium was observed Fixed; Large was observed Hug. Neither sizing mode nor their numeric radii is implemented here. Pressed feedback is provisional browser interaction feedback, not an additional source **State**.
+
+</details>
+
+## Usage and Contextual Examples
+
+### Data Grid context
 
 ### Filter
 
-This small simulation illustrates committed versus draft criteria. It does not implement the complete Filter editor. Visible status text supplements the Type color.
+This small simulation illustrates committed versus draft criteria. It does not implement the complete Filter editor. Visible status text supplements the **Type** color.
 
-The committed criterion and effective Type remain visible. The checkbox updates only the draft; Apply is unavailable when there is no difference to commit. Check and Apply to see Ghost-primary, reopen and Cancel to preserve the commit, or uncheck and Apply to return to Ghost.
+The committed criterion and effective **Type** remain visible. The checkbox updates only the draft; Apply is unavailable when there is no difference to commit. Check and Apply to see Ghost-primary, reopen and Cancel to preserve the commit, or uncheck and Apply to return to Ghost.
 
-The designer specifies **Round** delete Icon Buttons in Simple Filter. That contextual Shape is reference-only in this Small/Square pilot; no existing Filter consumer is migrated.
+The designer specifies **Round** delete Icon Buttons in Simple Filter. That contextual **Shape** is reference-only in this Small/Square pilot; no existing Filter consumer is migrated.
 
 <Canvas of={ContextStories.FilterContext} />
 
@@ -81,15 +98,20 @@ The harness below reuses the actual Sort editor. Its existing Delete Sort action
 
 Sort Editor Delete Sort uses **Square**, distinct from Simple Filter’s Round delete usage.
 
-The example initially has two committed editor rules, so toggling direct header sort leaves Ghost-primary. Use the review preset “Use zero editor rules” to isolate header-only sorting: Off gives Ghost, On gives Ghost-primary. Counts, direct-sort status and effective Type are reported independently. Presets are disabled during editing to preserve the actual editor’s draft session.
+<details>
+<summary>Implementation notes · Sort editor harness</summary>
+
+The example initially has two committed editor rules, so toggling direct header sort leaves Ghost-primary. Use the review preset “Use zero editor rules” to isolate header-only sorting: Off gives Ghost, On gives Ghost-primary. Counts, direct-sort status and effective **Type** are reported independently. Presets are disabled during editing to preserve the actual editor’s draft session.
 
 The editor sits in its normal criteria host surface with a complete border. Only the Storybook host width and selector layout adapt here; on narrow previews controls wrap within the workspace while retaining 32px selector height and single-line selected text.
+
+</details>
 
 <Canvas of={ContextStories.SortAndDelete} />
 
 The actual toolbar reads `advancedSnapshot.rows` / `simpleFilters` for Filter and `sortSnapshot` / `directSort` for Sort. Clear sort clears editor criteria while direct header sorting remains independent. Apply, Cancel and last-row starter behavior are preserved by the existing editor.
 
-## Usage guidance
+### Practical guidance
 
 - Use a recognizable icon for a compact action, with a specific accessible name such as “Filter” or “Remove Sort.”
 - Use Ghost-primary when matching criteria are committed. Provide contextual text or a summary so applied status is understandable beyond color.
@@ -98,26 +120,37 @@ The actual toolbar reads `advancedSnapshot.rows` / `simpleFilters` for Filter an
 
 ## Accessibility
 
-The reference reuses a native button. The accessible label remains present when tooltips are disabled; SVG and slot are decorative. Native disabled buttons cannot activate and are skipped by sequential keyboard navigation.
+**Limitations:** the 24px control needs touch-target review; tooltips are pointer-inert, and hover-only Escape requires trigger focus. Human assistive-technology review remains open.
 
-Use Tab / Shift+Tab to move focus, Enter / Space to activate, and Escape while the trigger is focused to dismiss its tooltip. The existing tooltip opens on hover or focus and dismisses on pointer leave, blur, click, activation keys or scroll. A hover-only tooltip does not receive Escape when keyboard focus is elsewhere; move the pointer away to dismiss it. It uses `role="tooltip"` and an open-time description relationship. Disabled controls cannot receive ordinary keyboard focus; their tooltip must never contain essential instructions.
+- **Semantics:** native button; the accessible label remains when tooltips are disabled. SVG and slot are decorative.
+- **Keyboard:** Tab / Shift+Tab moves focus; Enter / Space activates. Native disabled buttons cannot activate and are skipped by sequential navigation.
+- **Tooltip:** opens on hover/focus; pointer leave, blur, click, activation keys and scroll dismiss it. Escape dismisses while the trigger is focused. Its open-time `role="tooltip"` description is supplemental; essential instructions must remain visible.
+- **Review:** description preservation, assistive technology and hoverable-content behavior remain unresolved.
 
-The reused tooltip is pointer-inert and does not support hovering its content. Description preservation and assistive-technology behavior need human review. This batch does not modify the tooltip implementation or claim full accessibility conformance.
+See CS-02 for the label-only Tooltip reference. Existing Data Grid consumers, including Remove Sort, retain their current appearance and behavior.
 
-Tooltip visuals, including Remove Sort, are pending their own component specification. Existing hover/focus/dismissal behavior and the accessible name “Remove Sort” are retained.
+<details>
+<summary>Focus appearance and annotation details</summary>
 
-A 24px visual control does not certify touch-target suitability. Ghost keyboard focus uses solid white 2px inner and #4A5565 4px outer shadows, with bg/primary-hover even without hover. The inherited outline is suppressed to avoid a third ring. Forced-colors mode uses a solid system-color Highlight outline because shadows can be suppressed by the browser. Disabled controls have no hover/focus background or ring.
+Ghost keyboard focus uses solid white 2px inner and #4A5565 4px outer shadows, with bg/primary-hover even without hover. Ghost-primary uses white 2px inner and #155DFC 4px outer shadows. Both appearances are established by master `233:5486`; semantic effect aliases remain unresolved. The inherited outline is suppressed to avoid a third ring. Forced-colors uses a solid system Highlight outline; disabled buttons have no hover/focus background or ring.
 
-Ghost-primary uses solid white 2px inner and #155DFC 4px outer shadows. Both focus layers are verified from the authoritative Figma Icon Button master, node `233:5486`, using the evidence supplied for this update. The Ghost anatomy diagram depicts its neutral ring. External numbered leaders connect to feature endpoints; dashed/dotted slot and glyph-box guides are construction only. Keyboard checks remain separate from visual and assistive-technology review.
+The anatomy shows the neutral ring. Leaders end on the stated features; dashed/dotted slot and glyph-box guides are construction only. Keyboard checks remain separate from human accessibility review.
 
-## Tokens and evidence
+</details>
 
-<TokensTable />
+## Implementation notes
+
+<details>
+<summary>Source mappings, scope and provenance</summary>
 
 The six Oxygen color tokens and both Focused-state shadow layers are verified values supplied for this update. They are implemented only in the CS-01 reference CSS; no global Data Grid or production token definitions are changed.
 
 Geometry retains the accepted Small/Square measurements. The implemented 16px slot and exported 14px immediate icon instance are distinct from the painted glyph bounds. Focus evidence comes from the authoritative Icon Button master, node `233:5486`. This update uses supplied evidence, without another Figma lookup or copying private source documents/screenshots; the diagram is reconstructed and the examples synthetic.
 
-Remaining questions: exact SVG artwork and stroke fidelity, Tooltip specification, assistive-technology behavior and touch-target suitability. Medium, Large, Round and other Types remain reference-only; this pilot does not implement all 120 combinations. Pressed feedback remains provisional.
+Remaining questions: exact SVG artwork and stroke fidelity, assistive-technology behavior and touch-target suitability. Medium, Large, Round and other Types remain reference-only; this pilot does not implement all 120 combinations. Pressed feedback remains provisional.
 
-This designer-owned handoff library is a limited, non-production reference, not the actual Joblogs design-system implementation. The library path is `/zoblocks-prototypes/storybook/`; the separate Data Grid prototype is `/zoblocks-prototypes/#/data-grid`. Only the stated Small/Square variants are implemented. The Ghost-primary Disabled specimen now uses verified `icon/brand-disabled` (#8EC5FF). These examples do not establish complete Figma parity or production acceptance.
+This designer-owned handoff library is a limited, non-production reference. The library path is `/zoblocks-prototypes/storybook/`; the separate Data Grid prototype is `/zoblocks-prototypes/#/data-grid`. Only the stated Small/Square variants are implemented. The Ghost-primary Disabled specimen now uses verified `icon/brand-disabled` (#8EC5FF). These examples do not establish complete Figma parity or production acceptance.
+
+</details>
+
+</div>

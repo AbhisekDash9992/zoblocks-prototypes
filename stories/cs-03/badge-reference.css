@@ -1,0 +1,124 @@
+/* CS-03 only: designer-owned reference, no shared token or consumer changes. */
+.cs03-reference { box-sizing: border-box; color: #101828; font: 14px/1.5 'DM Sans', system-ui, sans-serif; min-width: 0; }
+.cs03-reference *, .cs03-reference *::before, .cs03-reference *::after { box-sizing: border-box; }
+.cs03-badge {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  border: 0;
+  background: var(--cs03-fill);
+  color: var(--cs03-foreground);
+  font: 500 11px/16px 'DM Sans', system-ui, sans-serif;
+  letter-spacing: 0;
+}
+.cs03-badge-medium { min-height: 24px; padding: 4px 10px; }
+.cs03-badge-round { border-radius: 9999px; }
+/* Provisional 1px inset painted edge: preserves supplied padding and height. */
+.cs03-badge-outlined { box-shadow: inset 0 0 0 1px var(--cs03-border); }
+.cs03-badge-label { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.cs03-badge-icon { display: block; flex: 0 0 12px; width: 12px; height: 12px; color: inherit; stroke: currentColor; }
+/* Component-specific Oxygen semantic proposal; Figma Close bindings are unverified. */
+.cs03-badge[data-cs03-color="Default"] { --cs03-close-rest: #4A5565; --cs03-close-hover: #101828; }
+.cs03-badge[data-cs03-color="Info"] { --cs03-close-rest: #2B7FFF; --cs03-close-hover: #1447E6; }
+.cs03-badge[data-cs03-color="Success"] { --cs03-close-rest: #008236; --cs03-close-hover: #016630; }
+.cs03-badge[data-cs03-color="Warning"] { --cs03-close-rest: #E17100; --cs03-close-hover: #BB4D00; }
+.cs03-badge[data-cs03-color="Danger"] { --cs03-close-rest: #FB2C36; --cs03-close-hover: #C10007; }
+.cs03-badge[data-cs03-type="Solid"] { --cs03-close-rest: rgb(255 255 255 / 85%); --cs03-close-hover: #FFFFFF; }
+.cs03-badge-close { color: var(--cs03-close-rest); }
+/* Local native button; no expanded hit area. State specificity outranks Data Grid hover. */
+.cs03-reference .cs03-remove { display: inline-flex; flex: 0 0 12px; align-items: center; justify-content: center; width: 12px; height: 16px; margin: 0; padding: 0; border: 0; border-radius: 2px; background: transparent; box-shadow: none; color: var(--cs03-close-rest); line-height: 1; cursor: pointer; }
+.cs03-reference .cs03-badge .cs03-remove:is(:hover, :focus-visible, :active) { background: transparent; box-shadow: none; }
+.cs03-reference .cs03-remove:is(:hover, :focus-visible) { color: var(--cs03-close-hover); }
+.cs03-remove .cs03-badge-close { color: inherit; }
+.cs03-reference .cs03-remove:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.cs03-removal-status { margin: 8px 0; color: #4A5565; }
+.cs03-removal-status:empty { margin: 0; }
+.cs03-reference .cs03-demo-button { padding: 6px 10px; border: 1px solid #D1D5DC; border-radius: 6px; background: white; color: #101828; font: inherit; cursor: pointer; }
+.cs03-demo-button:focus-visible, .cs03-example-preview:focus-visible { outline: 2px solid #1447E6; outline-offset: 2px; }
+.cs03-badge-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; padding: 0; list-style: none; }
+.cs03-badge-list li { min-width: 0; max-width: 100%; }
+.cs03-optional-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.cs03-option-card { min-width: 0; padding: 16px; border: 1px solid #D1D5DC; border-radius: 8px; }
+.cs03-option-card h3 { margin: 0 0 12px; font: 500 14px/20px 'DM Sans', system-ui, sans-serif; }
+.cs03-close-note { color: #4A5565; }
+.cs03-panel { max-width: 900px; min-width: 0; padding: 24px; background: white; border: 1px solid #D1D5DC; border-radius: 12px; overflow-wrap: anywhere; }
+.cs03-panel p:last-child { margin-bottom: 0; }
+.cs03-muted, .cs03-property-description { color: #4A5565; }
+.cs03-empty { margin: 0; padding: 8px; border-left: 3px solid #6A7282; color: #4A5565; }
+.cs03-evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.cs03-evidence section { padding: 16px; border: 1px solid #D1D5DC; border-radius: 8px; }
+.cs03-evidence h3, .cs03-type-group h3 { margin: 0 0 12px; font-size: 14px; }
+.cs03-evidence p { margin-bottom: 0; }
+.cs03-gallery { display: grid; gap: 16px; }
+.cs03-type-group { min-width: 0; padding: 16px; border: 1px solid #D1D5DC; border-radius: 8px; }
+.cs03-color-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.cs03-variant-card { min-width: 0; }
+.cs03-variant-card h4 { margin: 0 0 8px; color: #4A5565; font: 500 12px/18px 'DM Sans', system-ui, sans-serif; }
+.cs03-anatomy { display: grid; grid-template-columns: minmax(0, 480px) minmax(0, 1fr); gap: 24px; align-items: center; }
+.cs03-anatomy-diagram { display: block; width: 100%; height: auto; max-width: 480px; }
+.cs03-leader { fill: none; stroke: #4A5565; stroke-width: 1; }
+.cs03-anchor, .cs03-number-marker { fill: #4A5565; }
+.cs03-number { fill: white; font: 500 18px 'DM Sans', sans-serif; }
+.cs03-label-guide { fill: none; stroke: #6A7282; stroke-width: 1; stroke-dasharray: 4 3; }
+.cs03-legend { margin: 0; padding-left: 22px; }
+.cs03-legend li { margin: 8px 0; }
+.cs03-table-wrap { max-width: 100%; }
+.cs03-reference.cs03-table-wrap table { table-layout: fixed; width: 100%; border-collapse: collapse; font: inherit; }
+.cs03-reference.cs03-table-wrap table caption { text-align: left; font-weight: 500; margin-bottom: 12px; }
+/* Outrank native Docs table defaults within this CS-03 wrapper only. */
+.cs03-reference.cs03-table-wrap table th, .cs03-reference.cs03-table-wrap table td { padding: 10px 8px; text-align: left; vertical-align: top; border-bottom: 1px solid #D1D5DC; overflow-wrap: anywhere; font: 400 14px/1.5 'DM Sans', system-ui, sans-serif; }
+.cs03-reference.cs03-table-wrap table th { font-weight: 500; }
+.cs03-controls { max-width: 100%; overflow-x: auto; }
+/* CS-03 Docs presentation only; no Badge geometry or shared theme overrides. */
+.cs03-docs { color: #101828; font: 14px/1.6 'DM Sans', system-ui, sans-serif; min-width: 0; }
+.cs03-docs > p, .cs03-docs > details { max-width: 76ch; }
+.cs03-docs strong { font-weight: 600; color: #101828; }
+.cs03-details { margin: 20px 0; padding: 12px 0; border-block: 1px solid #E5E7EB; }
+.cs03-docs summary, .cs03-evidence summary { cursor: pointer; font-weight: 600; color: #344054; }
+.cs03-docs summary:focus-visible { outline: 2px solid #1447E6; outline-offset: 3px; }
+.cs03-details > p { margin: 12px 0; }
+.cs03-docs .cs03-properties th, .cs03-docs .cs03-properties td { white-space: normal; }
+.cs03-playground { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 0.9fr); gap: 24px; }
+.cs03-playground h3 { margin: 0 0 16px; font: 600 14px/20px 'DM Sans', system-ui, sans-serif; }
+.cs03-specimen, .cs03-configuration { min-width: 0; }
+.cs03-playground-badge { display: flex; align-items: center; min-height: 112px; padding: 24px 0; }
+.cs03-playground-badge > div { max-width: 100%; min-width: 0; }
+.cs03-configuration { padding-left: 24px; border-left: 1px solid #E5E7EB; }
+.cs03-playground .cs03-summary-caption { margin: 12px 0 8px; color: #4A5565; font-size: 12px; }
+.cs03-config { display: grid; gap: 8px; margin: 0; }
+.cs03-config > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; }
+.cs03-config dt { font-weight: 600; color: #344054; }
+.cs03-config dd { margin: 0; overflow-wrap: anywhere; }
+.cs03-config-fixed { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cs03-config-fixed > div { display: block; }
+.cs03-playground-notes { grid-column: 1 / -1; border-top: 1px solid #E5E7EB; padding-top: 12px; }
+.cs03-playground-notes p { margin: 8px 0; }
+.cs03-icon-context { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.cs03-icon-context section { min-width: 0; }
+.cs03-icon-context h3 { margin: 0 0 12px; font-size: 14px; }
+.cs03-icon-context p { margin: 12px 0; }
+.cs03-view-toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs03-reference .cs03-view-toolbar .cs03-view-choice, .cs03-reference .cs03-view-toolbar .cs03-view-choice:is(:hover, :active, :focus-visible) { display: inline-flex; margin: 0; padding: 0; border: 0; border-radius: 9999px; background: transparent; box-shadow: none; cursor: pointer; }
+.cs03-reference .cs03-view-choice:focus-visible { outline: 2px solid #4A5565; outline-offset: 3px; }
+.cs03-context-note { grid-column: 1 / -1; }
+/* Native Controls retain their own keyboard-scrollable region on narrow Docs. */
+@media (max-width: 760px) {
+  .cs03-playground, .cs03-icon-context { grid-template-columns: minmax(0, 1fr); }
+  .cs03-configuration { border-left: 0; border-top: 1px solid #E5E7EB; padding: 16px 0 0; }
+  .cs03-evidence, .cs03-anatomy { grid-template-columns: minmax(0, 1fr); }
+  .cs03-color-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cs03-optional-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .cs03-config > div { grid-template-columns: 70px minmax(0, 1fr); gap: 8px; }
+  .cs03-panel { padding: 16px; }
+  .cs03-color-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs03-optional-grid { grid-template-columns: minmax(0, 1fr); }
+  .cs03-reference.cs03-table-wrap table th, .cs03-reference.cs03-table-wrap table td { padding: 8px 4px; font-size: 12px; }
+}
+@media (max-width: 360px) { .cs03-color-grid { grid-template-columns: minmax(0, 1fr); } }

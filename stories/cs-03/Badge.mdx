@@ -1,0 +1,193 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as BadgeStories from './Badge.stories';
+import { Anatomy, CloseTokens, ColorReference, ContrastAudit, Evidence, GeometryTypography } from './ReferenceGuide';
+
+import { TokenKey } from '../cs-01/ReferenceTokens';
+
+<Meta of={BadgeStories} />
+
+<div className="zw-docs cs03-docs">
+
+# Badge
+
+CS-03 · Designer-owned, non-production reference
+
+## Overview
+
+A Badge presents a short informational label. Explore **15 Type × Color combinations** with optional leading artwork and **Close**. The initial Playground and comparison matrix are text-only.
+
+<details className="cs03-details">
+<summary>Source evidence · reference scope</summary>
+
+A Badge presents a short, visible informational label. This reference implements all 15 **Type** × **Color** combinations for fixed **Shape**: Round and **Size**: Medium through one local component, with optional leading and trailing icon visuals. The comparison matrix and initial Playground remain text-only. This defines no production ZoBlocks API, action, clinical interpretation or Data Grid migration. Only synthetic examples and verified source measurements are used.
+
+</details>
+
+<Evidence />
+
+## Playground
+
+Use the five native Controls below the specimen. **Type** and **Color** are independent; **Icon start** and **Close** initially default to false. **Shape** and **Size** stay fixed.
+
+<Canvas of={BadgeStories.PlaygroundExample} />
+<div className="cs03-controls zw-docs-controls zw-docs-motion" role="region" aria-label="Badge Controls" tabIndex={0}>
+  <Controls of={BadgeStories.PlaygroundExample} />
+</div>
+
+<div className="cs03-reference cs03-table-wrap cs03-properties zw-docs-table">
+
+<table>
+  <caption>Badge properties · fixed scope and native Controls</caption>
+  <thead><tr><th scope="col">Property</th><th scope="col">Scope</th><th scope="col">Values / purpose</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><strong>Shape</strong></th><td>Fixed</td><td>Round; Square deferred</td></tr>
+    <tr><th scope="row"><strong>Size</strong></th><td>Fixed</td><td>Medium; Small deferred</td></tr>
+    <tr><th scope="row"><strong>Type</strong></th><td>Native Control</td><td>Outlined, Flat, Solid</td></tr>
+    <tr><th scope="row"><strong>Color</strong></th><td>Native Control</td><td>Default, Info, Success, Warning, Danger</td></tr>
+    <tr><th scope="row"><strong>Label</strong></th><td>Native Control</td><td>Meaningful text; default “Tag Label”</td></tr>
+    <tr><th scope="row"><strong>Icon start</strong></th><td>Native Control</td><td>Optional 12px leading visual; default false</td></tr>
+    <tr><th scope="row"><strong>Close</strong></th><td>Native Control</td><td>Fixed X removal button; default false</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+**Accessibility limitation:** the **Close** button is **12 × 16px**. Its compact target needs review; full touch-target conformance is not claimed.
+
+<details className="cs03-details">
+<summary>Technical details · Controls and label resilience</summary>
+
+Use the native **Type**, **Color**, **Label**, **Icon start** and **Close** Controls. **Type** (Outlined, Flat, Solid) and **Color** (Default, Info, Success, Warning, Danger) update the same Badge independently. Both Boolean Controls initially default to false; toggling them retains **Type**, **Color** and Label. The default is text-only **Round / Outlined / Medium / Default**, with **Tag Label**. **Shape**: Round and **Size**: Medium are fixed and shown near the preview. The Badge body remains informational; enabling **Close** adds a native removal button.
+
+An empty or whitespace-only label replaces the Badge with visible explanatory feedback. Long labels wrap within the available width and can increase height; this is a local resilience choice, not verified source multiline behavior.
+
+Storybook's native selects also provide their standard “Choose option…” entries. Clearing **Type** returns to Outlined; clearing **Color** returns to Default. These are host Control placeholders, not additional source values.
+
+</details>
+
+- **Remove:** click X or focus **Remove [Badge label]** and press Enter or Space. Confirmation and **Restore Badge** appear.
+- **Restore:** uses current Controls; changing Controls does not restore implicitly.
+- **Focus:** moves to Restore after removal, then to X after restoration, or the preview group when Close is off.
+
+## Properties, Variants and States
+
+### Round / Medium combination matrix
+
+<Canvas of={BadgeStories.VariantMatrix} />
+
+Every specimen uses the same reference implementation. Each **Type** group presents all five Colors in the same order. All 15 combinations are **Shape**: Round / **Size**: Medium; Small and Square remain deferred.
+
+## Optional icon visuals
+
+<Canvas of={BadgeStories.OptionalContentReference} />
+
+Four optional Boolean configurations, with the same **24px** normal height and **12px** icon boxes. No extra **Type**/**Color** axes or **State** property.
+
+**Artwork caveat:** SquareDashed and X are approximate Lucide illustrations; original artwork and library bindings remain unverified.
+
+<details className="cs03-details">
+<summary>Source evidence · optional icon geometry</summary>
+
+These four configurations are optional Boolean content, not new **Type**/**Color** axes or a **State** property. Source evidence from 63 enabled contextual instances, including 56 with both icons on, supports 12 × 12px icon instance boxes, a 16px text line box, 4px between visible adjacent elements, center alignment, 24px Medium height and 4px vertical / 10px horizontal padding. Width follows content; omitting an icon also omits its adjacent gap. Enabled source examples cover Flat/Default and Outlined/Solid Info; this designer-approved local reference applies that geometry across the 15 combinations without claiming universal source artwork parity.
+
+</details>
+
+<details className="cs03-details">
+<summary>Technical details · local renderer and artwork</summary>
+
+The local renderer accepts optional `iconStart`, `close`, `leadingIcon` and `onRemove` properties solely for this Storybook reference. Parents own whether a Badge is displayed; the callback requests removal and React state removes the whole Badge. Static specimens without a callback do not expose a dead button. **SquareDashed** is a neutral illustrative leading default, not the meaning of every application Badge. The leading Lucide component can be replaced for a coherent context. The trailing artwork is always **X**. No icon-library dropdown is added to Controls.
+
+Both SVGs use currentColor and decorative, non-focusable 12px boxes. Their 24-unit Lucide viewBox and strokeWidth 2 yield approximately 1px rendered strokes. Lucide artwork is a designer-approved approximation; original Figma artwork, painted glyph bounds, library identity and complete paths remain unverified. The SVG box is not a 16px wrapper or the text line box.
+
+</details>
+
+**Removal is designer-approved behavior, not verified from the original Figma prototype.** The **Close**-only and both-enabled examples each support removal and Restore. Only the native X button has pointer hover feedback and visible keyboard focus; the informational Badge body has neither click behavior nor clickable styling. No animation or Figma **State** variant is added.
+
+### Close color proposal
+
+<CloseTokens />
+
+## Removable Badge group
+
+<Canvas of={BadgeStories.RemovableBadgeGroup} />
+
+- Each X removes only its synthetic Badge; **Reset Badges** restores all three.
+- Focus goes to the next X, the previous X when removing the last position, or Reset when empty.
+- A separate polite confirmation reports removal. No Data Grid state or clinical behavior changes.
+
+## Anatomy
+
+<Anatomy />
+
+Numbered markers, leaders and line-box guides are schematic annotations. They identify visual features without inventing source child nodes or an underlying Figma layer tree. The 5× schematic enlarges Medium height, padding and typography; width is illustrative and is not the supplied 69px example width.
+
+## Geometry and Tokens
+
+<TokenKey />
+
+<div className="zw-docs-table"><GeometryTypography /></div>
+
+DM Sans is reused from the existing bundled font. No shared typography or tokens change. Content-based width intentionally follows the label; the source example widths are evidence about those examples only.
+
+### Color and border reference
+
+<div className="zw-docs-table"><ColorReference /></div>
+
+The fills and border colors above are verified source root values. **Every local foreground is PROVISIONAL; its Figma value and variable binding are unverified.** Source border weight/alignment is also unverified. All five Outlined colors use a disclosed local 1px inset painted edge, preserving the supplied padding and single-line height. Flat and Solid have no border. The purple bounding box in Figma is a selection indicator, not a Badge border.
+
+### Text contrast — 15 combinations
+
+<div className="zw-docs-table zw-docs-table-scroll" role="region" aria-label="Badge text contrast" tabIndex={0}><ContrastAudit /></div>
+
+### Source variant scope
+
+**Implemented:** 15 Round / Medium combinations. **Deferred:** Small and Square, accounting for the other 45 source combinations.
+
+<details className="cs03-details">
+<summary>Source evidence · property model and provenance</summary>
+
+The inspected root is a COMPONENT_SET with properties ordered as in Figma: **Shape**, **Type**, **Size**, **Color**, **Icon start**, **Close**. **Shape** (Round, Square), **Type** (Outlined, Flat, Solid), **Size** (Medium, Small), and **Color** (Default, Info, Success, Warning, Danger) produce **2 × 3 × 2 × 5 = 60 source visual variants**. Source defaults are Round / Outlined / Medium / Default.
+
+The current implementation exposes independent **Type** and **Color** Controls for **15 Round / Medium combinations**. **Shape** and **Size** are fixed, not misleading working Controls. Small and Square are source evidence only and remain deferred. B-01 through B-09 belong to the previous local QA pilot, not the current property model.
+
+Both source Boolean properties, **Icon start** and **Close**, default to false. They control optional content on the same local renderer. Enabled instance layout is supported by the additional evidence described above; original icon artwork/library bindings remain unverified. The designer separately approved removal of the whole displayed Badge via **Close**. This behavior is not Figma prototype evidence, and Boolean content does not multiply the 60 source visual variants.
+
+There is **no verified State property** in the source Badge. Hover and focus feedback belong to the approved native removal affordance, not to additional Figma Hover, Focused, Active or Disabled Badge variants.
+
+</details>
+
+## Usage and Contextual Examples
+
+Use a brief, specific label that conveys its meaning without color, such as “Import complete” or “Needs review.” Pair a Badge with nearby context that explains what it describes. Keep actions in separately specified controls. Avoid ambiguous color-only labels, essential instructions hidden in a Badge, or inferred clinical thresholds.
+
+<Canvas of={BadgeStories.ContextualExamples} />
+
+These accepted examples use the same refactored **Type** and **Color** properties; they do not define application workflows or remap existing healthcare semantics.
+
+### Contextual Usage
+
+<Canvas of={BadgeStories.ContextualIconExamples} />
+
+**Filter:** the accepted Funnel icon reinforces an informational label.
+
+**View:** selected/current items use Round / Flat / Info; inactive items use Round / Flat / Default gray. Native buttons own selection and keyboard activation; their Badge spans remain informational. No Data Grid consumer is migrated. The generic Playground retains SquareDashed.
+
+## Accessibility
+
+The Badge body is a plain span with visible text, without button/status roles, aria-pressed, tabIndex or whole-Badge activation. **Close** with a local callback is a native type="button", named **Remove [Badge label]**, supporting mouse, Enter and Space. Only this button is in the tab order. Parent-owned removal confirmation uses a polite status message; it does not turn the Badge itself into a live region. Native Storybook Controls remain separate.
+
+Both optional SVGs have aria-hidden="true" and focusable="false". The X's enclosing button supplies its action and accessible name. Visible focus and subtle hover feedback are scoped to that button; the label and source-backed surface do not change on hover.
+
+The visible X remains 12 × 12px. Its compact button is **12 × 16px**, preserving the 4px adjacent gap, 24px component height and source padding. This is a small effective pointer/touch target and requires accessibility review. No invisible expanded hit area, overlap with neighboring content, or full target-size conformance is claimed. A larger target would require a separate geometry decision. Focus recovery and native activation are automated checks, not full assistive-technology certification.
+
+Visible labels communicate meaning independently of color. All 15 actual local foreground/fill pairs are calculated above against the 4.5:1 requirement for normal 11px text. Background colors remain source-backed. Text can wrap without truncation or fixed-width assumptions; the single-line Medium 24px height does not constrain multiline text.
+
+Automated contrast and browser checks do not certify accessibility. Human review is still needed for screen-reader reading order, zoom, forced-colors legibility, small-text suitability and final visual fidelity. The source foregrounds and multiline rules remain unresolved.
+
+## Implementation notes
+
+Deferred: the 45 combinations involving Small and/or Square, whole-Badge actions, dark-theme variants, production props/APIs and Data Grid consumer migration. No source **State** axis is established. Whole-Badge removal is approved only in the local **Close** examples; application-specific effects and persistence are not defined.
+
+Confirm exact source text colors and variable bindings; Outlined border weight/alignment; original icon artwork/library references and painted bounds; compact target suitability; and long-label guidance before extending scope. Local enabled-instance geometry remains source-backed, while removal, hover/focus treatment and focus recovery are designer-approved local behavior. Private screenshots and raw JSON are not reproduced. This reference is ready for designer review, not production acceptance.
+
+</div>

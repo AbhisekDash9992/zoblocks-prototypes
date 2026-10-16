@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { TokenTable, type TokenRow } from '../cs-01/ReferenceTokens'
 
 export function Anatomy() {
   const title = useId(), description = useId(), shadow = useId()
@@ -34,15 +35,42 @@ export function Anatomy() {
 }
 
 export function GeometryTokens() {
-  const rows = [
-    ['Source', 'Oxygen Design System → ❖ Tooltip, node 317:890'],
-    ['Structure', 'Standalone component; one TEXT child'],
-    ['Sizing', 'Hug; supplied example 64 × 28px (not a fixed width)'],
-    ['Padding', '4px vertical / 10px horizontal'],
-    ['Radius', '8px'],
-    ['Background / text', '#101828 / #FFFFFF'],
-    ['Typography', 'DM Sans Regular (400), 14px / 20px'],
-    ['Shadow', '0 1px 2px rgb(24 24 27 / 5%)'],
+  const rows: TokenRow[] = [
+    ['Background', 'bg/inverse', 'gray/900', '#101828', 'B'],
+    ['Text', 'text/on-dark', 'white', '#FFFFFF', 'B'],
+    ['Font family', 'font/family/DM Sans', null, 'DM Sans', 'B'],
+    ['Font weight', 'font/weight/regular', null, 'Regular; CSS 400', 'B'],
+    ['Font size', 'font/size/200', null, '14; rendered 14px', 'B'],
+    ['Line height', 'line-height/20', null, '20; rendered 20px', 'B'],
+    ['Vertical padding', 'space/50', null, '4px', 'B'],
+    ['Horizontal padding', 'space/125', null, '10px', 'B'],
+    ['Corner radius', 'radius/lg', null, '8px', 'B'],
+    ['Elevation (named style)', 'shadow/xs', null, '0 1px 2px; #18181B at 5%; spread 0', 'B'],
+    ['Border / icon', null, null, 'None; one TEXT child', 'D'],
+    ['Positioning', null, null, '6px trigger gap; 8px feasible viewport gutter', 'D'],
+    ['Motion', null, null, 'No local Tooltip transition', 'D'],
   ]
-  return <div className="dg-page cs02-reference"><table><caption>Verified geometry and values supplied by the designer</caption><thead><tr><th scope="col">Property</th><th scope="col">Reference</th></tr></thead><tbody>{rows.map(([property, value]) => <tr key={property}><th scope="row">{property}</th><td>{value}</td></tr>)}</tbody></table></div>
+  return <div className="dg-page cs02-reference"><TokenTable caption="Verified geometry and values — existing token mappings proposed for Tooltip" rows={rows} />
+    <p className="cs02-muted">Source node 317:890: one TEXT child, Hug example 64 × 28px. The measured values are source-backed; token/style names above are role-appropriate reference mappings, not proof of node alias bindings. The one-child source's 10px item-spacing property does not establish a shortcut slot.</p></div>
+}
+
+export function ShortcutTokens() {
+  const rows: TokenRow[] = [
+    ['Background', null, null, 'Transparent', 'D'],
+    ['Text', null, 'gray/200', '#EAECF0', 'C'],
+    ['Border color', null, 'gray/500', '#6A7282', 'C'],
+    ['Border width / vertical padding', null, null, '1px / 1px', 'D'],
+    ['Height / minimum width', 'space/250', null, '20px', 'B'],
+    ['Horizontal padding', 'space/75', null, '6px', 'B'],
+    ['Label gap', 'space/150', null, '12px', 'B'],
+    ['Corner radius', 'radius/sm', null, '4px', 'B'],
+    ['Font family', 'font/family/DM Sans', null, 'DM Sans', 'B'],
+    ['Font weight', 'font/weight/medium', null, 'Medium; CSS 500', 'B'],
+    ['Font size', 'font/size/100', null, '12; rendered 12px', 'B'],
+    ['Line height', 'line-height/16', null, '16; rendered 16px', 'B'],
+    ['Shadow / motion', null, null, 'None', 'D'],
+    ['Future Kbd semantic role', null, null, 'Candidate only; no token created', 'E'],
+  ]
+  return <div className="dg-page cs02-reference"><TokenTable caption="Outlined Kbd — optional contextual proposal, separate from Tooltip source" rows={rows} />
+    <p className="cs02-muted">A noninteractive span, not a source variant or production Kbd component. Primitive reuse does not select dark-theme text/border semantics for a Tooltip shown in a light application.</p></div>
 }

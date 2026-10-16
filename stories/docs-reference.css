@@ -1,0 +1,93 @@
+/* Opt-in documentation chrome for CS-01/02/03 only. Never imported by the app.
+   Canvas actions use observed Storybook 10.6.2 classes/adjacency, not generated classes. */
+.zw-docs { min-width: 0; color: #101828; font: 14px/1.6 'DM Sans', system-ui, sans-serif; }
+.zw-docs > p, .zw-docs > ul, .zw-docs > details { max-width: 76ch; }
+.zw-docs strong, .zw-docs dt { color: #101828; font-weight: 600; }
+.zw-docs :is(.cs01-panel, .cs02-panel) { border-color: #D1D5DC; }
+.zw-docs :is(.cs02-muted, .cs02-safety-test p) { color: #4A5565; }
+.zw-docs .zw-docs-table small.zw-docs-binding { display: block; margin-top: 6px; color: #4A5565; font: 400 11px/1.5 'DM Sans', system-ui, sans-serif; }
+.zw-docs .zw-docs-token-table code { white-space: normal; overflow-wrap: anywhere; }
+.zw-docs-token-region { max-width: 100%; min-width: 0; overflow-x: auto; }
+.zw-docs-token-region:focus-visible { outline: 2px solid #4A5565; outline-offset: 3px; }
+.zw-docs .zw-docs-token-table { min-width: 560px; }
+.zw-docs .zw-docs-table-scroll { max-width: 100%; overflow-x: auto; }
+.zw-docs .zw-docs-table-scroll:focus-visible { outline: 2px solid #4A5565; outline-offset: 3px; }
+.zw-docs .zw-docs-table-scroll table { min-width: 440px; }
+/* Shared specimen surroundings; the component inside keeps its original styles. */
+.zw-docs-playground { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .9fr); gap: 24px; }
+.zw-docs-playground > section { min-width: 0; }
+.zw-docs-playground h3 { margin: 0 0 16px; font: 600 14px/20px 'DM Sans', system-ui, sans-serif; }
+.zw-docs-specimen { min-height: 112px; padding: 24px 0; }
+.zw-docs-configuration { padding-left: 24px; border-left: 1px solid #E5E7EB; }
+.zw-docs-config { display: grid; gap: 8px; margin: 0; }
+.zw-docs-config > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; }
+.zw-docs-config dt { font-weight: 600; color: #344054; }
+.zw-docs-config dd { margin: 0; overflow-wrap: anywhere; }
+.zw-docs-playground-notes { grid-column: 1 / -1; border-top: 1px solid #E5E7EB; padding-top: 12px; }
+/* Native checked state owns the capsule. Explicit opt-in on CS-01 and CS-03 Docs. */
+.zw-docs-motion label:has(> input[role="switch"]) { display: inline-grid; grid-template-columns: repeat(2, 1fr); position: relative; isolation: isolate; width: 120px; padding: 2px; margin-bottom: 0; background: #E5E7EB; }
+.zw-docs-motion label:has(> input[role="switch"])::before { content: ''; position: absolute; z-index: -1; pointer-events: none; top: 2px; left: 2px; width: calc((100% - 4px) / 2); height: calc(100% - 4px); border-radius: inherit; background: #FFFFFF; box-shadow: 0 1px 3px rgb(16 24 40 / 16%); transform: translateX(0); transition: transform 160ms ease-out; }
+.zw-docs-motion label:has(> input[role="switch"]:checked)::before { transform: translateX(100%); }
+.zw-docs-motion label:has(> input[role="switch"]) > span { padding: 7px 10px; background: transparent; box-shadow: none; color: #4A5565; transition: none; }
+.zw-docs-motion label > input[role="switch"]:checked ~ span:last-of-type, .zw-docs-motion label > input[role="switch"]:not(:checked) ~ span:first-of-type { color: #101828; background: transparent; box-shadow: none; padding: 7px 10px; }
+@media (prefers-reduced-motion: reduce) { .zw-docs-motion label:has(> input[role="switch"])::before { transition: none; } }
+@media (forced-colors: active) { .zw-docs-motion label:has(> input[role="switch"])::before { background: ButtonFace; outline: 1px solid ButtonText; box-shadow: none; } }
+@media (max-width: 760px) {
+  .zw-docs-playground { grid-template-columns: minmax(0, 1fr); }
+  .zw-docs-configuration { border-left: 0; border-top: 1px solid #E5E7EB; padding: 16px 0 0; }
+}
+.zw-docs details { margin: 20px 0; padding-block: 12px; border-block: 1px solid #E5E7EB; }
+.zw-docs summary { color: #344054; font-weight: 600; cursor: pointer; }
+.zw-docs summary:focus-visible, .zw-docs-controls:focus-visible { outline: 2px solid #4A5565; outline-offset: 3px; }
+.zw-docs .zw-docs-table { min-width: 0; max-width: 100%; }
+.sbdocs-content .zw-docs .zw-docs-table table { box-sizing: border-box; width: 100%; margin: 16px 0; table-layout: fixed; border: 1px solid #D1D5DC; border-collapse: separate; border-spacing: 0; border-radius: 8px; background: #FFFFFF; }
+.zw-docs .zw-docs-table table caption { margin-bottom: 10px; text-align: left; color: #344054; font-weight: 600; }
+.zw-docs .zw-docs-table table > :is(thead, tbody) > tr > :is(th, td) { border: 0; border-bottom: 1px solid #E5E7EB; padding: 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; font-family: 'DM Sans', system-ui, sans-serif; font-size: 13px; line-height: 1.5; font-weight: 400; font-variant-numeric: tabular-nums; color: #101828; background: #FFFFFF; }
+.zw-docs .zw-docs-table table > thead > tr > th { background: #F9FAFB; color: #4A5565; font-weight: 600; }
+.zw-docs .zw-docs-table table > tbody > tr > th { font-weight: 600; }
+.zw-docs .zw-docs-table tbody th strong { color: inherit; font-weight: inherit; }
+/* Explicit documentation outcomes only; not Badge Color names or Figma bindings. */
+.zw-docs .zw-docs-table :is(.zw-docs-status-pass, .zw-docs-status-fail, .zw-docs-status-warning, .zw-docs-status-pending, .zw-docs-number) { font-family: inherit; font-size: inherit; line-height: inherit; font-variant-numeric: tabular-nums; }
+.zw-docs .zw-docs-table .zw-docs-number { font-weight: 400; }
+.zw-docs .zw-docs-table .zw-docs-status-pass { color: #016630; font-weight: 500; }
+.zw-docs .zw-docs-table .zw-docs-status-fail { color: #C10007; font-weight: 500; }
+.zw-docs .zw-docs-table .zw-docs-status-warning { color: #BB4D00; font-weight: 500; }
+.zw-docs .zw-docs-table .zw-docs-status-pending { color: #4A5565; font-weight: 500; }
+.zw-docs .zw-docs-table .zw-docs-hex { color: #101828; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; line-height: 1.5; font-weight: 400; font-variant-numeric: tabular-nums; }
+.zw-docs .zw-docs-table code.zw-docs-token { padding: 2px 5px; border: 1px solid #E5E7EB; border-radius: 4px; background: #F2F3F5; color: #101828; font: 500 12px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.zw-docs .zw-docs-table table > tbody > tr:last-child > :is(th, td) { border-bottom: 0; }
+.zw-docs .zw-docs-table table > thead > tr:first-child > th:first-child { border-top-left-radius: 7px; }
+.zw-docs .zw-docs-table table > thead > tr:first-child > th:last-child { border-top-right-radius: 7px; }
+.zw-docs .zw-docs-table table > tbody > tr:last-child > :first-child { border-bottom-left-radius: 7px; }
+.zw-docs .zw-docs-table table > tbody > tr:last-child > :last-child { border-bottom-right-radius: 7px; }
+/* Only narrative inline code and observed Controls type-label spans, not code panels or previews. */
+.zw-docs :is(p, li, .zw-docs-table td) > code,
+.zw-docs .zw-docs-controls .docblock-argstable td:nth-child(2) > div + div span { padding: 2px 5px; border: 1px solid #E5E7EB; border-radius: 4px; background: #F2F3F5; color: #344054; font: 500 12px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
+/* Native table has width:100% plus 1px horizontal margins. Remove the excess,
+   replace external cell shadows with contained borders, and keep intrinsic mobile scrolling. */
+.zw-docs .zw-docs-controls { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; overflow-x: auto; }
+/* Keep four native columns readable on phones; the existing named region scrolls. */
+.zw-docs .zw-docs-controls .docblock-argstable { box-sizing: border-box; width: 100%; min-width: 40rem; margin: 24px 0; border: 1px solid #D1D5DC; border-spacing: 0; border-collapse: separate; border-radius: 8px; }
+.zw-docs .zw-docs-controls .docblock-argstable > tbody { filter: none; }
+.zw-docs .zw-docs-controls .docblock-argstable > :is(thead, tbody) > tr > :is(th, td) { padding: 12px; border: 0; border-bottom: 1px solid #E5E7EB; box-shadow: none; }
+.zw-docs .zw-docs-controls .docblock-argstable > thead > tr > th { background: #F9FAFB; color: #4A5565; font-weight: 600; }
+.zw-docs .zw-docs-controls .docblock-argstable > tbody > tr > td { color: #101828; font-weight: 400; }
+.zw-docs .zw-docs-controls .docblock-argstable > tbody > tr:last-child > td { border-bottom: 0; }
+.zw-docs .zw-docs-controls .docblock-argstable > thead > tr > th:first-child { border-top-left-radius: 7px; }
+.zw-docs .zw-docs-controls .docblock-argstable > thead > tr > th:last-child { border-top-right-radius: 7px; }
+/* Exactly the native Show code toggle, its Copy sibling, and native Controls reset. */
+.zw-docs .sbdocs-preview-actions :is(.docblock-code-toggle, .docblock-code-toggle + button),
+.zw-docs .zw-docs-controls button[aria-label="Reset controls"] { color: #4A5565; background: transparent; box-shadow: none; }
+.zw-docs .sbdocs-preview-actions :is(.docblock-code-toggle, .docblock-code-toggle + button):is(:hover, :active),
+.zw-docs .zw-docs-controls button[aria-label="Reset controls"]:is(:hover, :active) { color: #101828; background: #F2F3F5; box-shadow: none; }
+.zw-docs .sbdocs-preview-actions :is(.docblock-code-toggle, .docblock-code-toggle + button):focus-visible,
+.zw-docs .zw-docs-controls button[aria-label="Reset controls"]:focus-visible { outline: 2px solid #4A5565; outline-offset: 2px; box-shadow: none; }
+@media (max-width: 480px) {
+  .zw-docs-config > div { grid-template-columns: 70px minmax(0, 1fr); gap: 8px; }
+  .zw-docs .zw-docs-table table caption { max-width: calc(100vw - 80px); }
+  .zw-docs .zw-docs-table table > :is(thead, tbody) > tr > :is(th, td) { padding: 8px 6px; font-size: 12px; }
+  .zw-docs .zw-docs-table .zw-docs-hex { font-size: 11px; }
+}
+@media (forced-colors: active) {
+  .zw-docs .sbdocs-preview-actions :is(.docblock-code-toggle, .docblock-code-toggle + button):focus-visible { outline-color: Highlight; }
+}

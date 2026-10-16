@@ -16,15 +16,18 @@ type PlaygroundProps = {
 function Playground({ type, icon, disabled, label, tooltip }: PlaygroundProps) {
   const [activations, setActivations] = useState(0)
   const statusId = useId()
-  return <div className="cs01-panel">
-    <div className="cs01-row">
+  return <div className="cs01-panel zw-docs-playground">
+    <section><h3>Specimen</h3><div className="cs01-row zw-docs-specimen">
       <PrototypeIconButton referenceType={type === 'Ghost-primary' ? 'ghost-primary' : 'ghost'} referenceGlyphSize={icon === 'Filter' ? 14 : 16} icon={icons[icon]} label={label.trim() || 'Icon action'} disabled={disabled} tooltip={tooltip} onClick={() => setActivations(value => value + 1)} />
-      <span>Small / Square · {type}{disabled ? ' · Disabled' : ''}</span>
-    </div>
+    </div><p id={statusId} className="cs01-status" role="status">Activations: {activations}</p></section>
+    <section className="zw-docs-configuration"><h3>Configuration</h3><dl className="zw-docs-config">
+      {[['Size / Shape', 'Small / Square'], ['Type', type], ['Icon', icon], ['Disabled', disabled ? 'True' : 'False'], ['Tooltip', tooltip ? 'True' : 'False']].map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}
+    </dl></section>
+    <div className="zw-docs-playground-notes">
     {!label.trim() && <p role="alert">Supply an accessible label. This preview uses “Icon action” while the field is empty.</p>}
     {type === 'Ghost-primary' && disabled && <p className="cs01-muted">Verified icon/brand-disabled: #8EC5FF. Native disabled behavior prevents activation.</p>}
-    <p id={statusId} className="cs01-status" role="status">Activations: {activations}</p>
-    <p className="cs01-muted">Hover the button, or use Tab / Shift+Tab to focus it. Enter and Space activate it. Both solid focus rings are verified from Icon Button master 233:5486; Lucide artwork remains approximate.</p>
+    <p className="cs01-muted">Hover or use Tab / Shift+Tab to focus. Enter and Space activate. Lucide artwork is approximate.</p>
+    </div>
   </div>
 }
 
@@ -33,11 +36,11 @@ const meta = {
   component: Playground,
   args: { type: 'Ghost', icon: 'Filter', disabled: false, label: 'Filter', tooltip: true },
   argTypes: {
-    type: { control: 'select', options: ['Ghost', 'Ghost-primary'], description: 'Visual Type, independent of interaction state.' },
-    icon: { control: 'select', options: ['Filter', 'Sort', 'Delete'], description: 'Lucide prototype approximation.' },
-    disabled: { control: 'boolean' },
-    label: { control: 'text', description: 'Required accessible name, independent of tooltip visibility.' },
-    tooltip: { control: 'boolean' },
+    type: { control: 'select', options: ['Ghost', 'Ghost-primary'], description: 'Visual Type, independent of interaction state.', table: { defaultValue: { summary: 'Ghost' } } },
+    icon: { control: 'select', options: ['Filter', 'Sort', 'Delete'], description: 'Lucide prototype approximation.', table: { defaultValue: { summary: 'Filter' } } },
+    disabled: { control: 'boolean', description: 'Native disabled button; prevents activation and keyboard focus.', table: { defaultValue: { summary: 'false' } } },
+    label: { control: 'text', description: 'Required accessible name, independent of tooltip visibility.', table: { defaultValue: { summary: 'Filter' } } },
+    tooltip: { control: 'boolean', description: 'Supplemental hover/focus label; accessible name remains present.', table: { defaultValue: { summary: 'true' } } },
   },
 } satisfies Meta<typeof Playground>
 

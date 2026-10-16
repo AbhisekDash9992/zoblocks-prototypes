@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Filter } from 'lucide-react'
 import { PrototypeIconButton } from '../../src/prototypes/data-grid/ui/PrototypeIconButton'
+import { TokenTable, type TokenRow } from './ReferenceTokens'
 
 export function Anatomy() {
   // Source-relative geometry at 6×: root 144, padding 24, slot 96, glyph box 84.
@@ -44,21 +45,26 @@ export function VariantsTable() {
 }
 
 export function TokensTable() {
-  const rows = [
-    ['icon/primary → #101828', 'Ghost Default / Hover / Focused'],
-    ['icon/disabled → #99A1AF', 'Ghost Disabled'],
-    ['icon/brand-primary → #1447E6', 'Ghost-primary Default / Hover / Focused'],
-    ['icon/brand-disabled → #8EC5FF', 'Ghost-primary Disabled'],
-    ['bg/primary-hover → #F2F3F5', 'Ghost Hover / Focused'],
-    ['bg/brand-primary-hover → #E2EEFE', 'Ghost-primary Hover / Focused'],
-    ['Ghost Focused → white 2px inner + #4A5565 4px outer', 'Verified Icon Button master 233:5486'],
-    ['Ghost-primary Focused → white 2px inner + #155DFC 4px outer', 'Verified Icon Button master 233:5486'],
-    ['Default / Disabled → transparent', 'Both Types; Disabled has no hover / focus effects'],
-    ['Forced-colors → solid 2px Highlight outline', 'Accessibility fallback when shadows are suppressed'],
-    ['Pressed feedback', 'Existing prototype interaction feedback; provisional'],
+  const rows: TokenRow[] = [
+    ['Ghost icon', 'icon/primary', 'gray/900', '#101828', 'A'],
+    ['Ghost disabled icon', 'icon/disabled', 'gray/400', '#99A1AF', 'A'],
+    ['Ghost-primary icon', 'icon/brand-primary', 'blue/700', '#1447E6', 'A'],
+    ['Ghost-primary disabled icon', 'icon/brand-disabled', 'blue/300', '#8EC5FF', 'A'],
+    ['Ghost hover / focus background', 'bg/primary-hover', 'gray/100', '#F2F3F5', 'A'],
+    ['Ghost-primary hover / focus background', 'bg/brand-primary-hover', 'blue/100', '#E2EEFE', 'A'],
+    ['Rest / disabled background', null, null, 'Transparent; no border or shadow', 'D'],
+    ['Focus inner layer', null, 'white', '#FFFFFF', 'C'],
+    ['Ghost focus outer layer', null, 'gray/600', '#4A5565', 'C'],
+    ['Ghost-primary focus outer layer', null, 'blue/600', '#155DFC', 'C'],
+    ['Ghost pressed background', null, 'gray/200', '#EAECF0', 'C'],
+    ['Ghost-primary pressed background', null, null, '#D5E5FF', 'D'],
+    ['Forced-colors focus', null, null, 'System Highlight; 2px solid outline', 'D'],
+    ['Button motion', null, null, 'No local transition', 'D'],
+    ['Docs Boolean capsule', null, null, 'Transform 160ms ease-out; none with reduced motion', 'D'],
   ]
-
-  return <div className="dg-page cs01-reference"><table><caption>Designer-workspace mappings, not production tokens</caption><thead><tr><th scope="col">Reference value / mapping</th><th scope="col">Application / evidence</th></tr></thead><tbody>{rows.map(([value, status]) => <tr key={value}><th scope="row">{value}</th><td>{status}</td></tr>)}</tbody></table></div>
+  return <div className="dg-page cs01-reference"><TokenTable caption="Icon Button color and interaction references" rows={rows} />
+    <p className="cs01-muted">Six component mappings are established by the accepted CS-01 evidence. Focus appearance is also established: zero offset/blur, white 2px inner and intent 4px outer layers; their semantic effect names remain unresolved. Pressed feedback is provisional. The button has no visible text; typography belongs to its separately specified Tooltip.</p>
+  </div>
 }
 
 type Measurements = { root: string; slot: string; padding: string; radius: string; glyph: string }
@@ -77,10 +83,10 @@ export function Geometry() {
     observer.observe(button)
     return () => observer.disconnect()
   }, [])
-  const rows: [keyof Measurements, string, string][] = [['root', 'Root', '24 × 24px'], ['slot', 'Implemented icon slot', '16 × 16px'], ['padding', 'Padding', '4px'], ['radius', 'Radius / md', '6px'], ['glyph', 'Filter SVG box', '14 × 14px immediate instance; artwork approximate']]
+  const rows: [keyof Measurements, string, string][] = [['root', 'Root', '24 × 24px; space/300 matching size (B)'], ['slot', 'Implemented icon slot', '16 × 16px; space/200 matching size (B)'], ['padding', 'Padding', 'space/50 = 4px (B)'], ['radius', 'Radius / md', 'radius/md = 6px (A)'], ['glyph', 'Filter SVG box', '14 × 14px immediate instance; local sizing literal (D); artwork approximate']]
   return <div className="dg-page cs01-reference cs01-panel">
     <div ref={anchor}><PrototypeIconButton referenceType="ghost" referenceGlyphSize={14} icon={Filter} label="Geometry example Filter" tooltip={false} /></div>
-    <table><caption>Source measurements and this browser’s rendered result</caption><thead><tr><th scope="col">Aspect</th><th scope="col">Designer-supplied evidence</th><th scope="col">Rendered now</th></tr></thead><tbody>{rows.map(([key, name, evidence]) => <tr key={key}><th scope="row">{name}</th><td>{evidence}</td><td>{actual?.[key] ?? 'Awaiting browser measurement'}</td></tr>)}</tbody></table>
+    <table><caption>Source measurements and this browser’s rendered result</caption><thead><tr><th scope="col">Aspect</th><th scope="col">Designer-supplied evidence</th><th scope="col">Rendered now</th></tr></thead><tbody>{rows.map(([key, name, evidence]) => <tr key={key}><th scope="row">{name}</th><td>{evidence}</td><td>{actual?.[key] ?? <span className="zw-docs-status-pending">Awaiting browser measurement</span>}</td></tr>)}</tbody></table>
     <p className="cs01-muted">Rendered geometry is a local measurement, not a touch-target or painted-art certification.</p>
   </div>
 }

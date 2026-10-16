@@ -1,8 +1,12 @@
 import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as TooltipStories from './Tooltip.stories';
-import { Anatomy, GeometryTokens } from './ReferenceGuide';
+import { Anatomy, GeometryTokens, ShortcutTokens } from './ReferenceGuide';
+
+import { TokenKey } from '../cs-01/ReferenceTokens';
 
 <Meta of={TooltipStories} />
+
+<div className="zw-docs cs02-docs">
 
 # Tooltip
 
@@ -10,28 +14,40 @@ CS-02 · Designer-owned, non-production reference
 
 ## Overview
 
-Label-only is the default and Figma-verified baseline. The supplied source is Oxygen Design System → ❖ Tooltip, node `317:890`: a standalone container with one TEXT child. This reference uses designer-supplied measurements; no private screenshots or source documents are included.
+A Tooltip supplies a brief supplemental label for a familiar control. Source node 317:890 contains one TEXT child. No shortcut slot or **State** axis is verified.
+
+**The Filter icon belongs to the trigger Icon Button.** The Tooltip has no verified leading-icon or trailing Close property. Its sole native Control edits the label.
+
+<details>
+<summary>Source evidence</summary>
+
+Designer-supplied measurements: Oxygen Design System → ❖ Tooltip, node `317:890`. No private screenshots or source documents are included.
+
+</details>
 
 ## Playground
 
 Hover the actual button or use Tab / Shift+Tab. Enter and Space activate it. The accessible button name exists independently of the tooltip. Controls update the live example.
 
+<details>
+<summary>Implementation notes · reused trigger</summary>
+
 The trigger reuses PrototypeIconButton with the accepted CS-01 Small/Square Ghost presentation: 24px root, 16px slot, 14px immediate icon box, 4px padding and 6px radius. A narrow Storybook-only CS-01 context supplies its existing interaction and focus treatment. Its own Tooltip is disabled; the outer CS-02 Tooltip supplies the reference portal. Lucide artwork remains approximate.
 
+</details>
+
 <Canvas of={TooltipStories.LabelOnly} />
-<div className="cs02-controls" role="region" aria-label="Tooltip Controls" tabIndex={0}>
+<div className="cs02-controls zw-docs-controls" role="region" aria-label="Tooltip Controls" tabIndex={0}>
   <Controls of={TooltipStories.LabelOnly} />
 </div>
 
-## Source and proposal distinction
+## Properties and Variants
 
 No shortcut slot or shortcut variant was verified in Figma. A shortcut hint is an optional proposed enhancement, never a requirement for all Tooltips. Show one only when the shortcut is implemented, active and useful in its context. Keep the label meaningful without it.
 
 The example below implements R to reset a nonzero demo count while focus is in its section. It ignores typing fields, editable content, composition, repeats and modified keys. The hint and `aria-keyshortcuts` are supplied only while that action is available. It does not establish a Data Grid shortcut or a production contract.
 
-The designer-approved **outlined Kbd proposal** uses the existing `.dg-tooltip-key` span, not semantic `kbd` markup. It has a transparent background, 1px #6A7282 border, #EAECF0 foreground, 20px height and minimum width, 1px vertical / 6px horizontal padding, border-box sizing and 4px radius. Typography is DM Sans Medium 12px / 16px. It is centered vertically with a 12px label gap; a single-line label and keycap remain 28px high together.
-
-These values reuse existing Oxygen primitives without adding a global semantic token. The label retains white text/on-dark treatment on #101828; the dark Tooltip surface does not imply application dark-theme mode. This proposed usage is not a Figma-verified Tooltip shortcut variant.
+The **outlined Kbd proposal** is a noninteractive shortcut hint, separate from the source anatomy. Its primitive colors and proposed variable mappings are documented below; the dark Tooltip surface does not imply application dark mode.
 
 Text controls reuse PrototypeButton, Secondary / 32px, as an existing prototype presentation; exact Figma parity for that Button variant is not claimed. The separately divided **Keyboard shortcut safety test** demonstrates typing protection: type R there to enter the letter normally without resetting a nonzero demo count. It is not a truncation example, and shortcut actions do not move focus programmatically.
 
@@ -43,19 +59,25 @@ Text controls reuse PrototypeButton, Secondary / 32px, as an existing prototype 
 
 The diagram enlarges the supplied label-only geometry 4×. Circular numbered markers, routed leaders and endpoint dots follow the accepted CS-01 annotation convention. The four callouts describe container/surface, padding, the label line box and shadow/elevation; they do not imply four child nodes. Numbers and dashed guides are annotations. The optional proposal adds a hint only in that separate example; it is not a second verified Figma child.
 
-## Geometry and tokens
+## Geometry and Tokens
 
-<GeometryTokens />
+<TokenKey />
+
+<div className="zw-docs-table"><GeometryTokens /></div>
 
 The 64 × 28px source example is Hug content, not a width to impose on every label. Height is 20px text plus 8px vertical padding for a single line. Values are scoped to `.dg-tooltip.cs02-tooltip-reference` on the actual portal; existing consumers retain their styling.
 
-## Behavior
+### Outlined Kbd proposal
+
+<div className="zw-docs-table"><ShortcutTokens /></div>
+
+### Interaction behavior
 
 The shared Data Grid Tooltip opens on hover or focus. Pointer leave, blur, pointer down, click, Enter, Space and captured scroll dismiss it. Escape dismisses while its trigger has focus. Popup-open suppression persists through programmatic focus restoration; a new hover or blur/focus interaction re-arms it. The harness below demonstrates this existing behavior with a synthetic disclosure.
 
 <Canvas of={TooltipStories.PopupSuppression} />
 
-## Usage
+## Usage and Contextual Examples
 
 Use a brief, specific label for a familiar action. Keep essential instructions and clinical meaning visible in the surrounding interface. Tooltips contain no interactive controls. Avoid long explanations; the limited longer-label example checks wrapping without proposing a rich-content variant.
 
@@ -67,8 +89,12 @@ The trigger is a native button with an independent accessible name. The open por
 
 Existing limitations remain: hover-only Escape is not handled when focus is elsewhere, the tooltip is pointer-inert and cannot be hovered, and existing description attributes are not preserved by the shared implementation. These checks do not establish full accessibility conformance. Screen-reader announcement, touch suitability and hoverable-content expectations need human review.
 
-## Open issues
+## Implementation notes
+
+### Open issues
 
 Tooltip placement uses its rendered dimensions. It normally appears below the trigger with a 6px gap, adjusts horizontal alignment near viewport edges while preserving visual association with the trigger, and flips above when there is insufficient space below. When neither side fully fits, a viewport-constrained fallback is used where feasible. Exceptionally large tooltips may still overlap the trigger or exceed the available viewport.
 
 Shortcut visuals and semantics remain a proposal. Long-text limits, touch interaction and assistive-technology behavior remain unresolved. CS-01 and the separate Data Grid route retain their accepted appearance and behavior.
+
+</div>
