@@ -1,0 +1,31 @@
+/* TF-01 catalog chrome only. No selectors or rendered styles outside this scope. */
+.tf01-catalog { box-sizing: border-box; max-width: 1100px; min-width: 0; color: #101828; background: #FFFFFF; font: 14px/1.6 'DM Sans', system-ui, sans-serif; overflow-wrap: anywhere; }
+.tf01-catalog *, .tf01-catalog *::before, .tf01-catalog *::after { box-sizing: border-box; }
+.tf01-catalog nav { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 12px 0; border-bottom: 1px solid #D1D5DC; }
+.tf01-catalog a { color: #1447E6; text-decoration: underline; }
+.tf01-catalog section { margin-block: 32px; scroll-margin-top: 16px; }
+.tf01-catalog h2 { font: 600 20px/28px 'DM Sans', system-ui, sans-serif; margin: 0 0 12px; }
+.tf01-catalog p { margin: 8px 0 16px; max-width: 85ch; }
+.tf01-catalog code { font: 12px/1.5 ui-monospace, monospace; overflow-wrap: anywhere; white-space: normal; }
+.tf01-catalog summary { cursor: pointer; font-weight: 600; padding-block: 8px; }
+.tf01-catalog :is(a, summary, .tf01-scroll, section):focus-visible { outline: 2px solid #1447E6; outline-offset: 3px; }
+.tf01-catalog .tf01-palette { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 8px 0 24px; }
+.tf01-catalog .tf01-palette li { min-width: 0; padding: 12px; border: 1px solid #D1D5DC; border-radius: 8px; }
+.tf01-catalog .tf01-palette :is(strong, code, li > span) { display: block; }
+.tf01-catalog .tf01-swatch { display: inline-block; width: 32px; height: 32px; vertical-align: middle; margin: 0 8px 8px 0; border: 1px solid #99A1AF; border-radius: 4px; }
+.tf01-catalog .tf01-scroll { max-width: 100%; min-width: 0; overflow-x: auto; margin-block: 20px; }
+.tf01-catalog table { width: 100%; min-width: 620px; border-collapse: collapse; table-layout: fixed; margin: 0; }
+.tf01-catalog caption { text-align: left; font-weight: 600; padding-bottom: 8px; color: #101828; }
+.tf01-catalog :is(th, td) { padding: 12px; border: 1px solid #D1D5DC; text-align: left; vertical-align: top; font-size: 13px; line-height: 1.5; color: #101828; background: #FFFFFF; }
+.tf01-catalog th { font-weight: 600; }
+.tf01-catalog .tf01-mode { background: var(--ox-bg-primary); color: var(--ox-text-primary); }
+.tf01-catalog .tf01-mode code { color: inherit; background: transparent; }
+.tf01-catalog .tf01-space-sample { display: inline-block; height: 16px; background: #155DFC; }
+.tf01-catalog .tf01-radius-sample { display: inline-block; width: 64px; height: 32px; background: #E2EEFE; border: 1px solid #1447E6; }
+.tf01-catalog .tf01-shadow-sample { display: inline-block; margin: 8px; padding: 12px; border-radius: 4px; background: #FFFFFF; }
+.tf01-catalog pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 16px; border: 1px solid #D1D5DC; background: #F9FAFB; }
+.tf01-catalog pre code { white-space: pre-wrap; }
+@media (max-width: 480px) {
+  .tf01-catalog .tf01-palette { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf01-catalog :is(th, td) { padding: 8px; }
+}
