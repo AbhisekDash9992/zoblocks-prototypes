@@ -1,0 +1,138 @@
+/* CS-04 Light values. Component alias IDs remain unresolved: semantic usage is
+   a documented local mapping, not proof of source bindings. No global reset. */
+.ox-button {
+  --_ox-rest-fill: var(--ox-bg-brand-solid);
+  --_ox-hover-fill: var(--ox-bg-brand-solid-hover);
+  --_ox-focus-fill: var(--_ox-rest-fill);
+  --_ox-disabled-fill: var(--ox-bg-brand-disabled);
+  --_ox-text: var(--ox-text-on-dark);
+  --_ox-icon: var(--ox-icon-on-dark);
+  --_ox-disabled-text: var(--ox-text-on-dark-disabled);
+  --_ox-disabled-icon: var(--ox-icon-on-dark-disabled);
+  --_ox-border: transparent;
+  --_ox-hover-border: var(--_ox-border);
+  --_ox-focus-border: var(--_ox-border);
+  --_ox-disabled-border: var(--_ox-border);
+  --_ox-rest-shadow: 0 0 #0000;
+  --_ox-ring: var(--ox-color-blue-600);
+  --_ox-icon-size: 16px;
+  box-sizing: border-box;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  /* Painted inset edge preserves the inspected padding and outer dimensions.
+     Source border alignment is unresolved. A CSS layout border adds 2px. */
+  border: 0;
+  border-radius: var(--ox-radius-lg);
+  padding: var(--ox-space-50) var(--ox-space-150);
+  gap: var(--ox-space-75);
+  background: var(--_ox-rest-fill);
+  color: var(--_ox-text);
+  box-shadow: inset 0 0 0 1px var(--_ox-border), var(--_ox-rest-shadow);
+  font: var(--ox-type-button-medium);
+  letter-spacing: calc(var(--ox-letter-spacing-normal) * 1px);
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  cursor: pointer;
+}
+.ox-button--large {
+  --_ox-icon-size: 18px;
+  padding: var(--ox-space-100) var(--ox-space-200);
+  gap: var(--ox-space-100);
+  border-radius: var(--ox-radius-xl);
+  font: var(--ox-type-button-large);
+}
+.ox-button--small {
+  --_ox-icon-size: 14px;
+  padding: var(--ox-space-50) var(--ox-space-125);
+  gap: var(--ox-space-50);
+  border-radius: var(--ox-radius-md);
+  font: var(--ox-type-button-small);
+}
+.ox-button--secondary {
+  --_ox-rest-fill: var(--ox-bg-white);
+  --_ox-hover-fill: var(--ox-bg-primary-hover);
+  --_ox-disabled-fill: var(--ox-bg-disabled-secondary);
+  --_ox-text: var(--ox-text-primary);
+  --_ox-icon: var(--ox-icon-primary);
+  --_ox-disabled-text: var(--ox-text-disabled);
+  --_ox-disabled-icon: var(--ox-icon-disabled);
+  --_ox-border: var(--ox-border-secondary);
+  --_ox-hover-border: var(--ox-border-primary);
+  --_ox-focus-border: var(--ox-border-primary);
+  --_ox-disabled-border: var(--ox-border-disabled);
+  /* Source #101828/5%, distinct from TF-01 shadow/xs (#18181B/5%). */
+  --_ox-rest-shadow: 0 1px 2px rgb(16 24 40 / 5%);
+  --_ox-ring: var(--ox-color-gray-600);
+}
+.ox-button--danger {
+  --_ox-rest-fill: var(--ox-bg-danger-solid);
+  --_ox-hover-fill: var(--ox-bg-danger-solid-hover);
+  --_ox-disabled-fill: var(--ox-bg-danger-disabled);
+  --_ox-ring: var(--ox-color-red-600);
+}
+.ox-button--text-primary {
+  --_ox-rest-fill: transparent;
+  --_ox-hover-fill: var(--ox-bg-brand-primary-hover);
+  --_ox-focus-fill: var(--ox-bg-brand-primary);
+  --_ox-disabled-fill: transparent;
+  --_ox-text: var(--ox-text-brand-primary);
+  --_ox-icon: var(--ox-icon-brand-primary);
+  --_ox-disabled-text: var(--ox-text-brand-disabled);
+  --_ox-disabled-icon: var(--ox-icon-brand-disabled);
+}
+.ox-button--text-secondary {
+  --_ox-rest-fill: transparent;
+  --_ox-hover-fill: var(--ox-bg-primary-hover);
+  --_ox-focus-fill: var(--ox-bg-primary-hover);
+  --_ox-disabled-fill: transparent;
+  --_ox-text: var(--ox-text-primary);
+  --_ox-icon: var(--ox-icon-primary);
+  --_ox-disabled-text: var(--ox-text-disabled);
+  --_ox-disabled-icon: var(--ox-icon-disabled);
+  --_ox-ring: var(--ox-color-gray-600);
+}
+.ox-button.ox-button--round { border-radius: var(--ox-radius-full); }
+.ox-button--round.ox-button--large { padding-block: var(--ox-space-75); }
+.ox-button__label { min-width: 0; overflow-wrap: anywhere; }
+.ox-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--_ox-icon-size);
+  width: var(--_ox-icon-size);
+  height: var(--_ox-icon-size);
+  color: var(--_ox-icon);
+  pointer-events: none;
+}
+.ox-button__icon > svg { display: block; }
+.ox-button:hover:not(:disabled) {
+  background: var(--_ox-hover-fill);
+  box-shadow: inset 0 0 0 1px var(--_ox-hover-border);
+}
+.ox-button:focus-visible:not(:disabled) {
+  background: var(--_ox-focus-fill);
+  outline: none;
+  /* Inner 2px white separation in front of the outer 4px color layer. */
+  box-shadow: inset 0 0 0 1px var(--_ox-focus-border), 0 0 0 2px var(--ox-color-white), 0 0 0 4px var(--_ox-ring);
+}
+.ox-button:disabled {
+  background: var(--_ox-disabled-fill);
+  color: var(--_ox-disabled-text);
+  box-shadow: inset 0 0 0 1px var(--_ox-disabled-border);
+  cursor: default;
+}
+.ox-button:disabled .ox-button__icon { color: var(--_ox-disabled-icon); }
+@media (forced-colors: active) {
+  .ox-button { border: 1px solid ButtonText; }
+  .ox-button:disabled { color: GrayText; border-color: GrayText; }
+  .ox-button:disabled .ox-button__icon { color: GrayText; }
+  .ox-button:focus-visible:not(:disabled) { outline: 2px solid Highlight; outline-offset: 2px; }
+}

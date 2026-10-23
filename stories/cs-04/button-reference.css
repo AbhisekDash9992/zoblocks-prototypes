@@ -1,0 +1,66 @@
+/* Storybook-only surroundings. No .dg-page, shared token edits, or app imports. */
+.cs04-reference, .cs04-docs { min-width: 0; color: #101828; font: 14px/1.6 'DM Sans', system-ui, sans-serif; }
+.cs04-reference *, .cs04-reference *::before, .cs04-reference *::after { box-sizing: border-box; }
+.cs04-reference :is(h3, h4) { margin: 0 0 16px; font: 600 14px/20px 'DM Sans', system-ui, sans-serif; }
+.cs04-reference p { margin: 12px 0; }
+.cs04-panel, .cs04-group { min-width: 0; padding: 24px; border: 1px solid #D1D5DC; border-radius: 12px; background: #FFFFFF; }
+.cs04-panel { max-width: 1000px; overflow-wrap: anywhere; }
+.cs04-matrix, .cs04-icons, .cs04-anatomy { display: grid; gap: 20px; min-width: 0; }
+.cs04-matrix > p, .cs04-icons > p { margin: 0; max-width: 76ch; }
+.cs04-scroll { max-width: 100%; min-width: 0; overflow-x: auto; }
+.cs04-scroll:focus-visible { outline: 2px solid #4A5565; outline-offset: 2px; }
+.cs04-state-table { width: 100%; min-width: 760px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.cs04-state-table caption { text-align: left; color: #4A5565; margin-bottom: 12px; }
+.cs04-state-table :is(th, td) { padding: 16px 10px; text-align: left; border: 0; border-bottom: 1px solid #EAECF0; background: #FFFFFF; }
+.cs04-state-table th:first-child { width: 86px; }
+.cs04-state-table thead th { color: #4A5565; font-weight: 500; }
+.cs04-state-table tbody th { font-size: 12px; font-weight: 500; }
+.cs04-state-table [data-cs04-case] .ox-button { pointer-events: none; }
+.cs04-icon-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.cs04-icon-grid > div { min-width: 0; }
+.cs04-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding-block: 8px; }
+.cs04-behavior form { border-top: 1px solid #EAECF0; margin-top: 24px; padding-top: 24px; }
+.cs04-anatomy-panel { max-width: 1200px; }
+.cs04-anatomy-layout { display: grid; grid-template-columns: minmax(0, 680px) minmax(240px, 1fr); gap: 24px; align-items: center; }
+.cs04-anatomy-diagram { display: block; width: 100%; height: auto; max-width: 680px; }
+.cs04-diagram-focus-outer, .cs04-diagram-surface { fill: var(--ox-bg-brand-solid); }
+.cs04-diagram-focus-inner { fill: var(--ox-color-white); }
+.cs04-box-guide { fill: none; stroke: var(--ox-color-white); stroke-width: 1; stroke-dasharray: 5 4; }
+.cs04-diagram-icons { fill: none; stroke: var(--ox-icon-on-dark); stroke-width: 6; }
+.cs04-diagram-icon-dot { fill: var(--ox-icon-on-dark); stroke: none; }
+.cs04-diagram-label { fill: var(--ox-text-on-dark); font: 500 70px 'DM Sans', system-ui, sans-serif; }
+.cs04-dimension-guide { fill: none; stroke: var(--ox-color-white); stroke-width: 1; }
+.cs04-leader { fill: none; stroke: #4A5565; stroke-width: 1; }
+.cs04-anchor { fill: #4A5565; stroke: #FFFFFF; stroke-width: 1; }
+.cs04-number-marker { fill: #4A5565; }
+.cs04-number { fill: #FFFFFF; font: 500 18px 'DM Sans', system-ui, sans-serif; }
+.cs04-legend { margin: 0; max-width: 76ch; padding-left: 22px; }
+.cs04-legend li { margin: 8px 0; }
+.cs04-anatomy-actual { margin-top: 24px; padding-top: 20px; border-top: 1px solid #EAECF0; }
+.cs04-anatomy-specimen { padding: 16px 8px; }
+.cs04-reference .zw-docs-table table { width: 100%; min-width: 640px; border-collapse: collapse; }
+.cs04-reference .zw-docs-table caption { text-align: left; margin-bottom: 12px; color: #4A5565; }
+.cs04-reference .zw-docs-table :is(th, td) { padding: 12px; border-bottom: 1px solid #EAECF0; text-align: left; vertical-align: top; }
+.cs04-reference .zw-docs-table th { font-weight: 500; }
+.cs04-docs .cs04-scroll table { min-width: 640px; }
+.cs04-docs .cs04-scroll .cs04-state-table { min-width: 760px; }
+.cs04-docs .cs04-token-table { min-width: 840px; }
+.cs04-docs :is(.cs04-state-table, .cs04-token-table) code { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 1100px) { .cs04-anatomy-layout { grid-template-columns: minmax(0, 1fr); } }
+/* Enlarge only annotation markers/type as the SVG shrinks; source geometry and
+   leader endpoints never move. Margins in the viewBox reserve this marker size. */
+@media (max-width: 760px) {
+  .cs04-number-marker { r: 28px; }
+  .cs04-number { font-size: 38px; }
+  .cs04-anchor { r: 5px; }
+}
+@media (max-width: 480px) {
+  .cs04-number-marker { r: 40px; }
+  .cs04-number { font-size: 60px; }
+  .cs04-anatomy-diagram { width: calc(100% + 32px); max-width: none; margin-inline: -16px; }
+}
+@media (max-width: 760px) {
+  .cs04-icon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs04-panel, .cs04-group { padding: 16px; }
+}
+@media (max-width: 420px) { .cs04-icon-grid { grid-template-columns: minmax(0, 1fr); } }

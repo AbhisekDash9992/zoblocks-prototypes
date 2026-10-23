@@ -1,0 +1,129 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+import { Tokens } from './ReferenceGuide';
+
+<Meta of={ButtonStories} />
+
+<div className="zw-docs cs04-docs">
+
+# Button
+
+CS-04 · Oxygen Light reference · Designer review, non-production
+
+## Overview
+
+A Button performs the action named by its visible label. One reusable renderer covers **120 visual variants**: 2 Shapes × 5 Types × 3 Sizes × 4 States, with independently optional leading and trailing decorative icons.
+
+<details>
+<summary>Source evidence and boundaries</summary>
+
+Designer-supplied component inspection, 22 October 2026: 120 variants, complete extraction, no inspection errors. Geometry, text size/line height, root colors, edge colors and focus effects are recorded for every variant. Only derived measurements and synthetic examples appear here.
+
+Component variable alias IDs remain unresolved. The tables distinguish verified values from local semantic mappings and uninspected properties. All specimens explicitly opt into **Light** through `data-oxygen-mode="light"`. Dark component parity is unverified. No prototype consumer is migrated and no shared TF-01 definition changes.
+
+</details>
+
+## Playground
+
+Use native Controls to change Type (API: `variant`), Shape, Size, visible label, native disabled state and either icon independently. Initial primary / square / medium is a local preview default; source component defaults are not established by this digest. Hover and keyboard focus are live browser states, without a public state prop.
+
+<Canvas of={ButtonStories.PlaygroundExample} />
+<div className="zw-docs-controls zw-docs-motion" role="region" aria-label="Button Controls" tabIndex={0}>
+  <Controls of={ButtonStories.PlaygroundExample} />
+</div>
+
+Reset Controls restores the initial configuration. The activation count belongs to the demo and is independent of args. Empty or whitespace-only labels show explanatory feedback; the reusable renderer returns no unnamed action.
+
+Clearing a select with Storybook's “Choose option…” placeholder uses the same local defaults as the renderer: primary, square and medium. The placeholder is not an extra source variant.
+
+## Variants and states
+
+<Canvas of={ButtonStories.FullStateMatrix} />
+
+Each Shape / Type group compares three sizes across Default, Hover, Disabled and Focused. Static Hover and Focused selectors are generated in Storybook from the renderer's actual pseudo-state declarations. Comparison specimens are excluded from Tab order; Disabled uses the native attribute. Pointer hover plus keyboard focus uses the Focused recipe. Active/pressed, loading and selected appearances were not inspected.
+
+## Icon configurations
+
+<Canvas of={ButtonStories.Icons} />
+
+No icon, leading, trailing and both configurations use the same renderer. Icon boxes are **18 / 16 / 14px** for Large / Medium / Small. Source icon path bytes, painted bounds and per-state icon fills are unavailable. CircleDot is an approximate illustration, not a reproduced private asset; other Lucide examples demonstrate replaceable artwork.
+
+Text and icons consume distinct TF-01 roles. Disabled solid text is **50% white**, while its icons use **80% white** as required for this reference. Component icon bindings remain unverified. Icons inherit their slot's color and carry `aria-hidden="true"`, `focusable="false"` and `tabIndex={-1}`. Supply decorative SVGs only, without interactive descendants.
+
+## Behavior examples
+
+<Canvas of={ButtonStories.NativeBehavior} />
+
+Native buttons support pointer, Enter and Space activation. Disabled blocks activation and is skipped by Tab. The examples also exercise a forwarded ref, default `type="button"` within a form and explicit `type="submit"`. Counters are synthetic demonstration effects, with no inferred product workflow.
+
+## Anatomy and geometry
+
+The enlarged **Medium / Square / Primary / Focused** schematic uses eight external numbered callouts and a matching textual legend: surface, leading icon slot, label line box, trailing icon slot, padding, adjacent spacing, radius and two-layer focus. The actual-size Button is a secondary specimen.
+
+<Canvas of={ButtonStories.AnatomyGeometry} />
+
+Drawing coordinates enlarge source geometry 5×; the diagram scales to fit the page and its content width is illustrative. The white 2px separation and outer color extending to 4px are solid, distinct layers. Dashed boxes identify text/icon bounds only. Decorative circles are illustrative shapes, not verified Figma glyph paths. SVG title/description and the numbered legend provide accessible context. Font family/weight/tracking and component aliases remain unverified as detailed below.
+
+Width follows the visible label and optional icons. Insets preserve inspected outer heights; no fixed specimen-label width is imposed. Secondary uses a 1px painted inset edge to preserve padding and height, with source alignment unresolved. Medium's **22px line-height** remains specific to the TF-01 Button composition. Long labels wrap and can increase height, a disclosed local resilience choice.
+
+## Tokens and evidence provenance
+
+<Tokens />
+
+Verified equal values do not establish component alias identity. The component consumes published TF-01 CSS variables without overriding them. Semantic text and icon roles stay separate even where their Light colors match. DM Sans / 500 / zero tracking reuse TF-01 provisionally: only component size and line-height are present in the evidence digest. The existing bundled Storybook font is reused; the renderer itself loads no font or prototype stylesheet.
+
+Primary, Text primary, Danger and neutral focus rings retain the inspected two-layer geometry. The source layers are represented in CSS with inner white painted above the outer colored layer. Secondary's default shadow is component-local **#101828 at 5%**; substituting TF-01 shadow/xs (**#18181B at 5%**) would change the inspected value. These effects do not establish new shared focus or shadow tokens.
+
+## Properties and reusable API
+
+```tsx
+import { Button } from '../../src/oxygen-button/Button'
+import { Plus, ArrowRight } from 'lucide-react'
+
+<section data-oxygen-mode="light">
+  <Button
+    variant="primary"
+    shape="square"
+    size="medium"
+    label="Add item"
+    leadingIcon={<Plus />}
+    trailingIcon={<ArrowRight />}
+    onClick={handleAdd}
+    ref={buttonRef}
+  />
+</section>
+```
+
+<div className="zw-docs-table cs04-scroll" role="region" aria-label="Button API" tabIndex={0}>
+<table>
+<caption>ButtonProps · local reusable React API</caption>
+<thead><tr><th scope="col">Property</th><th scope="col">Type / default</th><th scope="col">Purpose</th></tr></thead>
+<tbody>
+<tr><th scope="row">variant</th><td>primary (default), secondary, danger, text-primary, text-secondary</td><td>Source Type; independent of native button type.</td></tr>
+<tr><th scope="row">shape</th><td>square (default), round</td><td>Preserves per-variant radii and Large Round height.</td></tr>
+<tr><th scope="row">size</th><td>large, medium (default), small</td><td>Padding, gaps, icon boxes and typography.</td></tr>
+<tr><th scope="row">label</th><td>Required string</td><td>Meaningful visible text; no children or icon-only path.</td></tr>
+<tr><th scope="row">leadingIcon / trailingIcon</th><td>Optional SVG React elements</td><td>Independent decorative slots; no extra action or tab stop.</td></tr>
+<tr><th scope="row">type</th><td>Native button / submit / reset; defaults to button</td><td>Avoids accidental form submission.</td></tr>
+<tr><th scope="row">disabled and native props</th><td>ButtonHTMLAttributes without children</td><td>Includes events, form props, title, ARIA, data attributes, className and style.</td></tr>
+<tr><th scope="row">ref</th><td>Forwarded HTMLButtonElement</td><td>Allows parent-owned focus and native DOM access.</td></tr>
+</tbody>
+</table>
+</div>
+
+`iconLeft` and `iconRight` are Storybook Boolean adapters for the SVG slots. There is no public `state` prop; interaction belongs to the browser and native disabled attribute. The renderer imports its component CSS and opt-in TF-01 CSS and depends only on React. This reference API defines no production ZoBlocks contract or host-framework behavior.
+
+## Accessibility
+
+- Use a specific, visible action label. It supplies the accessible name; preserve it when adding ARIA props. Icon-only actions belong to CS-01.
+- Keep native button keyboard, pointer, form and disabled semantics. Do not replace disabled with styling or aria-disabled alone.
+- Tab gives a visible two-layer focus ring. Disabled has no activation or tab stop. Forced-colors mode uses a system-color outline.
+- Decorative SVGs are hidden from assistive technology and are non-focusable; they inherit the separate icon role. No essential meaning relies only on color or artwork.
+- Heights are 24–40px. Compact controls and reduced-contrast disabled appearances retain the source geometry and need contextual accessibility review; full touch-target compliance is not claimed.
+- Browser checks cover activation, focus and native semantics, not screen-reader certification. Review zoom, contrast, forced colors and touch use in the intended context.
+
+## Outstanding visual questions
+
+Confirm component variable aliases, icon artwork and state colors, source font family/weight/tracking, border alignment, long-label guidance and compact-target suitability. Dark appearance and Active/loading/selected states require additional evidence. No such appearance or workflow is inferred here.
+
+</div>
