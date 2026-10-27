@@ -1,41 +1,6 @@
-/* CS-03 only: designer-owned reference, no shared token or consumer changes. */
+/* CS-03 reference surroundings. Shared Badge styles live with its src renderer. */
 .cs03-reference { box-sizing: border-box; color: #101828; font: 14px/1.5 'DM Sans', system-ui, sans-serif; min-width: 0; }
 .cs03-reference *, .cs03-reference *::before, .cs03-reference *::after { box-sizing: border-box; }
-.cs03-badge {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-  gap: 4px;
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-  border: 0;
-  background: var(--cs03-fill);
-  color: var(--cs03-foreground);
-  font: 500 11px/16px 'DM Sans', system-ui, sans-serif;
-  letter-spacing: 0;
-}
-.cs03-badge-medium { min-height: 24px; padding: 4px 10px; }
-.cs03-badge-round { border-radius: 9999px; }
-/* Provisional 1px inset painted edge: preserves supplied padding and height. */
-.cs03-badge-outlined { box-shadow: inset 0 0 0 1px var(--cs03-border); }
-.cs03-badge-label { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
-.cs03-badge-icon { display: block; flex: 0 0 12px; width: 12px; height: 12px; color: inherit; stroke: currentColor; }
-/* Component-specific Oxygen semantic proposal; Figma Close bindings are unverified. */
-.cs03-badge[data-cs03-color="Default"] { --cs03-close-rest: #4A5565; --cs03-close-hover: #101828; }
-.cs03-badge[data-cs03-color="Info"] { --cs03-close-rest: #2B7FFF; --cs03-close-hover: #1447E6; }
-.cs03-badge[data-cs03-color="Success"] { --cs03-close-rest: #008236; --cs03-close-hover: #016630; }
-.cs03-badge[data-cs03-color="Warning"] { --cs03-close-rest: #E17100; --cs03-close-hover: #BB4D00; }
-.cs03-badge[data-cs03-color="Danger"] { --cs03-close-rest: #FB2C36; --cs03-close-hover: #C10007; }
-.cs03-badge[data-cs03-type="Solid"] { --cs03-close-rest: rgb(255 255 255 / 85%); --cs03-close-hover: #FFFFFF; }
-.cs03-badge-close { color: var(--cs03-close-rest); }
-/* Local native button; no expanded hit area. State specificity outranks Data Grid hover. */
-.cs03-reference .cs03-remove { display: inline-flex; flex: 0 0 12px; align-items: center; justify-content: center; width: 12px; height: 16px; margin: 0; padding: 0; border: 0; border-radius: 2px; background: transparent; box-shadow: none; color: var(--cs03-close-rest); line-height: 1; cursor: pointer; }
-.cs03-reference .cs03-badge .cs03-remove:is(:hover, :focus-visible, :active) { background: transparent; box-shadow: none; }
-.cs03-reference .cs03-remove:is(:hover, :focus-visible) { color: var(--cs03-close-hover); }
-.cs03-remove .cs03-badge-close { color: inherit; }
-.cs03-reference .cs03-remove:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
 .cs03-removal-status { margin: 8px 0; color: #4A5565; }
 .cs03-removal-status:empty { margin: 0; }
 .cs03-reference .cs03-demo-button { padding: 6px 10px; border: 1px solid #D1D5DC; border-radius: 6px; background: white; color: #101828; font: inherit; cursor: pointer; }

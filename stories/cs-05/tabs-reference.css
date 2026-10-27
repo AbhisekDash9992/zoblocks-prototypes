@@ -1,0 +1,74 @@
+/* Storybook-only CS-05 surroundings and annotations. No component recipe changes. */
+.cs05-reference, .cs05-docs { min-width:0; color:#101828; font:14px/1.6 'DM Sans',system-ui,sans-serif; }
+.cs05-reference *, .cs05-docs * { box-sizing:border-box; }
+.cs05-reference h2 { margin:0 0 16px; font-size:18px; }
+.cs05-reference h3 { margin:0 0 12px; font-size:14px; }
+.cs05-reference p { margin:12px 0; }
+.cs05-card { min-width:0; max-width:100%; padding:20px; border:1px solid #D1D5DC; border-radius:12px; background:#FFFFFF; }
+.cs05-stack { display:grid; gap:24px; }
+.cs05-reference .ox-tabs__panel { padding:8px 6px; }
+.cs05-reference .ox-tabs__panel p { margin:0; }
+.cs05-note { color:#4A5565; max-width:80ch; }
+.cs05-reference .zw-docs-specimen { min-width:0; min-height:0; padding:0; }
+.cs05-reference .zw-docs-config > div { grid-template-columns:110px minmax(0,1fr); }
+.cs05-specimens { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.cs05-specimen { min-width:0; padding:12px; border:1px solid #E5E7EB; border-radius:8px; }
+.cs05-sample { overflow-x:auto; padding:6px; }
+.cs05-scroll { max-width:100%; overflow-x:auto; }
+.cs05-scroll table { min-width:650px; }
+.cs05-scroll:focus-visible, .cs05-usage select:focus-visible { outline:2px solid #4A5565; outline-offset:3px; }
+.cs05-composition { max-width:100%; padding:16px; border:1px solid #D1D5DC; border-radius:8px; white-space:pre-wrap; overflow-wrap:anywhere; font:13px/1.7 ui-monospace,monospace; }
+.cs05-anatomy { container:cs05-anatomy / inline-size; width:100%; min-width:0; }
+.cs05-anatomy > .cs05-card { max-width:1200px; }
+.cs05-anatomy-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:center; }
+.cs05-diagram-column { min-width:0; }
+.cs05-diagram-scroll { width:100%; max-width:100%; overflow-x:auto; padding-block:8px; }
+.cs05-diagram-scroll:focus-visible { outline:2px solid #4A5565; outline-offset:3px; }
+.cs05-anatomy-diagram { display:block; width:100%; min-width:420px; max-width:520px; height:auto; margin:0 auto; }
+/* Use available anatomy width, including when Docs is embedded in a wide viewport. */
+@container cs05-anatomy (min-width:960px) {
+  .cs05-anatomy-layout { grid-template-columns:minmax(0,.47fr) minmax(0,.53fr); }
+}
+.cs05-root-guide, .cs05-measure-bound { fill:none; stroke:none; }
+.cs05-diagram-surface { fill:#F2F8FF; stroke:#BEDBFF; stroke-width:10; }
+.cs05-diagram-badge { fill:#F2F3F5; stroke:#D1D5DC; stroke-width:10; }
+/* SVG-local clip paths trim centered 10-unit strokes to 5-unit inside edges. */
+.cs05-box-guide { fill:none; stroke:#98A2B3; stroke-width:1; stroke-dasharray:5 5; }
+.cs05-anatomy-reference { fill:none; stroke:#98A2B3; stroke-width:1; vector-effect:non-scaling-stroke; }
+.cs05-anatomy-reference[data-anatomy-guide="label-line"] { stroke-dasharray:3 3; }
+.cs05-diagram-artwork { fill:none; stroke:currentColor; color:#1447E6; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+.cs05-diagram-label { fill:#1447E6; font:500 70px 'DM Sans',sans-serif; }
+.cs05-diagram-count { fill:#4A5565; font:500 55px 'DM Sans',sans-serif; }
+.cs05-diagram-indicator { fill:#155DFC; }
+.cs05-callout polyline { fill:none; stroke:#475467; stroke-width:1.5; stroke-linejoin:round; }
+.cs05-anchor { fill:#475467; stroke:none; }
+.cs05-number-marker { fill:#344054; stroke:none; }
+.cs05-number { fill:#FFFFFF; font:500 28px 'DM Sans',sans-serif; }
+.cs05-legend { display:block; margin:0; max-width:76ch; padding-left:22px; }
+.cs05-legend li { margin:8px 0; padding:0; }
+.cs05-legend strong { font-weight:600; }
+.cs05-anatomy-subtitle { margin:0 0 16px; font-size:14px; }
+.cs05-geometry { min-width:0; margin-top:24px; border-top:1px solid #E5E7EB; padding-top:20px; }
+.cs05-geometry > h4 { margin:0 0 16px; font-size:16px; }
+.cs05-geometry .cs05-scroll { container-type:inline-size; }
+.cs05-geometry .cs05-scroll table caption { max-width:100cqi; }
+.cs05-geometry .zw-docs-table table { box-sizing:border-box; width:100%; margin:16px 0; border:1px solid #D1D5DC; border-collapse:separate; border-spacing:0; }
+.cs05-actual { margin-top:24px; border-top:1px solid #E5E7EB; padding-top:12px; }
+.cs05-reference-notes { margin-top:20px; color:#4A5565; font-size:13px; }
+.cs05-reference-notes h4 { margin:0 0 8px; color:#344054; font-size:13px; }
+.cs05-reference-notes ul { margin:0; padding-left:20px; max-width:92ch; }
+.cs05-reference-notes li { margin:4px 0; }
+.cs05-usage select { max-width:100%; padding:6px; font:inherit; color:#101828; background:#FFFFFF; border:1px solid #D1D5DC; border-radius:4px; }
+.cs05-usage-container { min-width:0; margin-top:20px; }
+.cs05-usage-container--narrow { width:240px; max-width:100%; }
+@media(max-width:600px) {
+  .cs05-specimens { grid-template-columns:minmax(0,1fr); }
+  .cs05-card { padding:12px; }
+}
+@media(forced-colors:active) {
+  .cs05-scroll:focus-visible, .cs05-usage select:focus-visible, .cs05-diagram-scroll:focus-visible { outline-color:Highlight; }
+  .cs05-number-marker, .cs05-anchor { fill:CanvasText; }
+  .cs05-number { fill:Canvas; }
+  .cs05-callout polyline { stroke:CanvasText; }
+  .cs05-anatomy-reference, .cs05-box-guide { stroke:GrayText; }
+}

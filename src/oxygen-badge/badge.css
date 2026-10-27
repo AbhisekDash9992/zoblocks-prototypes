@@ -1,0 +1,38 @@
+/* Shared designer-reference Badge only. No reset, theme, font loading or global
+   token changes. Legacy component hooks deliberately survive the extraction. */
+.cs03-badge {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  border: 0;
+  background: var(--cs03-fill);
+  color: var(--cs03-foreground);
+  font: 500 11px/16px 'DM Sans', system-ui, sans-serif;
+  letter-spacing: 0;
+}
+/* Standalone Medium remains 24px / 4px / 10px. These component-local hooks
+   support a measured contextual instance; they are not new TF-01 tokens. */
+.cs03-badge-medium {
+  min-height: var(--badge-context-min-height, 24px);
+  padding: var(--badge-context-padding-block, 4px) 10px;
+}
+.cs03-badge-round { border-radius: 9999px; }
+/* 1px inside is verified for the Tabs instance. Other CS-03 source edge
+   weights/alignment remain unverified; their accepted inset rendering stays. */
+.cs03-badge-outlined { box-shadow: inset 0 0 0 1px var(--cs03-border); }
+.cs03-badge-label { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.cs03-badge-icon { display: block; flex: 0 0 12px; width: 12px; height: 12px; color: inherit; stroke: currentColor; }
+/* All color/alpha resolution lives in referenceValues, including Close roles. */
+.cs03-badge-close { color: var(--cs03-close-rest); }
+/* Self-contained native Close control. Attribute specificity keeps accepted
+   feedback above surrounding prototype button rules without a story wrapper. */
+.cs03-badge .cs03-remove { display: inline-flex; flex: 0 0 12px; align-items: center; justify-content: center; width: 12px; height: 16px; margin: 0; padding: 0; border: 0; border-radius: 2px; background: transparent; box-shadow: none; color: var(--cs03-close-rest); line-height: 1; cursor: pointer; }
+.cs03-badge[data-cs03-type] .cs03-remove:is(:hover, :focus-visible, :active) { background: transparent; box-shadow: none; }
+.cs03-badge .cs03-remove:is(:hover, :focus-visible) { color: var(--cs03-close-hover); }
+.cs03-remove .cs03-badge-close { color: inherit; }
+.cs03-badge .cs03-remove:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }

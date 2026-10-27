@@ -1,0 +1,130 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TabsStories from './Tabs.stories';
+import { ParentMapping, Colors, Composition } from './ReferenceGuide';
+
+<Meta of={TabsStories} />
+
+<div className="zw-docs cs05-docs" data-oxygen-mode="light">
+
+# Tabs
+
+CS-05 · Oxygen Light · Interactive design reference · Local review
+
+## Overview
+
+Tabs switch among related content sections within one context, displaying one panel at a time. Use them when the sections are peers and users benefit from keeping their place. Five parent styles share four atom Types and three inspected visual States, giving **12 standalone atom specimens**.
+
+**Tabs** owns selection, focus, keyboard navigation and panel relationships. **TabAtom** is a separately reusable presentational control; its selected appearance is supplied by its parent. This Storybook explains design and demonstrates behavior. Production developers independently choose component APIs, architecture and integrations; these reference renderers are not production-certified contracts.
+
+<details>
+<summary>Evidence labels and source boundaries</summary>
+
+**Verified:** designer-inspected Light parent and atom specimens, plus additional nested Badge inspection, 23 October 2026. Only measured values and synthetic examples appear here. **Local reference decision:** manual activation, focus appearance, overflow handling, selected-over-hover precedence and the provisional 2px indicator. **Illustrative:** Lucide artwork and combined anatomy width. **Unresolved:** exact vectors, component variable bindings, source indicator thickness, alternate modes and assistive-technology certification.
+
+Original source spelling is retained in mapping tables: “Undeline” and “barnd” normalize to Underline and brand in display names. They are spelling inconsistencies, not additional concepts. Each source parent serializes eleven atoms, but only four are visible; seven hidden instances are not eleven displayed tabs.
+
+</details>
+
+## Playground
+
+Native Controls change all five styles, first-tab label, controlled selection, optional content and independent icon swaps. The four panels visibly change with selection. Arrow keys move focus without changing the selected panel; Enter, Space or pointer click selects. The Configuration summary displays both selected and focused items.
+
+<Canvas of={TabsStories.PlaygroundExample} />
+<div className="zw-docs-controls" role="region" aria-label="Tabs Controls" tabIndex={0}>
+  <Controls of={TabsStories.PlaygroundExample} />
+</div>
+
+Reset Controls restores the original args and first selection. Cleared select placeholders use the existing reference defaults. A blank first label displays feedback rather than an unnamed tab. Underline with icons always retains its source-required leading icon. Optional Badge content is noninteractive.
+
+## Parent styles and source mapping
+
+<Canvas of={TabsStories.ParentStyles} />
+
+These five specimens show four tabs with the first visually selected. They are noninteractive visual compositions with no tablist, tab or panel ARIA. Use Playground for interaction. Source parent widths below describe the inspected labels, not fixed widths for these synthetic examples.
+
+<ParentMapping />
+
+## Atom variants and states
+
+<Canvas of={TabsStories.SourceAtomStates} />
+
+Four Types × Active / Hover / Inactive. **Active means selected**, not CSS pressed state. The static Hover specimens retain that appearance when the pointer leaves; they do not demonstrate interaction. Live hover is available on unselected Playground tabs. The selected appearance wins over live hover as a local reference choice. No source Disabled, Focused, Loading or Error variant is inferred. Keyboard focus is a separate local accessibility treatment.
+
+## Optional content
+
+<Canvas of={TabsStories.ContentConfigurations} />
+
+All eight lead / Badge / tail combinations share the accepted TabAtom renderer. Slots are independently optional; no empty-slot gap is reserved. Enabled Badge appearance is verified in all four Active Types. Hover and Inactive reuse the reference Badge recipe without claiming separate source inspection. Icons remain decorative even when they resemble an arrow or other familiar action.
+
+## Anatomy and geometry
+
+<Canvas of={TabsStories.AnatomyGeometry} layout="fullscreen" />
+
+The clean Anatomy schematic identifies nine parts without shaded padding bands or a dashed label rectangle. Its external callouts match one ordered legend; small references mark padding and an empty gap. The compact schematic sits beside the legend when the content region is wide enough, and stacks above it in narrower regions.
+
+The **Geometry & spacing** subsection uses two specification tables: Standalone atom geometry and Geometry provenance and context. They separate source states, text-only sizes, root/nested padding, parent overrides and contextual Badge measurements. Each semantic table has a caption, column/row headings and a named keyboard-accessible region for local horizontal scrolling. The actual-size specimen and one Reference notes block follow the tables.
+
+The accepted Anatomy is the only annotated component illustration in this section. Its displayed scale, combined width and glyph artwork are illustrative. Source indicator color #155DFC is verified; its displayed 2px thickness is explicitly local/provisional. Nested surface border alignment remains a local rendering choice; the Badge's 1px inside alignment is verified. Source samples do not establish component variable bindings.
+
+Standalone atom height, parent row height and contextual Badge height are separate measurements. Exported text-only widths apply to the inspected specimen; labels and optional content determine live Hug width. Complete enabled-content composition widths are unverified. Root gap 8px on the nested type does not replace its inner content gap of 6px.
+
+## Colors, tokens and provenance
+
+<Colors />
+
+The table records Light samples and equal-valued TF-01 primitives consumed by the reference CSS. Correspondence does not establish Figma variable identity or semantic binding. Geometry reuses existing space/50, /75, /100, /150 and /200 values (4/6/8/12/16px), radius/md and /lg (6/8px), and button-medium typography (14/22). No TF-01 definitions change. Source label family and weight are verified; the exact inspected font file is unavailable. Dark parity and icon color bindings remain unverified.
+
+## Component composition
+
+<Composition />
+
+The nested Badge is an actual Figma **component instance**, not text and a border inferred to look like one. CS-03 and CS-05 now consume the **same portable reference Badge implementation**. Standalone CS-03 Medium stays 24px minimum height with 4px / 10px padding; Tabs-context Medium is 20px with 2px / 10px padding. It stays **Medium**, never Small. The context overrides geometry only and retains the verified tinted #F2F3F5 fill and 1px inside #D1D5DC edge. In Tabs, Close and Icon start are off, with no nested button or independent tab stop.
+
+Lucide is the existing SVG rendering mechanism for replaceable artwork. No Icon Button is used, and this composition needs no new shared Icon primitive. Decorative SVGs are hidden from assistive technology, not independently focusable and pass pointer interaction to the parent tab. Component alias bindings and original artwork remain unverified.
+
+## Usage guidance
+
+<Canvas of={TabsStories.UsageExamples} />
+
+Choose Simple text, Leading icons, Count Badges, Trailing icons, Longer labels or Narrow overflow. One live example changes its configuration; it uses the same Tabs component and minimal, section-specific content. Long labels stay intact in a single scrollable row. No extra tab navigation menu or truncation rule is invented.
+
+- Use tabs for related peer sections such as an enterprise workspace overview, properties, activity and files. A future Data Grid may appear inside a panel when that grouping matches the content model; no Data Grid integration is implemented here.
+- Use links for destinations and routing. Use appropriate form controls for choices or filters. Do not turn filter chips, row actions or unrelated workflows into tabs just because they share a visual shape.
+- Keep labels specific and stable. Counts supplement the label; trailing icons do not imply a close, menu or second action. Avoid using icons alone to convey essential information.
+- The local overflow decision keeps all four tabs reachable by horizontal scrolling and keyboard focus. Wrapping, responsive dropdowns, deletion, persistence and dynamic item policies need separate design decisions.
+
+## Accessibility
+
+This reference follows the [WAI-ARIA APG Tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), using manual activation as an approved local decision. The following describes the implemented horizontal reference, not an assistive-technology certification.
+
+<div className="zw-docs-table cs05-scroll" role="region" aria-label="Tabs accessibility model" tabIndex={0}>
+<table>
+<caption>Implemented keyboard and semantic model</caption>
+<thead><tr><th scope="col">Interaction / semantic</th><th scope="col">Reference behavior</th></tr></thead>
+<tbody>
+<tr><th scope="row">Tablist and names</th><td>Named horizontal tablist; native button tabs named by visible labels, with Badge text included when present.</td></tr>
+<tr><th scope="row">Selection and relationships</th><td>Exactly one aria-selected=true tab; each aria-controls points to a unique panel; panels point back with aria-labelledby. Inactive panels are hidden and excluded from focus.</td></tr>
+<tr><th scope="row">ArrowLeft / ArrowRight</th><td>Move focus with wrap. Selection and visible panel remain unchanged until activation.</td></tr>
+<tr><th scope="row">Home / End</th><td>Focus the first / last tab; reveal it through local horizontal scrolling.</td></tr>
+<tr><th scope="row">Enter / Space / pointer</th><td>Select the tab and update the visible section. Clicking either decorative icon activates its parent.</td></tr>
+<tr><th scope="row">Tab / Shift+Tab</th><td>One tablist entry stop; re-entry targets the selected tab after leaving. The visible panel is focusable because its example content starts with text. No placeholder links.</td></tr>
+<tr><th scope="row">Focus versus selected</th><td>Keyboard outline is separate from selected fill / indicator. Pointer input introduces no icon-sized ring. Up/Down retain browser scrolling.</td></tr>
+<tr><th scope="row">Forced colors</th><td>System-color focus outline, selected-label underline, selected indicator and nested/Badge edge fallbacks preserve distinctions.</td></tr>
+<tr><th scope="row">Decorative content</th><td>Icons and Badge have no independent action or focus target. No nested interactive controls inside the tab.</td></tr>
+</tbody>
+</table>
+</div>
+
+Try keyboard navigation in Playground: focus Overview, press Right and confirm Details has focus while Overview remains selected; press Enter to select Details; press Tab to focus its panel. In the narrow usage example, End brings the final tab into view. Inspect focus and selected styling together in forced-colors mode.
+
+Compact 30/38px source rows are retained. Touch-target suitability, contrast in the intended surrounding surface, browser zoom and real screen-reader announcements require contextual review. Browser automation verifies DOM relationships, keyboard and computed focus styling; it does not certify all browser/assistive-technology combinations. Badge foreground remains provisional, so final contrast approval is open.
+
+## QA, limitations and publication status
+
+Coverage: five parent styles, twelve static source states, eight optional-content configurations, native Controls/reset, manual focus/selection, unique panel relationships, both icon pointer paths, Badge reuse, forced colors and horizontal overflow. Focused QA scripts exercise these contracts and anatomy endpoints at desktop/mobile sizes. Regression boundaries include accepted CS-03 visuals/Close behavior, CS-01/02/04 smoke, TF-01 reference checks and unchanged Data Grid interactions.
+
+Open source questions: exact indicator thickness, original icon artwork and painted bounds, component variable aliases, alternate modes, enabled-content total dimensions, Badge foreground and Badge states beyond the inspected Active examples. Nominal Badge width 27px differs from the bundled-font browser result of about 26.44px for “2”; no fixed width is imposed to hide that discrepancy.
+
+**Local-only Batch 2 review.** These files are not a final GitHub publication. Screenshots and QA results stay in ignored local context. Designer review, source-question resolution and separately authorized release steps remain before publication. No Data Grid feature, deployment or Drive update is part of this batch.
+
+</div>

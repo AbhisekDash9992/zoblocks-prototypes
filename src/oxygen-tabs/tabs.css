@@ -1,0 +1,110 @@
+/* CS-05 sampled Light values. TF-01 primitives match values; component alias
+   identities are unverified. Explicit Light scope required; no global reset. */
+.ox-tab {
+  --_ox-tab-fill: transparent;
+  --_ox-tab-text: var(--ox-color-gray-500);
+  --_ox-tab-content-fill: transparent;
+  --_ox-tab-content-edge: transparent;
+  --_ox-tab-indicator: transparent;
+  position: relative;
+  box-sizing: border-box;
+  appearance: none;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: var(--ox-space-50) var(--ox-space-100);
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--_ox-tab-fill);
+  color: var(--_ox-tab-text);
+  font: var(--ox-type-button-medium);
+  letter-spacing: calc(var(--ox-letter-spacing-normal) * 1px);
+  text-align: center;
+  text-transform: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ox-tab__content {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ox-space-100);
+  background: var(--_ox-tab-content-fill);
+}
+.ox-tab--specimen { cursor: default; }
+/* Decorative content delegates pointer hits and focus to the tab button. */
+.ox-tab__icon { display: inline-flex; flex: 0 0 14px; width: 14px; height: 14px; color: inherit; pointer-events: none; }
+.ox-tab__icon svg { display: block; }
+.ox-tab--pill-gray, .ox-tab--pill-brand { padding-inline: var(--ox-space-150); }
+.ox-tab--pill-gray { border-radius: var(--ox-radius-md); }
+.ox-tab--pill-brand[data-selected="true"] { border-radius: var(--ox-radius-md); }
+
+/* Static source specimens share the recipe but never respond to live :hover.
+   Selected+hover retains the selected recipe: disclosed local precedence. */
+.ox-tab:not([data-reference-state]):not([data-selected="true"]):hover,
+.ox-tab[data-reference-state="hover"] { --_ox-tab-text: var(--ox-color-gray-600); }
+.ox-tab--pill-gray:not([data-reference-state]):not([data-selected="true"]):hover,
+.ox-tab--pill-gray[data-reference-state="hover"] { --_ox-tab-fill: var(--ox-color-gray-200); }
+.ox-tab[data-selected="true"] { --_ox-tab-text: var(--ox-color-blue-700); }
+.ox-tab--pill-gray[data-selected="true"] {
+  --_ox-tab-fill: var(--ox-color-gray-100);
+  --_ox-tab-text: var(--ox-color-gray-900);
+}
+.ox-tab--pill-brand[data-selected="true"] { --_ox-tab-fill: var(--ox-color-blue-50); }
+.ox-tab--underline[data-selected="true"], .ox-tab--pill-brand-underline[data-selected="true"] {
+  --_ox-tab-indicator: var(--ox-color-blue-600);
+}
+.ox-tab--pill-brand-underline { height: 38px; padding-inline: 0; }
+.ox-tab--pill-brand-underline .ox-tab__content {
+  height: 30px;
+  padding: var(--ox-space-50) var(--ox-space-100);
+  gap: var(--ox-space-75);
+  border-radius: var(--ox-radius-lg);
+  box-shadow: inset 0 0 0 1px var(--_ox-tab-content-edge);
+}
+.ox-tab--pill-brand-underline[data-selected="true"] {
+  --_ox-tab-content-fill: var(--ox-color-blue-50);
+  --_ox-tab-content-edge: var(--ox-color-blue-200);
+}
+/* Local 2px indicator: source color is sampled; mixed source stroke fields do
+   not establish thickness. Absolute paint preserves measured outer geometry. */
+.ox-tab--underline::after, .ox-tab--pill-brand-underline::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--_ox-tab-indicator);
+}
+/* Local accessibility focus treatment; not an additional source State. */
+.ox-tab:focus-visible { outline: 2px solid var(--ox-color-gray-600); outline-offset: 2px; }
+/* Verified contextual instance of the shared Round/Outlined/Medium/Default
+   Badge: 20px height and 2px block padding; shared 10px inline padding remains.
+   Medium is source identity, not a universal height. Palette/type/edge stay in
+   the shared renderer. The 27px source width for label "2" is not a fixed width. */
+.ox-tab__badge {
+  --badge-context-min-height: 20px;
+  --badge-context-padding-block: 2px;
+}
+.ox-tabs { min-width: 0; max-width: 100%; }
+/* Six-pixel clearance contains the local focus outline at both scroll edges. */
+.ox-tabs__scroller { box-sizing: border-box; max-width: 100%; overflow-x: auto; padding: 6px; }
+.ox-tabs__list { display: flex; width: max-content; align-items: center; gap: var(--ox-space-200); height: 30px; }
+.ox-tabs__list > .ox-tab { height: 30px; }
+.ox-tabs--pills-brand-border .ox-tabs__list { gap: var(--ox-space-75); height: 38px; }
+.ox-tabs--pills-brand-border .ox-tabs__list > .ox-tab { height: 38px; }
+.ox-tabs__panel { margin-top: 12px; }
+.ox-tabs__panel[hidden] { display: none; }
+.ox-tabs__panel:focus-visible { outline: 2px solid var(--ox-color-gray-600); outline-offset: 2px; }
+@media (forced-colors: active) {
+  .ox-tab { color: ButtonText; }
+  .ox-tab[data-selected="true"] .ox-tab__label { text-decoration: underline; text-underline-offset: 3px; }
+  .ox-tab:focus-visible, .ox-tabs__panel:focus-visible { outline-color: Highlight; }
+  .ox-tab[data-selected="true"]::after { background: Highlight; forced-color-adjust: none; }
+  .ox-tab--pill-brand-underline[data-selected="true"] .ox-tab__content { outline: 1px solid ButtonText; outline-offset: -1px; }
+  /* Preserve the approved Tabs-context system-color edge when shadows vanish. */
+  .ox-tab__badge { box-shadow: none; outline: 1px solid ButtonText; outline-offset: -1px; }
+}
