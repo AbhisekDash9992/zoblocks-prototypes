@@ -26,10 +26,10 @@ export function Anatomy() {
       </g>)}
     </svg>
     <div><p className="cs02-muted">Enlarged 4× schematic of the supplied 64 × 28px Hug example. Four visual features, one TEXT child; dashed line-box guides are construction only.</p><ol className="cs02-legend">
-      <li>Container / surface: #101828, Hug content, 8px radius.</li>
-      <li>Padding: 4px vertical and 10px horizontal. The leader ends inside the top padding band.</li>
-      <li>Label: one TEXT child, white DM Sans Regular, 14px / 20px. The leader ends at the right edge of its line box. No shortcut child.</li>
-      <li>Shadow / elevation: 0 1px 2px rgb(24 24 27 / 5%). The endpoint marks the shadow below the surface.</li>
+      <li><strong>Container / surface:</strong> #101828, Hug content, 8px radius.</li>
+      <li><strong>Padding:</strong> 4px vertical and 10px horizontal. The leader ends inside the top padding band.</li>
+      <li><strong>Label:</strong> one TEXT child, white DM Sans Regular, 14px / 20px. The leader ends at the right edge of its line box. No shortcut child.</li>
+      <li><strong>Shadow / elevation:</strong> 0 1px 2px rgb(24 24 27 / 5%). The endpoint marks the shadow below the surface.</li>
     </ol></div>
   </div>
 }

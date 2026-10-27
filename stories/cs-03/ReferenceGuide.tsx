@@ -47,11 +47,11 @@ export function Anatomy() {
     </svg>
     <div><p className="cs03-muted">5× height/padding/type schematic; illustrative content width. Annotations explain features, not an exact Figma layer tree.</p>
       <ol className="cs03-legend">
-        <li>Container / surface: source-backed Default fill #F2F3F5; horizontal content layout.</li>
-        <li>Label: DM Sans Medium (500), 11px / 16px, 0% tracking. Foreground #4A5565 is provisional. Dashed line box is a guide.</li>
-        <li>Padding: Medium 4px vertical / 10px horizontal. Gap is 4px; only text is present.</li>
-        <li>Border where applicable: source-backed #D1D5DC. Local 1px inset painted edge is provisional; source weight and alignment remain unknown.</li>
-        <li>Corner radius: Round 9999px, rendered as a pill; source Square 8px remains deferred.</li>
+        <li><strong>Container / surface:</strong> source-backed Default fill #F2F3F5; horizontal content layout.</li>
+        <li><strong>Label:</strong> DM Sans Medium (500), 11px / 16px, 0% tracking. Foreground #4A5565 is provisional. Dashed line box is a guide.</li>
+        <li><strong>Padding:</strong> Medium 4px vertical / 10px horizontal. Gap is 4px; only text is present.</li>
+        <li><strong>Border where applicable:</strong> source-backed #D1D5DC. Local 1px inset painted edge is provisional; source weight and alignment remain unknown.</li>
+        <li><strong>Corner radius:</strong> Round 9999px, rendered as a pill; source Square 8px remains deferred.</li>
       </ol>
     </div>
   </div>

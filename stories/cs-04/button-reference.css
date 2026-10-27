@@ -31,7 +31,7 @@
 .cs04-diagram-label { fill: var(--ox-text-on-dark); font: 500 70px 'DM Sans', system-ui, sans-serif; }
 .cs04-dimension-guide { fill: none; stroke: var(--ox-color-white); stroke-width: 1; }
 .cs04-leader { fill: none; stroke: #4A5565; stroke-width: 1; }
-.cs04-anchor { fill: #4A5565; stroke: #FFFFFF; stroke-width: 1; }
+.cs04-anchor { fill: #4A5565; stroke: none; }
 .cs04-number-marker { fill: #4A5565; }
 .cs04-number { fill: #FFFFFF; font: 500 18px 'DM Sans', system-ui, sans-serif; }
 .cs04-legend { margin: 0; max-width: 76ch; padding-left: 22px; }
