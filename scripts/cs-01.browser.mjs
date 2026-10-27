@@ -188,7 +188,15 @@ try {
   const docsText = await page.locator('body').textContent()
   for (const color of ['#101828', '#99A1AF', '#1447E6', '#8EC5FF', '#F2F3F5', '#E2EEFE', '#4A5565', '#155DFC']) assert.ok(docsText.includes(color), `Missing verified value ${color}`)
   assert.ok(docsText.includes('233:5486') && docsText.includes('exported 14px immediate icon instance'))
-  assert.ok(!/value unavailable|color specimen withheld|numeric.*unresolved|outer.*unverified/.test(docsText))
+  assert.doesNotMatch(docsText, /value unavailable|color specimen withheld/)
+  const referenceValues = await page.getByRole('table', {
+    name: 'Icon Button color and interaction references', exact: true,
+  }).locator('tbody td:last-child').allTextContents()
+  assert.ok(referenceValues.length > 0, 'Resolved reference values missing')
+  for (const value of referenceValues) {
+    assert.ok(value.trim(), 'Empty resolved reference value')
+    assert.doesNotMatch(value, /numeric.*unresolved|outer.*unverified/)
+  }
   for (const width of [1280, 760, 480, 360]) {
     await page.setViewportSize({ width, height: 1000 }); await settle()
     assert.equal(await page.locator('.cs01-evidence-group').count(), 2)
